@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java 75 Mastery Dashboard</title>
+    <style>
+        :root { --primary: #2c3e50; --accent: #2980b9; --bg: #f5f7fa; --card-bg: #ffffff; --text: #34495e; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; display: flex; height: 100vh; background-color: var(--bg); color: var(--text); }
+        
+        /* Sidebar */
+        .sidebar { width: 300px; background: var(--primary); color: white; display: flex; flex-direction: column; border-right: 1px solid #34495e; }
+        .sidebar-header { padding: 20px; background: #1a252f; text-align: center; font-weight: 700; border-bottom: 3px solid var(--accent); }
+        .search-container { padding: 10px; background: #34495e; }
+        .search-box { width: 100%; padding: 8px; border-radius: 4px; border: none; box-sizing: border-box; }
+        .nav-list { list-style: none; padding: 0; margin: 0; overflow-y: auto; flex: 1; }
+        .nav-item { padding: 12px 20px; border-bottom: 1px solid #34495e; cursor: pointer; font-size: 0.9rem; transition: 0.2s; display: flex; align-items: center; }
+        .nav-item:hover, .nav-item.active { background-color: var(--accent); padding-left: 25px; }
+        .nav-id { font-weight: bold; font-size: 0.8rem; background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 4px; margin-right: 10px; min-width: 25px; text-align: center;}
+
+        /* Main Content */
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
+        .card { background: var(--card-bg); padding: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 900px; margin: auto; }
+        
+        h1 { margin-top: 0; color: var(--primary); border-bottom: 2px solid #ecf0f1; padding-bottom: 15px; }
+        h3 { color: var(--accent); margin-top: 30px; margin-bottom: 10px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
+        
+        /* Overview Section with Link */
+        .overview-box { background: #eaf2f8; padding: 20px; border-radius: 6px; border-left: 5px solid var(--accent); }
+        .note-link { display: inline-block; margin-top: 10px; font-size: 0.9rem; font-weight: bold; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 5px 10px; border-radius: 4px; transition: 0.3s; }
+        .note-link:hover { background: var(--accent); color: white; }
+        
+        /* Code Block */
+        pre { background: #282c34; color: #abb2bf; padding: 20px; border-radius: 6px; overflow-x: auto; font-family: 'Consolas', monospace; font-size: 0.95rem; }
+        
+        /* Example Box */
+        .example-box { background: #fdfefe; border: 1px solid #dcdcdc; padding: 15px; border-radius: 6px; }
+
+        @media (max-width: 768px) { body { flex-direction: column; } .sidebar { width: 100%; height: 250px; } }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-header">☕ Java 75 Mastery</div>
+        <div class="search-container">
+            <input type="text" class="search-box" placeholder="Search Topic..." onkeyup="filterTopics(this.value)">
+        </div>
+        <ul class="nav-list" id="navList"></ul>
+    </div>
+
+    <div class="main-content" id="contentArea"></div>
+
+    <script>
+        // --- DATA SOURCE ---
+        const topics = [
+            // 1-11: BASICS (Context from PDFs, No Link provided in user list)
+            { id: 1, title: "Java Ecosystem", context: "JDK (Dev Kit), JRE (Runtime), JVM (Virtual Machine). JVM makes Java platform-independent.", example: "JVM is the engine, Bytecode is the fuel.", code: "java -version" },
+            { id: 2, title: "Variables", context: "Containers for data. Statically typed (must declare type).", example: "Box labeled 'Books' can only hold books.", code: "int x = 10;" },
+            { id: 3, title: "Primitive Types", context: "8 types: byte, short, int, long, float, double, boolean, char. Stored in Stack.", example: "int for counters, double for currency.", code: "double price = 99.99;" },
+            { id: 4, title: "Type Casting", context: "Implicit (Widening) vs Explicit (Narrowing).", example: "Pouring small cup into bucket (Auto) vs Bucket into cup (Manual).", code: "int i = (int) 10.5;" },
+            { id: 5, title: "Operators", context: "Arithmetic, Relational, Logical, Ternary.", example: "Ternary is a one-line if-else.", code: "int max = (a > b) ? a : b;" },
+            { id: 6, title: "If-Else & Switch", context: "Control flow. Switch works with Strings/Enums.", example: "Traffic light logic.", code: "if(red) stop();" },
+            { id: 7, title: "Loops", context: "For (fixed iterations), While (condition based).", example: "Iterating through a playlist.", code: "for(int i=0; i<10; i++) {}" },
+            { id: 8, title: "Arrays", context: "Fixed size collection. Stored in Heap.", example: "Egg tray (fixed slots).", code: "int[] arr = new int[5];" },
+            { id: 9, title: "Methods", context: "Reusable block of code. Signature = Name + Params.", example: "calculateTax() used in multiple places.", code: "void func() { ... }" },
+            { id: 10, title: "Overloading", context: "Same method name, different params. Compile-time Poly.", example: "search(name) vs search(id).", code: "add(int a); add(float b);" },
+            { id: 11, title: "Constructors", context: "Init object. No return type. Name same as Class.", example: "Setup default settings when User created.", code: "User() { active = true; }" },
+
+            // 12-25: CORE & OOPS (Links 12-25)
+            { id: 12, title: "The 'this' Keyword", link: "https://notebook.zohopublic.in/public/notes/u3i1se962d56445eb4118ab4e4c0ca99e4728", context: "Refers to current object instance.", example: "Distinguish param 'name' from field 'name'.", code: "this.name = name;" },
+            { id: 13, title: "Inheritance", link: "https://notebook.zohopublic.in/public/notes/u3i1s340edd3a883b4ef7ac90874731c865b0", context: "Is-A relationship. Parent -> Child.", example: "Car extends Vehicle.", code: "class Car extends Vehicle {}" },
+            { id: 14, title: "Polymorphism", link: "https://notebook.zohopublic.in/public/notes/u3i1s033d318172e442b8b8f242767b93776c", context: "One interface, multiple implementations.", example: "Shape.draw() -> Draws Circle or Square.", code: "Shape s = new Circle(); s.draw();" },
+            { id: 15, title: "Encapsulation", link: "https://notebook.zohopublic.in/public/notes/u3i1s033d318172e442b8b8f242767b93776c", context: "Data hiding. Private fields, Public getters.", example: "Capsule hides medicine powder.", code: "private int age;" },
+            { id: 16, title: "Abstraction", link: "https://notebook.zohopublic.in/public/notes/u3i1sa79b68153abe44d5aa93cc1d5b9f4dd9", context: "Hiding implementation details.", example: "Car Gearbox (implementation hidden).", code: "abstract void run();" },
+            { id: 17, title: "Interfaces", link: "https://notebook.zohopublic.in/public/notes/u3i1sae669a127ac24a07842a488207750a7c", context: "100% Abstract. Contract of behavior.", example: "Remote Control buttons.", code: "interface Remote { void click(); }" },
+            { id: 18, title: "Static Keyword", link: "https://notebook.zohopublic.in/public/notes/u3i1sd9ea4e81ceef491cb4bd1ee221daa89f", context: "Class level variable/method. Shared.", example: "Company Name (shared by all employees).", code: "static int count;" },
+            { id: 19, title: "Final Keyword", link: "https://notebook.zohopublic.in/public/notes/u3i1sd9ea4e81ceef491cb4bd1ee221daa89f", context: "Constant (Var), No Override (Method), No Inherit (Class).", example: "Math.PI", code: "final int MAX = 100;" },
+            { id: 20, title: "Super Keyword", link: "https://notebook.zohopublic.in/public/notes/u3i1s38886070c7a74e9db5b0ec3b1697f7f8", context: "Refers to Parent class.", example: "super.method() calls parent logic.", code: "super();" },
+            { id: 21, title: "Package & Import", link: "https://notebook.zohopublic.in/public/notes/u3i1sa26424f5a9614b35897900c90fb2c402", context: "Organizing classes. Preventing naming conflicts.", example: "Folders in OS.", code: "import java.util.*;" },
+            { id: 22, title: "Access Modifiers", link: "https://notebook.zohopublic.in/public/notes/u3i1sf9bea7a6f25c4a60941d06a07ac8d76c", context: "Public, Private, Protected, Default.", example: "Private = Diary. Public = Billboard.", code: "private String secret;" },
+            { id: 23, title: "String Basics", link: "https://notebook.zohopublic.in/public/notes/u3i1sf9bea7a6f25c4a60941d06a07ac8d76c", context: "Immutable sequence of chars. SCP memory.", example: "Username.", code: "String s = \"Java\";" },
+            { id: 24, title: "StringBuilder", link: "https://notebook.zohopublic.in/public/notes/u3i1sf9bea7a6f25c4a60941d06a07ac8d76c", context: "Mutable String. Efficient for modifications.", example: "Building a long SQL query.", code: "sb.append(\"Hello\");" },
+            { id: 25, title: "Exception Handling", link: "https://notebook.zohopublic.in/public/notes/u3i1sf9bea7a6f25c4a60941d06a07ac8d76c", context: "Try, Catch, Finally. Handling runtime errors.", example: "File not found fallback.", code: "try { } catch(e) { }" },
+
+            // 26-38: ADVANCED CORE (Links 26-38)
+            { id: 26, title: "Throw vs Throws", link: "https://notebook.zohopublic.in/public/notes/u3i1sf9bea7a6f25c4a60941d06a07ac8d76c", context: "Throw = Explicitly throw. Throws = Declare.", example: "Throw 'Invalid Age'.", code: "throw new Exception();" },
+            { id: 27, title: "Custom Exceptions", link: "https://notebook.zohopublic.in/public/notes/u3i1sf9bea7a6f25c4a60941d06a07ac8d76c", context: "User defined error classes.", example: "InsufficientFundsException.", code: "class MyEx extends Exception {}" },
+            { id: 28, title: "Inner Classes", link: "https://notebook.zohopublic.in/public/notes/74tdod05928d081b5484fbfd5937d4129fa64", context: "Class inside class. Logical grouping.", example: "Car.Engine.", code: "class Outer { class Inner {} }" },
+            { id: 29, title: "Anonymous Class", link: "https://notebook.zohopublic.in/public/notes/74tdo52a4834de5554f09bc9ec3f11572cd11", context: "Class without name. One time use.", example: "Button Click Listener.", code: "new Interface() { ... }" },
+            { id: 30, title: "Generics", link: "https://notebook.zohopublic.in/public/notes/74tdo47dcfcf05e644cf192c411a6d78ec1dc", context: "Type safety. Compile time checks.", example: "List<String> (Only strings).", code: "class Box<T> {}" },
+            { id: 31, title: "Bounded Generics", link: "https://notebook.zohopublic.in/public/notes/74tdob1b1f9bf584f44228974656f4d93519d", context: "Restricting generic types.", example: "NumberBox<T extends Number>.", code: "<T extends Number>" },
+            { id: 32, title: "Wildcards", link: "https://notebook.zohopublic.in/public/notes/74tdo36e9543c1b8941ea9099d9f04b190404", context: "? extends T. Flexible typing.", example: "Reading list of any Numbers.", code: "List<? extends Number>" },
+            { id: 33, title: "Wrapper Classes", link: "https://notebook.zohopublic.in/public/notes/74tdof6d5236d9b234442a814277c786bc6a2", context: "Object version of primitive. (int -> Integer).", example: "Collections need Objects.", code: "Integer x = 5;" },
+            { id: 34, title: "Autoboxing", link: "https://notebook.zohopublic.in/public/notes/74tdo0e297bb7d6dd4d45a837d13f60fedc3f", context: "Auto convert primitive to wrapper.", example: "int to Integer.", code: "Integer i = 10;" },
+            { id: 35, title: "Class Basics", link: "https://notebook.zohopublic.in/public/notes/74tdo4a0bd722efc748d0909fbb498fa21b18", context: "Blueprint for objects.", example: "Blueprint -> House.", code: "class House {}" },
+            { id: 36, title: "Object Class", link: "https://notebook.zohopublic.in/public/notes/74tdo77c24fe4d4df41c582e9041230f2cd6e", context: "Root of all classes. toString(), equals().", example: "Every class inherits Object.", code: "obj.toString();" },
+            { id: 37, title: "Java Variables", link: "https://notebook.zohopublic.in/public/notes/74tdo985cdf57a9bc40bdb37a4468a09b9554", context: "Local, Instance, Static.", example: "Scope definition.", code: "int local = 5;" },
+            { id: 38, title: "Memory Mgmt", link: "https://notebook.zohopublic.in/public/notes/74tdo3074d38916474ae096fe57ad9f2ff54b", context: "Stack (Methods) vs Heap (Objects). GC.", example: "Garbage Collector cleans Heap.", code: "new Object(); // Heap" },
+
+            // 39-45: MODERN JAVA & LOMBOK (OneDrive Links)
+            { id: 39, title: "Lombok", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5", context: "Boilerplate reducer. @Data, @Builder.", example: "Auto Generate Getters/Setters.", code: "@Data class User {}" },
+            { id: 40, title: "SequencedCollection", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5", context: "Java 21. Uniform access to first/last.", example: "list.getFirst().", code: "list.addFirst(1);" },
+            { id: 41, title: "Sealed Classes", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5", context: "Restrict inheritance.", example: "Shape permits Circle only.", code: "sealed class X permits Y {}" },
+            { id: 42, title: "Switch Enhance", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5", context: "Arrow syntax, yield return.", example: "Less verbose switch.", code: "case 1 -> \"One\";" },
+            { id: 43, title: "Instanceof Pattern", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5", context: "Type check and cast in one line.", example: "if(obj instanceof String s).", code: "s.length();" },
+            { id: 44, title: "Switch Pattern", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5", context: "Switch on types/objects.", example: "case Integer i -> ...", code: "switch(obj) {}" },
+            { id: 45, title: "Records", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5", context: "Immutable data carrier. Replaces DTO.", example: "UserRecord(name, age).", code: "record User(String name) {}" },
+
+            // 46-64: COLLECTIONS & THREADS (Zoho Links)
+            { id: 46, title: "ArrayList", link: "https://notebook.zohopublic.in/public/notes/bietvaf4a031eeb7245f19e651a16232e077a", context: "Dynamic Array. Fast Access.", example: "Shopping Cart items.", code: "List<String> l = new ArrayList<>();" },
+            { id: 47, title: "LinkedList", link: "https://notebook.zohopublic.in/public/notes/bietv97e0afeb8fcf41e191da86e3898422b7", context: "Doubly Linked Nodes. Fast Insert/Delete.", example: "Music Playlist.", code: "new LinkedList<>();" },
+            { id: 48, title: "Vector & Stack", link: "https://notebook.zohopublic.in/public/notes/bietv1d00e57bcbca4be89f155f6039985778", context: "Legacy synchronized lists. Stack is LIFO.", example: "Undo feature (Stack).", code: "Stack<Int> s = new Stack<>();" },
+            { id: 49, title: "HashSet", link: "https://notebook.zohopublic.in/public/notes/bietv2018487e1de84b009904a4dfeda24def", context: "Unique items. Unordered. Hashing.", example: "Unique User IDs.", code: "Set<Int> s = new HashSet<>();" },
+            { id: 50, title: "LinkedHashSet", link: "https://notebook.zohopublic.in/public/notes/bietv0de3bac30fbd41e7b1346bf9243ad3b2", context: "Unique items + Insertion Order.", example: "History of visited pages.", code: "new LinkedHashSet<>();" },
+            { id: 51, title: "TreeSet", link: "https://notebook.zohopublic.in/public/notes/bietv964a637b52be4a1bbfde8d0309040a79", context: "Sorted unique items. Red-Black Tree.", example: "Leaderboard ranks.", code: "new TreeSet<>();" },
+            { id: 52, title: "HashMap", link: "https://notebook.zohopublic.in/public/notes/bietv379bff087eca47eaa84a3024d7e14b46", context: "Key-Value pairs. Fast Lookup.", example: "Dictionary.", code: "map.put(key, val);" },
+            { id: 53, title: "Hashtable", link: "https://notebook.zohopublic.in/public/notes/bietv13e5f5aeff684305a86e2d251aa4deed", context: "Legacy synchronized Map.", example: "Old multi-threaded apps.", code: "new Hashtable<>();" },
+            { id: 54, title: "Multithreading", link: "https://notebook.zohopublic.in/public/notes/dcr5ze84495de6ad14cadbf5fe38b99b18b9d", context: "Executing multiple tasks at once.", example: "Playing music + Typing.", code: "extends Thread" },
+            { id: 55, title: "Thread Creation", link: "https://notebook.zohopublic.in/public/notes/dcr5ze84495de6ad14cadbf5fe38b99b18b9d", context: "Extend Thread vs Implement Runnable.", example: "Runnable is preferred.", code: "new Thread(runnable).start();" },
+            { id: 56, title: "Thread Methods", link: "https://notebook.zohopublic.in/public/notes/dcr5z12bd30d9fbc2454e9881904115682227", context: "start, run, sleep, join, yield.", example: "sleep(1000) pauses exec.", code: "t.join();" },
+            { id: 57, title: "Daemon Thread", link: "https://notebook.zohopublic.in/public/notes/dcr5za43213ff940049e4857a26389eb54486", context: "Background support thread.", example: "Garbage Collector.", code: "t.setDaemon(true);" },
+            { id: 58, title: "Synchronization", link: "https://notebook.zohopublic.in/public/notes/dcr5z827d4c4d67cf491494f30a7733eeb3e1", context: "Thread safety. Locks.", example: "2 people booking same seat.", code: "synchronized method() {}" },
+            { id: 59, title: "Sync Block", link: "https://notebook.zohopublic.in/public/notes/dcr5z613a71d83b66404e8692cfca4790232e", context: "Locking only specific code.", example: "Performance optimization.", code: "synchronized(this) { }" },
+            { id: 60, title: "Inter-thread Comm", link: "https://notebook.zohopublic.in/public/notes/dcr5zd72620f1d2574b40a39fe1b017931423", context: "wait(), notify(), notifyAll().", example: "Producer-Consumer problem.", code: "wait();" },
+            { id: 61, title: "Deadlock", link: "https://notebook.zohopublic.in/public/notes/dcr5z0896f8dfa8ad4dcfafa5d737b2b9c26d", context: "Two threads waiting for each other forever.", example: "Traffic Gridlock.", code: "Avoid nested locks." },
+            { id: 62, title: "Thread Lifecycle", link: "https://notebook.zohopublic.in/public/notes/dcr5zfbbb4128be4a406682b6a13ff80ed8fa", context: "New -> Runnable -> Running -> Blocked -> Terminated.", example: "Life of a worker.", code: "State.NEW" },
+            { id: 63, title: "Interrupting", link: "https://notebook.zohopublic.in/public/notes/dcr5z502a3a0746974f36b75a50729b691d58", context: "Waking up a sleeping thread.", example: "Stop background task.", code: "t.interrupt();" },
+            { id: 64, title: "Yielding", link: "https://notebook.zohopublic.in/public/notes/dcr5z26771d816c4f47b7a63d7e1d45129fd7", context: "Giving up CPU to others.", example: "Being polite in queue.", code: "Thread.yield();" },
+
+            // 65-71: ADVANCED/SPRING (Zoho Links)
+            { id: 65, title: "Serialization", link: "https://notebook.zohopublic.in/public/notes/9wn9o2148145a9ab9476ca8b75e801ca27882", context: "Object to Byte Stream. Persist state.", example: "Save Game Progress.", code: "implements Serializable" },
+            { id: 66, title: "Transient", link: "https://notebook.zohopublic.in/public/notes/9wn9o7260a3af90164c31941f061955edb73d", context: "Skip field during Serialization.", example: "Don't save Passwords.", code: "transient String pwd;" },
+            { id: 67, title: "File I/O", link: "https://notebook.zohopublic.in/public/notes/9wn9o634e8b2e46734882b52ecfd06aa4a162", context: "Reading/Writing files.", example: "Log files.", code: "FileInputStream" },
+            { id: 68, title: "Java 8 Features", link: "https://notebook.zohopublic.in/public/notes/9wn9o5fd6c0f15d68425d9b98284f48186179", context: "Lambdas, Streams, Optional.", example: "Functional Programming.", code: "-> { }" },
+            { id: 69, title: "Lambda Expr", link: "https://notebook.zohopublic.in/public/notes/9wn9o2d75e726a75c4b7eb7aaec1bd35d99b5", context: "Anonymous function.", example: "Runnable r = () -> {};", code: "(a,b) -> a+b" },
+            { id: 70, title: "Functional Interface", link: "https://notebook.zohopublic.in/public/notes/9wn9o30b391bbe74c408eb8c70d306be98258", context: "Interface with 1 abstract method.", example: "Runnable, Callable.", code: "@FunctionalInterface" },
+            { id: 71, title: "Method Reference", link: "https://notebook.zohopublic.in/public/notes/9wn9ob681f4fe22c8412db0729f618737a416", context: "Shorthand for Lambda.", example: "System.out::println", code: "List::add" },
+
+            // 72-75: JPA MAPPINGS (OneDrive Links)
+            { id: 72, title: "OneToOne Mapping", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41", context: "1 entity <-> 1 entity.", example: "User <-> Profile.", code: "@OneToOne" },
+            { id: 73, title: "JPA Basics", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41", context: "ORM Standard.", example: "Java Class <-> SQL Table.", code: "@Entity" },
+            { id: 74, title: "JPA Part 8", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41", context: "Advanced JPA config.", example: "Lazy Loading.", code: "FetchType.LAZY" },
+            { id: 75, title: "Final JPA", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41", context: "JPA Wrap up.", example: "Criteria API.", code: "EntityManager" }
+        ];
+
+        // --- RENDER FUNCTIONS ---
+        function renderNav(items) {
+            const list = document.getElementById('navList');
+            list.innerHTML = "";
+            items.forEach(t => {
+                const li = document.createElement('li');
+                li.className = 'nav-item';
+                li.innerHTML = `<span class="nav-id">${t.id}</span> ${t.title}`;
+                li.onclick = () => loadTopic(t.id);
+                list.appendChild(li);
+            });
+        }
+
+        function loadTopic(id) {
+            const t = topics.find(item => item.id === id);
+            const content = document.getElementById('contentArea');
+            
+            // Highlight active nav
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            // (Note: simple highlight logic for demo)
+
+            // Link Section Logic
+            let linkHTML = "";
+            if (t.link) {
+                linkHTML = `<br><a href="${t.link}" target="_blank" class="note-link">🔗 Open Original Note / PDF</a>`;
+            }
+
+            content.innerHTML = `
+                <div class="card">
+                    <h1>${t.id}. ${t.title}</h1>
+                    
+                    <div class="overview-box">
+                        <strong>📖 Overview (Context):</strong><br>
+                        ${t.context}
+                        ${linkHTML}
+                    </div>
+
+                    <h3>🏢 Real-Time Example</h3>
+                    <div class="example-box">${t.example}</div>
+
+                    <h3>💻 Code</h3>
+                    <pre>${t.code}</pre>
+                </div>
+            `;
+        }
+
+        function filterTopics(query) {
+            const filtered = topics.filter(t => t.title.toLowerCase().includes(query.toLowerCase()));
+            renderNav(filtered);
+        }
+
+        // Initialize
+        renderNav(topics);
+        loadTopic(1); // Load first topic by default
+
+    </script>
+</body>
+</html>
