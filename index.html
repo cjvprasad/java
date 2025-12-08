@@ -1016,7 +1016,7 @@
             linkDiv.innerHTML = "";
 // Assuming you created a folder named 'pdfs' in your repo
 if(t.src && !t.isProject) {
-    linkDiv.innerHTML += `<a href="./${t.src}" target="_blank" class="link-btn link-note">📄 Open PDF</a>`;
+    linkDiv.innerHTML += `<a href="./#${t.src}" target="_blank" class="link-btn link-note">📄 ${t.src}</a>`;
 }            if(t.link) linkDiv.innerHTML += `<a href="${t.link}" target="_blank" class="link-btn link-note">🔗 Open Link</a>`;
             if(t.git) linkDiv.innerHTML += `<a href="${t.git}" target="_blank" class="link-btn link-git">🦊 Git Code</a>`;
 
