@@ -3,75 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Professional Mastery v2</title>
+    <title>Java Professional Mastery v3</title>
     <style>
         :root { 
             --primary: #2c3e50; 
+            --secondary: #34495e;
             --accent: #27ae60; 
-            --bg: #eaeff2; 
             --text: #333;
-            --sidebar-width: 340px;
-            --tab-active: #fff;
-            --tab-inactive: #f1f1f1;
+            --bg: #ecf0f1;
+            --sidebar-width: 320px;
         }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; display: flex; height: 100vh; background: var(--bg); color: var(--text); }
         
-        /* Sidebar */
-        .sidebar { width: var(--sidebar-width); background: #1e272e; color: white; display: flex; flex-direction: column; border-right: 1px solid #1a252f; flex-shrink: 0; transition: width 0.3s; }
+        /* SIDEBAR STYLES */
+        .sidebar { width: var(--sidebar-width); background: #1e272e; color: #ecf0f1; display: flex; flex-direction: column; border-right: 1px solid #111; flex-shrink: 0; }
         .sidebar-header { padding: 20px; background: #111; text-align: center; border-bottom: 4px solid var(--accent); }
         .sidebar-header h2 { margin: 0; font-size: 1.2rem; letter-spacing: 1px; color: var(--accent); }
-        .search-box { padding: 10px 15px; background: #2d3436; }
-        .search-input { width: 100%; padding: 10px; border-radius: 4px; border: none; outline: none; background: #dfe6e9; color: #333; font-weight: 600; }
         
-        .nav-list { list-style: none; padding: 0; margin: 0; overflow-y: auto; flex: 1; }
-        .nav-item { padding: 12px 18px; border-bottom: 1px solid #2d3436; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; }
-        .nav-item:hover { background: rgba(255,255,255,0.05); padding-left: 22px; }
-        .nav-item.active { background: var(--accent); color: white; padding-left: 22px; border-left: 4px solid white; }
-        .nav-id { font-weight: bold; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; margin-right: 10px; font-size: 0.75rem; min-width: 25px; text-align: center; }
-        .nav-cat { font-size: 0.7rem; text-transform: uppercase; opacity: 0.7; margin-left: auto; letter-spacing: 0.5px; border: 1px solid rgba(255,255,255,0.2); padding: 1px 4px; border-radius: 3px; }
+        .search-box { padding: 10px; background: #2d3436; }
+        .search-input { width: 100%; padding: 8px; border-radius: 4px; border: none; outline: none; background: #dfe6e9; color: #333; font-weight: 600; box-sizing: border-box;}
 
-        /* Main Content */
+        .nav-container { flex: 1; overflow-y: auto; scrollbar-width: thin; }
+        
+        /* Accordion Categories */
+        .cat-group { border-bottom: 1px solid #2d3436; }
+        .cat-header { 
+            padding: 12px 15px; 
+            background: #232d36; 
+            cursor: pointer; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            font-weight: 600; 
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .cat-header:hover { background: #2c3e50; }
+        .cat-header .badge { font-size: 0.75rem; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 10px; }
+        .cat-icon { font-size: 0.7rem; transition: transform 0.3s; }
+        
+        /* Active Category State */
+        .cat-group.open .cat-header { color: var(--accent); border-left: 3px solid var(--accent); background: #1a2126; }
+        .cat-group.open .cat-icon { transform: rotate(180deg); }
+        
+        /* Topic List */
+        .cat-list { display: none; background: #151a1e; list-style: none; padding: 0; margin: 0; }
+        .cat-group.open .cat-list { display: block; animation: slideDown 0.3s ease; }
+        
+        .nav-item { padding: 10px 15px 10px 25px; cursor: pointer; font-size: 0.85rem; border-bottom: 1px solid #232d36; color: #bdc3c7; transition: 0.2s; display: flex; align-items: center; }
+        .nav-item:hover { background: rgba(255,255,255,0.05); color: white; }
+        .nav-item.active { background: rgba(39, 174, 96, 0.15); color: var(--accent); border-left: 3px solid var(--accent); padding-left: 22px; font-weight: 700; }
+        .nav-id { opacity: 0.5; margin-right: 8px; min-width: 25px; font-size: 0.75rem; }
+
+        /* MAIN CONTENT */
         .main-content { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; }
-        .container { max-width: 950px; margin: 0 auto; width: 100%; }
-        
-        /* Navigation Controls (Top/Bottom) */
-        .nav-controls { display: flex; justify-content: space-between; margin-bottom: 15px; margin-top: 15px; }
-        .btn-nav { padding: 8px 16px; background: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 5px; transition: 0.2s; }
-        .btn-nav:hover { background: var(--accent); }
-        .btn-nav:disabled { background: #bdc3c7; cursor: not-allowed; }
+        .container { max-width: 900px; margin: 0 auto; width: 100%; }
 
-        /* Card */
-        .card { background: white; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; display: flex; flex-direction: column; min-height: 400px; }
-        .card-header { background: var(--primary); color: white; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; }
+        /* Controls */
+        .nav-controls { display: flex; justify-content: space-between; margin-bottom: 15px; }
+        .btn-nav { padding: 8px 20px; background: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .btn-nav:hover { background: var(--accent); transform: translateY(-2px); }
+        .btn-nav:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
+
+        /* Content Card */
+        .card { background: white; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; min-height: 500px; display: flex; flex-direction: column; }
+        .card-header { background: var(--primary); color: white; padding: 25px; display: flex; justify-content: space-between; align-items: center; }
         .card-header h1 { margin: 0; font-size: 1.5rem; }
+        .cat-tag { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
 
         /* Tabs */
-        .tabs { display: flex; background: #f1f2f6; border-bottom: 1px solid #ddd; padding: 0 20px; gap: 5px; overflow-x: auto;}
-        .tab { padding: 12px 20px; cursor: pointer; font-weight: 600; color: #7f8c8d; border-bottom: 3px solid transparent; transition: 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 6px; }
-        .tab:hover { color: var(--primary); background: rgba(0,0,0,0.02); }
+        .tabs { display: flex; background: #f8f9fa; border-bottom: 1px solid #e9ecef; padding: 0 20px; overflow-x: auto; }
+        .tab { padding: 15px 20px; cursor: pointer; font-weight: 600; color: #7f8c8d; border-bottom: 3px solid transparent; transition: 0.2s; white-space: nowrap; font-size: 0.9rem; }
+        .tab:hover { color: var(--primary); }
         .tab.active { color: var(--accent); border-bottom: 3px solid var(--accent); background: white; }
 
         .card-body { padding: 30px; flex: 1; }
         .tab-content { display: none; animation: fadeIn 0.3s; }
         .tab-content.active { display: block; }
 
-        /* Content Blocks */
-        .content-block { margin-bottom: 25px; }
-        .block-title { font-size: 1.1rem; color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; font-weight: 700; border-bottom: 2px solid #eee; padding-bottom: 5px; }
+        /* Typography */
+        .block-title { font-size: 1.1rem; color: var(--primary); margin-bottom: 15px; font-weight: 700; border-bottom: 2px solid #f1f1f1; padding-bottom: 8px; }
+        .text-content { font-size: 1.05rem; line-height: 1.7; color: #444; }
         
-        .context-text { font-size: 1.05rem; line-height: 1.6; color: #444; }
-        .link-group { margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap; }
-        .ext-link { text-decoration: none; font-size: 0.9rem; padding: 6px 12px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; border: 1px solid transparent; }
-        .link-note { background: #eaf2f8; color: #2980b9; border-color: #aed6f1; }
-        .link-note:hover { background: #d4e6f1; }
-        .link-git { background: #fdf2e9; color: #d35400; border-color: #fad7a0; }
-        .link-git:hover { background: #fbeee6; }
+        .scenario-box { background: #e8f8f5; padding: 20px; border-radius: 6px; border-left: 4px solid var(--accent); color: #0e6251; line-height: 1.6; }
+        .code-block { background: #2d3436; color: #dfe6e9; padding: 20px; border-radius: 6px; overflow-x: auto; font-family: 'Consolas', monospace; font-size: 0.95rem; line-height: 1.5; border: 1px solid #444; }
 
-        .scenario-box { background: #e8f8f5; padding: 20px; border-radius: 6px; border-left: 4px solid var(--accent); color: #0b5345; }
-        .code-block { background: #282c34; color: #abb2bf; padding: 20px; border-radius: 6px; overflow-x: auto; font-family: 'Consolas', monospace; line-height: 1.5; font-size: 0.95rem; }
+        /* Links */
+        .link-area { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; }
+        .link-btn { text-decoration: none; padding: 8px 12px; border-radius: 4px; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
+        .link-note { background: #e3f2fd; color: #2980b9; border: 1px solid #a9cce3; }
+        .link-note:hover { background: #2980b9; color: white; }
+        .link-git { background: #fbeee6; color: #d35400; border: 1px solid #edbb99; }
+        .link-git:hover { background: #d35400; color: white; }
 
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        @media (max-width: 900px) { body { flex-direction: column; } .sidebar { width: 100%; height: 250px; } .tabs { flex-wrap: wrap; } }
+        
+        @media (max-width: 900px) { body { flex-direction: column; } .sidebar { width: 100%; height: 350px; } }
     </style>
 </head>
 <body>
@@ -83,21 +111,22 @@
         <div class="search-box">
             <input type="text" class="search-input" placeholder="Search Topic..." onkeyup="filterTopics(this.value)">
         </div>
-        <ul class="nav-list" id="navList"></ul>
+        <div class="nav-container" id="navContainer">
+            </div>
     </div>
 
     <div class="main-content">
         <div class="container">
             
             <div class="nav-controls">
-                <button class="btn-nav" id="prevBtnTop" onclick="prevTopic()">← Prev</button>
-                <button class="btn-nav" id="nextBtnTop" onclick="nextTopic()">Next →</button>
+                <button class="btn-nav" id="prevBtnTop" onclick="changeTopic(-1)">← Prev</button>
+                <button class="btn-nav" id="nextBtnTop" onclick="changeTopic(1)">Next →</button>
             </div>
 
             <div class="card">
                 <div class="card-header">
                     <h1 id="topicTitle">Select a Topic</h1>
-                    <span id="topicCat" style="opacity:0.8; font-size: 0.9rem; background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 12px;">Category</span>
+                    <span class="cat-tag" id="topicCat">Category</span>
                 </div>
 
                 <div class="tabs">
@@ -109,26 +138,19 @@
 
                 <div class="card-body">
                     <div id="tab-core" class="tab-content active">
-                        <div class="content-block">
-                            <div class="block-title">Overview</div>
-                            <div class="context-text" id="contextText"></div>
-                            
-                            <div id="linkSection" class="link-group"></div>
-                        </div>
+                        <div class="block-title">Overview</div>
+                        <div class="text-content" id="coreText"></div>
+                        <div class="link-area" id="linkArea"></div>
                     </div>
 
                     <div id="tab-scenario" class="tab-content">
-                        <div class="content-block">
-                            <div class="block-title">Use Case</div>
-                            <div class="scenario-box" id="scenarioText"></div>
-                        </div>
+                        <div class="block-title">Business Use Case</div>
+                        <div class="scenario-box" id="scenarioText"></div>
                     </div>
 
                     <div id="tab-impl" class="tab-content">
-                        <div class="content-block">
-                            <div class="block-title">Code Example</div>
-                            <div class="code-block" id="codeText"></div>
-                        </div>
+                        <div class="block-title">Code Example</div>
+                        <pre class="code-block" id="codeText"></pre>
                     </div>
 
                     <div id="tab-all" class="tab-content">
@@ -138,181 +160,259 @@
             </div>
 
             <div class="nav-controls">
-                <button class="btn-nav" id="prevBtnBot" onclick="prevTopic()">← Prev</button>
-                <button class="btn-nav" id="nextBtnBot" onclick="nextTopic()">Next →</button>
+                <button class="btn-nav" id="prevBtnBot" onclick="changeTopic(-1)">← Prev</button>
+                <button class="btn-nav" id="nextBtnBot" onclick="changeTopic(1)">Next →</button>
             </div>
 
         </div>
     </div>
 
     <script>
-        // --- DATA ---
-        // Merged dataset (Core + Spring + Microservices)
+        // --- 75 TOPIC DATA ARRAY ---
         const topics = [
-            // BASICS & CORE
-            { id: 1, cat: "Core", title: "Java Architecture", context: "JDK (Dev Kit) > JRE (Runtime) > JVM (Virtual Machine). The JVM acts as an interpreter between Bytecode (.class) and the Operating System, enabling 'Write Once, Run Anywhere'.", example: "Spotify app running identically on Windows, Mac, and Linux because the JVM abstracts the OS differences.", code: "java -version\njavac MyCode.java", src: "2_JDK_JRE_JVM.pdf" },
-            { id: 2, cat: "Core", title: "Static Typing", context: "Java enforces variable types at compile-time. You cannot assign a String to an Integer variable. This strictness catches bugs early.", example: "Banking Ledger: You cannot accidentally subtract a User Name (String) from a Balance (Double).", code: "int id = 10;\n// id = \"Hello\"; // Compile Error", src: "4_Primitive_Variables.pdf" },
-            { id: 3, cat: "Core", title: "Stack vs Heap", context: "Stack stores primitive variables and method calls (LIFO). It is fast and thread-specific. Heap stores Objects. It is large, shared, and managed by GC.", example: "Recursion (Stack) vs Database Result Set (Heap).", code: "int x = 5; // Stack\nUser u = new User(); // Heap", src: "9_Memory.pdf", link: "https://notebook.zohopublic.in/public/notes/74tdo3074d38916474ae096fe57ad9f2ff54b" },
-            { id: 4, cat: "OOPS", title: "Polymorphism", context: "The ability of an object to take on many forms. A parent reference can hold a child object, and the child's overridden method will execute.", example: "Notification System: send(Email), send(SMS), send(Push). All implement 'Notification'.", code: "Notification n = new Email();\nn.send(); // Sends Email", src: "1_OOPS.pdf", link: "https://notebook.zohopublic.in/public/notes/u3i1s033d318172e442b8b8f242767b93776c" },
-            { id: 5, cat: "OOPS", title: "Encapsulation", context: "Restricting direct access to data fields. Using 'private' variables and 'public' getters/setters allows validation logic.", example: "Bank Account: You can't set balance = -500. You must call withdraw(500) which checks funds.", code: "private double balance;\npublic void setBal(double b) { if(b>0) balance=b; }", src: "1_OOPS.pdf" },
+            // 1. BASICS
+            { id: 1, cat: "Basics", title: "Java Architecture", context: "JDK (Dev Kit) > JRE (Runtime) > JVM (Virtual Machine). JVM executes Bytecode, enabling 'Write Once, Run Anywhere'.", example: "Spotify app running identically on Windows and Mac using the JVM.", code: "java -version\njavac Code.java", src: "2_JDK_JRE_JVM.pdf" },
+            { id: 2, cat: "Basics", title: "Static Typing", context: "Java enforces variable types at compile-time to prevent runtime crashes.", example: "Banking: Cannot subtract a String name from a Double balance.", code: "int id = 10;\n// id = \"Text\"; // Error", src: "4_Primitive_Variables.pdf" },
+            { id: 3, cat: "Basics", title: "Primitive vs Reference", context: "Primitives (int, boolean) in Stack (Fast). Objects (User, String) in Heap (Managed).", example: "Stock Price (Stack) vs User Profile (Heap).", code: "int x = 5;\nUser u = new User();", src: "4_Primitive_Variables.pdf" },
+            { id: 4, cat: "Basics", title: "Type Casting", context: "Widening (Auto) vs Narrowing (Manual/Risk of data loss).", example: "GPS: Satellite gives 10.987km, Display shows 10km (Narrowing).", code: "double d = 10.5;\nint i = (int) d;", src: "4_Primitive_Variables.pdf" },
+            { id: 5, cat: "Basics", title: "Operators & Ternary", context: "Shorthand if-else for cleaner UI logic.", example: "Login: (loggedIn) ? 'Welcome' : 'Login'.", code: "String s = (auth) ? \"User\" : \"Guest\";", src: "General" },
+            { id: 6, cat: "Basics", title: "Switch Expressions", context: "Modern Java 14+ switch with arrow syntax and return values.", example: "Order Status: 1 -> 'Pending', 2 -> 'Shipped'.", code: "String s = switch(i) { case 1 -> \"A\"; default -> \"B\"; };", src: "Link 42", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5" },
+            { id: 7, cat: "Basics", title: "Loops", context: "For (Known count) vs While (Unknown condition).", example: "Payroll (For 500 employees) vs Server Listener (While running).", code: "for(User u : users) { sendEmail(u); }", src: "General" },
+            { id: 8, cat: "Basics", title: "Arrays", context: "Fixed size, fast access (O(1)). Contiguous memory.", example: "Image Pixels: Fixed grid 1920x1080.", code: "int[] arr = new int[10];", src: "6_NonPrimitive_Variables.pdf" },
+            { id: 9, cat: "Basics", title: "Methods", context: "Reusable code blocks. Inputs (Params) -> Logic -> Output (Return).", example: "Tax Calc: logic reused in Cart, Invoice, and Email.", code: "double calc(double val) { return val * 0.18; }", src: "7_METHODS.pdf" },
+            { id: 10, cat: "Basics", title: "Overloading", context: "Same method name, different params.", example: "Search(ID) vs Search(Name).", code: "void search(int id){}\nvoid search(String s){}", src: "7_METHODS.pdf" },
+            { id: 11, cat: "Basics", title: "Constructors", context: "Init object state. No return type.", example: "DB Connection: Must allow URL/Pass on creation.", code: "class DB { DB(String url) { connect(url); } }", src: "7_METHODS.pdf" },
+
+            // 2. OOPS
+            { id: 12, cat: "OOPS", title: "The 'this' Keyword", context: "Current instance reference. Resolves shadowing.", example: "User Input 'email' vs Class Field 'email'.", code: "this.email = email;", src: "Link 12", link: "https://notebook.zohopublic.in/public/notes/u3i1se962d56445eb4118ab4e4c0ca99e4728" },
+            { id: 13, cat: "OOPS", title: "Inheritance", context: "Child acquires Parent properties. Code reuse.", example: "Uber: UberX and UberBlack inherit Vehicle.", code: "class UberX extends Vehicle {}", src: "Link 13", link: "https://notebook.zohopublic.in/public/notes/u3i1s340edd3a883b4ef7ac90874731c865b0" },
+            { id: 14, cat: "OOPS", title: "Polymorphism", context: "Runtime method overriding. Parent ref, Child object.", example: "Payment: process() runs PayPal logic if obj is PayPal.", code: "Payment p = new PayPal(); p.pay();", src: "Link 14", link: "https://notebook.zohopublic.in/public/notes/u3i1s033d318172e442b8b8f242767b93776c" },
+            { id: 15, cat: "OOPS", title: "Encapsulation", context: "Data hiding. Private fields, Public getters/setters.", example: "Bank: withdraw() checks balance before reducing it.", code: "private double bal;\npublic void set(double b) { if(b>0) bal=b; }", src: "Link 15", link: "https://notebook.zohopublic.in/public/notes/u3i1s033d318172e442b8b8f242767b93776c" },
+            { id: 16, cat: "OOPS", title: "Abstraction", context: "Hiding implementation. Showing functionality.", example: "Car: Driver uses Brake Pedal (Interface), not Hydraulics.", code: "abstract void brake();", src: "Link 16", link: "https://notebook.zohopublic.in/public/notes/u3i1sa79b68153abe44d5aa93cc1d5b9f4dd9" },
+            { id: 17, cat: "OOPS", title: "Interfaces", context: "Contract of capabilities. Multiple inheritance.", example: "Phone: Implements Camera, GPS, MusicPlayer.", code: "class Phone implements GPS, Camera {}", src: "Link 17", link: "https://notebook.zohopublic.in/public/notes/u3i1sae669a127ac24a07842a488207750a7c" },
+            { id: 18, cat: "OOPS", title: "Static", context: "Class-level memory. Shared by all instances.", example: "Company Name: Stored once for all employees.", code: "static String company = \"Google\";", src: "Link 18", link: "https://notebook.zohopublic.in/public/notes/u3i1sd9ea4e81ceef491cb4bd1ee221daa89f" },
+            { id: 19, cat: "OOPS", title: "Final", context: "Constant (Var), No Override (Method), No Inherit (Class).", example: "Security Config: Algorithm name shouldn't change.", code: "final String ALG = \"AES\";", src: "Link 19", link: "https://notebook.zohopublic.in/public/notes/u3i1sd9ea4e81ceef491cb4bd1ee221daa89f" },
+            { id: 20, cat: "OOPS", title: "Super", context: "Access Parent class members/constructors.", example: "Manager calls super(name) to init Employee parts.", code: "super(name);", src: "Link 20", link: "https://notebook.zohopublic.in/public/notes/u3i1s38886070c7a74e9db5b0ec3b1697f7f8" },
+
+            // 3. STRINGS/EXCEPTIONS
+            { id: 21, cat: "Strings", title: "Immutability", context: "Strings can't change. String Pool saves memory.", example: "1M users with role 'USER' share 1 string object.", code: "String s = \"A\"; s = \"B\"; // New Object", src: "Link 21", link: "https://notebook.zohopublic.in/public/notes/u3i1sa26424f5a9614b35897900c90fb2c402" },
+            { id: 22, cat: "Strings", title: "StringBuilder", context: "Mutable string for loops/manipulation.", example: "Building a CSV report row by row.", code: "sb.append(\"data\");", src: "Link 22", link: "https://notebook.zohopublic.in/public/notes/u3i1sf9bea7a6f25c4a60941d06a07ac8d76c" },
+            { id: 23, cat: "Exceptions", title: "Try-Catch", context: "Handle runtime errors gracefully.", example: "File Upload: Catch 'CorruptFile' and warn user.", code: "try { } catch(Ex e) { }", src: "Link 23", link: "https://notebook.zohopublic.in/public/notes/u3i1sf9bea7a6f25c4a60941d06a07ac8d76c" },
+            { id: 24, cat: "Exceptions", title: "Finally", context: "Always runs. Cleanup logic.", example: "Close DB connection.", code: "finally { db.close(); }", src: "Link 24", link: "https://notebook.zohopublic.in/public/notes/u3i1sf9bea7a6f25c4a60941d06a07ac8d76c" },
+            { id: 25, cat: "Exceptions", title: "Throw vs Throws", context: "Throw action vs Method Declaration.", example: "ATM: Throw 'NoFunds'.", code: "void pay() throws Ex { throw new Ex(); }", src: "Link 25", link: "https://notebook.zohopublic.in/public/notes/u3i1sf9bea7a6f25c4a60941d06a07ac8d76c" },
+
+            // 4. MEMORY/COLLECTIONS
+            { id: 26, cat: "Memory", title: "Stack vs Heap", context: "Stack=Execution/Primitives. Heap=Objects.", example: "Recursion fills Stack. Large Data fills Heap.", code: "int i=0; User u = new User();", src: "9_Memory.pdf", link: "https://notebook.zohopublic.in/public/notes/74tdo3074d38916474ae096fe57ad9f2ff54b" },
+            { id: 27, cat: "Memory", title: "Garbage Collection", context: "Auto delete unused objects. Mark & Sweep.", example: "Closing Browser Tab frees RAM.", code: "obj = null;", src: "9_Memory.pdf" },
+            { id: 28, cat: "Collections", title: "ArrayList", context: "Dynamic Array. Fast Read, Slow Insert.", example: "News Feed (Read heavy).", code: "list.get(0);", src: "Link 46", link: "https://notebook.zohopublic.in/public/notes/bietvaf4a031eeb7245f19e651a16232e077a" },
+            { id: 29, cat: "Collections", title: "LinkedList", context: "Nodes. Fast Insert, Slow Read.", example: "Music Queue (Insert Next).", code: "list.addFirst(song);", src: "Link 47", link: "https://notebook.zohopublic.in/public/notes/bietv97e0afeb8fcf41e191da86e3898422b7" },
+            { id: 30, cat: "Collections", title: "HashMap", context: "Key-Value. O(1) lookup.", example: "Session Cache (ID -> User).", code: "map.put(id, user);", src: "Link 52", link: "https://notebook.zohopublic.in/public/notes/bietv379bff087eca47eaa84a3024d7e14b46" },
+            { id: 31, cat: "Collections", title: "HashSet", context: "Unique items only.", example: "Email List (No duplicates).", code: "set.add(email);", src: "Link 49", link: "https://notebook.zohopublic.in/public/notes/bietv2018487e1de84b009904a4dfeda24def" },
+            { id: 32, cat: "Collections", title: "Generics", context: "Type Safety.", example: "Box<Shoes> prevents storing Pizza.", code: "List<String> s;", src: "10_Classes.pdf", link: "https://notebook.zohopublic.in/public/notes/74tdo47dcfcf05e644cf192c411a6d78ec1dc" },
+
+            // 5. THREADS/MODERN
+            { id: 33, cat: "Threads", title: "Multithreading", context: "Parallel Tasks.", example: "Typing + SpellCheck.", code: "Thread t = new Thread(task);", src: "Link 54", link: "https://notebook.zohopublic.in/public/notes/dcr5ze84495de6ad14cadbf5fe38b99b18b9d" },
+            { id: 34, cat: "Threads", title: "Synchronization", context: "Thread Safety (Locks).", example: "Booking Seat A1 (Only 1 user).", code: "synchronized book() {}", src: "Link 58", link: "https://notebook.zohopublic.in/public/notes/dcr5z827d4c4d67cf491494f30a7733eeb3e1" },
+            { id: 35, cat: "Modern", title: "Lambdas", context: "Concise functional code (Java 8).", example: "Button OnClick.", code: "btn.onClick(e -> print(e));", src: "Link 69", link: "https://notebook.zohopublic.in/public/notes/9wn9o2d75e726a75c4b7eb7aaec1bd35d99b5" },
+            { id: 36, cat: "Modern", title: "Stream API", context: "Declarative processing (Filter/Map).", example: "Filter products > $50.", code: "list.stream().filter().toList();", src: "General" },
+            { id: 37, cat: "Modern", title: "Optional", context: "Null handling container.", example: "DB Result might be empty.", code: "opt.orElse(\"None\");", src: "General" },
+            { id: 38, cat: "Tools", title: "Lombok", context: "Boilerplate Generator.", example: "@Data for Getters/Setters.", code: "@Data class User {}", src: "Link 39", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5" },
+            { id: 39, cat: "Modern", title: "Records", context: "Immutable Data Carrier.", example: "DTOs (Data Transfer).", code: "record Point(int x, int y){}", src: "Link 45", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5" },
+
+            // 6. SPRING BOOT
+            { id: 40, cat: "Spring Boot", title: "Architecture", context: "Auto-Config, Embedded Server.", example: "Run Web App in 5 mins.", code: "@SpringBootApplication", src: "User Link", link: "https://onedrive.live.com/:o:/g/personal/6B364628C29FEB52/EksLbbBuPIhDjFYNjtEw6kEB7wRxe5wd2oWXREL9gKphEg?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&ithint=onenote&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc" },
+            { id: 41, cat: "Security", title: "Basics", context: "AuthN (Who) & AuthZ (What). Filters.", example: "Login protection.", code: "http.authenticated();", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc&wd=target(SpringBoot.one%7Cd37c24fe-34a1-2046-885f-ef3807025388%2FSpringBoot%20Security%20-%20Part2%20and%20Part3%7C7e5c2090-8ff6-dc46-9ade-25cf32f7e4eb%2F)&wdorigin=703" },
+            { id: 42, cat: "Security", title: "OAuth 2.0", context: "Delegated Auth (Google/FB).", example: "Sign in with Google.", code: "@EnableOAuth2Sso", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc&wd=target(SpringBoot.one%7Cd37c24fe-34a1-2046-885f-ef3807025388%2FSpringBoot%20Security%20-%20Part8%20(OAuth%20Authentication%5C)%7Cf5c0fea5-77d9-bb45-a1fc-fc6285059c1a%2F)&wdorigin=703", git: "https://gitlab.com/shrayansh8/interviewcodingpractise/-/tree/main/src/main/java/com/conceptandcoding/learningspringboot/OAuth" },
+            { id: 43, cat: "Security", title: "RBAC", context: "Role Based Access.", example: "Admin vs User API access.", code: "@PreAuthorize('ADMIN')", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc&wd=target(SpringBoot.one%7Cd37c24fe-34a1-2046-885f-ef3807025388%2FSpring%20boot%20-%20Part9%20(Role%20based%20Authorization%20-%20Annotations%5C)%7C941edfd8-801e-9c46-963e-d79b8b8c9607%2F)&wdorigin=703" },
+
+            // 7. MICROSERVICES
+            { id: 44, cat: "Microservices", title: "RestClient", context: "Sync HTTP Client (Spring 3.2).", example: "Order Svc calling Inventory Svc.", code: "restClient.get().retrieve()", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FRestClient%7C0d8b2f2c-6b98-4a43-b5e7-c85058aaed36%2F%29&wdorigin=703" },
+            { id: 45, cat: "Microservices", title: "Feign Client", context: "Declarative HTTP Client.", example: "Interface based calls.", code: "@FeignClient interface API {}", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FFeignClient%7C58a280a8-cde1-2744-9639-da22cbd670c2%2F%29&wdorigin=703" },
+            { id: 46, cat: "Microservices", title: "Discovery", context: "Eureka. Service Registry.", example: "Dynamic Scaling (IP lookup).", code: "@EnableEurekaServer", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FService+Discovery%7Cbe9efdfc-f515-344f-b765-9b58c71e6cdb%2F%29&wdorigin=703" },
+            { id: 47, cat: "Microservices", title: "Load Balancing", context: "Client-side traffic distribution.", example: "Round Robin requests.", code: "@LoadBalanced", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FClient+Side+Load+Balancer%7Ca0e35fce-9ab3-774d-a9a5-1a83bcd9e0f9%2F%29&wdorigin=703" },
+            { id: 48, cat: "Microservices", title: "Resilience4j", context: "Fault Tolerance.", example: "Handling downtimes gracefully.", code: "// CircuitBreaker", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FResilience4j+Building+Fault-Tolerant+Microservice%7Ca0095666-1317-4f4c-b672-a8915839634d%2F%29&wdorigin=703" },
+            { id: 49, cat: "Microservices", title: "Bulkhead", context: "Resource Isolation (Thread Pools).", example: "Payment Threads vs Browse Threads.", code: "@Bulkhead(name='api')", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FBulkhead+Fault-Tolerant+Microservice+%28Part-2%5C%29%7Cc82898a8-8c19-df43-a956-00d6d5ce44fc%2F%29&wdorigin=703" },
+            { id: 50, cat: "Microservices", title: "Retry", context: "Retrying failed ops.", example: "Network Blip.", code: "@Retry(name='api')", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FRetry+Fault-Tolerant+Microservice+%28Part-3%5C%29%7C8d82083b-9805-4b47-bafa-6cea3f88f6a4%2F%29&wdorigin=703" },
+            { id: 51, cat: "Microservices", title: "Circuit Breaker", context: "Fail Fast. Stop calling dead service.", example: "Email Service Dead.", code: "@CircuitBreaker", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FCircuit+Breaker+Fault-Tolerant+Microservice+%28Part-%7Caff21d09-7e7c-4a43-b09c-50e7a2c70e82%2F%29&wdorigin=703" },
+            { id: 52, cat: "Microservices", title: "API Gateway", context: "Single Entry Point. Routing.", example: "Route /orders -> OrderSvc.", code: "routes: \n - id: order\n uri: lb://ORDER", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FAPI+Gateway%7C3bb17da8-1963-2f47-b15a-a530443924cf%2F%29&wdorigin=703", git: "https://gitlab.com/shrayansh8/springboot-microservices/-/tree/main/apigateway_part1?ref_type=heads" },
+            { id: 53, cat: "Microservices", title: "Gateway Filters", context: "Modify Request/Response.", example: "Add Trace Headers.", code: "filters: AddHeader", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FAPI+Gateway+-+Part2%7C669be8ba-609d-734a-a8ce-72a0ea3e27cc%2F%29&wdorigin=703", git: "https://gitlab.com/shrayansh8/springboot-microservices/-/tree/main/apigateway_part2/apigateway?ref_type=heads" },
+            { id: 54, cat: "Microservices", title: "Central Config", context: "Git-backed configs.", example: "Change props without redeploy.", code: "spring.config.import", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FCentralized+Configuration%7Cfc15fdca-d6a1-8f40-b677-08a3d45ac351%2F%29&wdorigin=703" },
+            { id: 55, cat: "Advanced", title: "Serialization", context: "Object to Byte Stream.", example: "Saving Game State.", code: "implements Serializable", src: "Link 65", link: "https://notebook.zohopublic.in/public/notes/9wn9o2148145a9ab9476ca8b75e801ca27882" },
             
-            // COLLECTIONS & THREADS
-            { id: 6, cat: "Collections", title: "HashMap", context: "Stores data in Key-Value pairs. Uses hashing to compute an index, providing O(1) average time complexity for retrieval.", example: "Caching: Storing User Sessions where Key=SessionID and Value=UserProfile.", code: "Map<String, User> cache = new HashMap<>();\ncache.put(\"SID_123\", userObj);", src: "Link 52", link: "https://notebook.zohopublic.in/public/notes/bietv379bff087eca47eaa84a3024d7e14b46" },
-            { id: 7, cat: "Threads", title: "Multithreading", context: "Executing multiple threads simultaneously to maximize CPU usage. Essential for responsive UIs and handling multiple server requests.", example: "Web Browser: One thread downloads the file, another keeps the UI responsive so you can scroll.", code: "Thread t = new Thread(() -> downloadFile());\nt.start();", src: "Link 54", link: "https://notebook.zohopublic.in/public/notes/dcr5ze84495de6ad14cadbf5fe38b99b18b9d" },
-            
-            // TOOLS & MODERN JAVA
-            { id: 8, cat: "Tools", title: "Lombok", context: "A library that generates boilerplate code (Getters, Setters, Constructors) at compile time using annotations.", example: "User DTOs: Instead of writing 100 lines of getters/setters, use @Data.", code: "@Data\npublic class User {\n  private String name;\n}", src: "Link 39", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5" },
-            { id: 9, cat: "Modern", title: "Java Records", context: "Introduced in Java 16. A concise way to create immutable data carrier classes. Replaces POJOs for simple data holding.", example: "API Response: Returning Coordinates (x,y) from a backend.", code: "public record Point(int x, int y) {}", src: "Link 45", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5" },
-            
-            // SPRING BOOT & SECURITY
-            { id: 40, cat: "Spring Boot", title: "Spring Boot Architecture", context: "Simplifies Spring apps with 'Auto-Configuration' and 'Embedded Servers' (Tomcat). It scans your classpath and configures beans automatically.", example: "Microservices: Spinning up a new service in 5 mins without XML config.", code: "@SpringBootApplication\npublic class App { main() { run(App.class); } }", src: "User Link", link: "https://onedrive.live.com/:o:/g/personal/6B364628C29FEB52/EksLbbBuPIhDjFYNjtEw6kEB7wRxe5wd2oWXREL9gKphEg?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&ithint=onenote&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc" },
-            { id: 41, cat: "Security", title: "Spring Security Basics", context: "Authentication (Who) and Authorization (What). Uses a filter chain to intercept requests.", example: "Login Page: Intercepts request, checks credentials, issues Session/Token.", code: "http.authorizeRequests().anyRequest().authenticated();", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc&wd=target(SpringBoot.one%7Cd37c24fe-34a1-2046-885f-ef3807025388%2FSpringBoot%20Security%20-%20Part2%20and%20Part3%7C7e5c2090-8ff6-dc46-9ade-25cf32f7e4eb%2F)&wdorigin=703" },
-            { id: 42, cat: "Security", title: "OAuth 2.0 Integration", context: "Delegated authorization. Allows users to log in via Google/Facebook without sharing passwords.", example: "Social Login: 'Sign in with Google' button.", code: "@EnableOAuth2Sso", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc&wd=target(SpringBoot.one%7Cd37c24fe-34a1-2046-885f-ef3807025388%2FSpringBoot%20Security%20-%20Part8%20(OAuth%20Authentication%5C)%7Cf5c0fea5-77d9-bb45-a1fc-fc6285059c1a%2F)&wdorigin=703", git: "https://gitlab.com/shrayansh8/interviewcodingpractise/-/tree/main/src/main/java/com/conceptandcoding/learningspringboot/OAuth" },
-            { id: 43, cat: "Security", title: "RBAC (Role Based)", context: "Restricting access based on User Roles (Admin, User, Manager).", example: "HR Portal: Only 'Admin' can delete employees.", code: "@PreAuthorize(\"hasRole('ADMIN')\")", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc&wd=target(SpringBoot.one%7Cd37c24fe-34a1-2046-885f-ef3807025388%2FSpring%20boot%20-%20Part9%20(Role%20based%20Authorization%20-%20Annotations%5C)%7C941edfd8-801e-9c46-963e-d79b8b8c9607%2F)&wdorigin=703" },
-            
-            // MICROSERVICES
-            { id: 44, cat: "Microservices", title: "RestClient", context: "Modern synchronous HTTP client (Spring 3.2+). Replaces RestTemplate.", example: "Order Service calling Inventory Service API.", code: "restClient.get().uri(\"/stock\").retrieve();", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FRestClient%7C0d8b2f2c-6b98-4a43-b5e7-c85058aaed36%2F%29&wdorigin=703" },
-            { id: 45, cat: "Microservices", title: "Feign Client", context: "Declarative Web Service Client. You write an Interface, Spring writes the implementation.", example: "Simplifying HTTP calls between services.", code: "@FeignClient(name=\"inventory\") interface InvClient {}", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FFeignClient%7C58a280a8-cde1-2744-9639-da22cbd670c2%2F%29&wdorigin=703" },
-            { id: 46, cat: "Microservices", title: "Service Discovery", context: "Eureka Server. Services register themselves so others can find them by name, not IP.", example: "Scaling: Adding 5 Inventory instances dynamically.", code: "@EnableEurekaServer", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FService+Discovery%7Cbe9efdfc-f515-344f-b765-9b58c71e6cdb%2F%29&wdorigin=703" },
-            { id: 47, cat: "Microservices", title: "Load Balancing", context: "Client-side load balancing. Distributing requests among available service instances.", example: "Round-robin requests to 3 different Inventory nodes.", code: "@LoadBalanced WebClient.Builder", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FClient+Side+Load+Balancer%7Ca0e35fce-9ab3-774d-a9a5-1a83bcd9e0f9%2F%29&wdorigin=703" },
-            { id: 48, cat: "Resilience", title: "Resilience4j", context: "Fault tolerance library. Prevents cascading failures when a service goes down.", example: "Fallback: Return cached data if DB is down.", code: "// CircuitBreaker, Retry, Bulkhead", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FResilience4j+Building+Fault-Tolerant+Microservice%7Ca0095666-1317-4f4c-b672-a8915839634d%2F%29&wdorigin=703" },
-            { id: 49, cat: "Resilience", title: "Bulkhead Pattern", context: "Isolating resources (thread pools). Failure in one part doesn't crash the whole system.", example: "Payment Service threads separate from Browsing threads.", code: "@Bulkhead(name=\"api\")", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FBulkhead+Fault-Tolerant+Microservice+%28Part-2%5C%29%7Cc82898a8-8c19-df43-a956-00d6d5ce44fc%2F%29&wdorigin=703" },
-            { id: 50, cat: "Resilience", title: "Retry Pattern", context: "Automatically retrying failed operations for transient errors.", example: "Network timeout? Try again in 200ms.", code: "@Retry(name=\"backend\")", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FRetry+Fault-Tolerant+Microservice+%28Part-3%5C%29%7C8d82083b-9805-4b47-bafa-6cea3f88f6a4%2F%29&wdorigin=703" },
-            { id: 51, cat: "Resilience", title: "Circuit Breaker", context: "Stops making requests to a dead service to allow it to recover.", example: "Email Service dead? Stop calling it for 30s.", code: "@CircuitBreaker", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FCircuit+Breaker+Fault-Tolerant+Microservice+%28Part-%7Caff21d09-7e7c-4a43-b09c-50e7a2c70e82%2F%29&wdorigin=703" },
-            { id: 52, cat: "Microservices", title: "API Gateway", context: "Single entry point for all clients. Handles Routing, Auth, and Throttling.", example: "Route /orders -> OrderService.", code: "spring.cloud.gateway.routes", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FAPI+Gateway%7C3bb17da8-1963-2f47-b15a-a530443924cf%2F%29&wdorigin=703", git: "https://gitlab.com/shrayansh8/springboot-microservices/-/tree/main/apigateway_part1?ref_type=heads" },
-            { id: 53, cat: "Microservices", title: "Centralized Config", context: "Managing properties for all services in one Git repo. Services fetch config at startup.", example: "Changing 'Dark Mode' feature flag for 10 apps at once.", code: "spring.config.import=configserver:", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FCentralized+Configuration%7Cfc15fdca-d6a1-8f40-b677-08a3d45ac351%2F%29&wdorigin=703" }
+            // 8. ADVANCED / SPRING BOOT EXTENDED
+            { id: 56, cat: "Design Patterns", title: "Singleton Pattern", context: "Class with only one instance. Private constructor.", example: "Database Connection Pool.", code: "private static Singleton instance;", src: "10_Classes.pdf" },
+            { id: 57, cat: "Design Patterns", title: "Factory Pattern", context: "Creating objects without exposing logic.", example: "CarFactory.getCar('Sports') -> Returns Ferrari.", code: "Shape s = ShapeFactory.get('CIRCLE');", src: "7_METHODS.pdf" },
+            { id: 58, cat: "Spring Boot", title: "Dependency Injection", context: "Spring provides objects (beans) to your class. Loosely coupled.", example: "Controller asks for Service, Spring gives it.", code: "@Autowired private UserService service;", src: "General" },
+            { id: 59, cat: "Spring Boot", title: "Inversion of Control", context: "Container manages lifecycle of objects, not the dev.", example: "Don't call 'new User()', ask Spring Context.", code: "ApplicationContext ctx = ...;", src: "General" },
+            { id: 60, cat: "Spring Boot", title: "Spring Bean Scopes", context: "Singleton (Default), Prototype (New every time), Request, Session.", example: "Service is Singleton. UserCart is Session.", code: "@Scope('prototype')", src: "General" },
+            { id: 61, cat: "Spring Boot", title: "Spring Annotations", context: "@Component, @Service, @Repository, @Controller.", example: "Stereotypes for cleaner code.", code: "@Service public class MyService { }", src: "General" },
+            { id: 62, cat: "Spring Boot", title: "Spring Boot Intro", context: "Opinionated view of Spring. Auto-configuration. Embedded Server.", example: "Running web app with 'java -jar' (No Tomcat install needed).", code: "@SpringBootApplication", src: "General" },
+            { id: 63, cat: "Spring Boot", title: "REST APIs", context: "Building Web Services using HTTP methods.", example: "GET /users, POST /users.", code: "@RestController @GetMapping", src: "General" },
+            { id: 64, cat: "Spring Boot", title: "Exception Handling", context: "Global Exception Handler in Spring.", example: "Returning 404 JSON when entity not found.", code: "@ControllerAdvice @ExceptionHandler", src: "General" },
+            { id: 65, cat: "Spring Boot", title: "Properties Config", context: "Externalizing configuration.", example: "application.properties for DB creds.", code: "@Value('${app.name}')", src: "General" },
+            { id: 66, cat: "Spring Boot", title: "Profiles", context: "Different configs for Dev/Prod.", example: "Dev DB (H2) vs Prod DB (MySQL).", code: "spring.profiles.active=dev", src: "General" },
+            { id: 67, cat: "Spring Boot", title: "Actuator", context: "Monitoring and managing app.", example: "/actuator/health check.", code: "spring-boot-starter-actuator", src: "General" },
+            { id: 68, cat: "Spring Boot", title: "Testing", context: "Unit and Integration testing support.", example: "JUnit 5 + Mockito.", code: "@SpringBootTest", src: "General" },
+            { id: 69, cat: "Spring Boot", title: "Data JPA", context: "Simplifying DB access.", example: "CRUD operations without SQL.", code: "extends JpaRepository", src: "General" },
+            { id: 70, cat: "Spring Boot", title: "Transactions", context: "Managing DB transactions.", example: "@Transactional ensures atomic operations.", code: "@Transactional", src: "General" },
+            { id: 71, cat: "Spring Boot", title: "AOP", context: "Aspect Oriented Programming.", example: "Logging every method call.", code: "@Aspect @Before", src: "General" },
+
+            // 9. JPA MAPPINGS
+            { id: 72, cat: "JPA", title: "OneToOne Mapping", context: "1 Entity related to exactly 1 other Entity.", example: "User <-> Profile.", code: "@OneToOne private Profile profile;", src: "Link 72", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41" },
+            { id: 73, cat: "JPA", title: "OneToMany Mapping", context: "1 Entity related to Many.", example: "User <-> Orders.", code: "@OneToMany private List<Order> orders;", src: "Link 73", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41" },
+            { id: 74, cat: "JPA", title: "ManyToMany Mapping", context: "Many related to Many.", example: "Student <-> Course.", code: "@ManyToMany private List<Course> courses;", src: "Link 74", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41" },
+            { id: 75, cat: "JPA", title: "Spring Data Repos", context: "Interface extending JpaRepository.", example: "findByUsername(String name);", code: "interface UserRepo extends JpaRepository<User, Long> {}", src: "Link 75", link: "https://onedrive.live.com/:o:/g/personal/6B364628C29FEB52/EksLbbBuPIhDjFYNjtEw6kEB7wRxe5wd2oWXREL9gKphEg?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&ithint=onenote&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc" }
         ];
 
-        let currentTopicIndex = 0;
+        let currentIndex = 0;
 
-        // --- FUNCTIONS ---
-        function renderSidebar(items) {
-            const list = document.getElementById('navList');
-            list.innerHTML = "";
-            items.forEach((t, index) => {
-                const li = document.createElement('li');
-                li.className = 'nav-item';
-                li.id = `nav-${index}`;
-                li.innerHTML = `
-                    <span class="nav-id">${t.id}</span>
-                    <span class="nav-text">${t.title}</span>
-                    <span class="nav-cat">${t.cat}</span>
-                `;
-                li.onclick = () => loadTopic(index);
-                list.appendChild(li);
+        // --- RENDER SIDEBAR ---
+        function renderSidebar() {
+            const container = document.getElementById('navContainer');
+            container.innerHTML = "";
+            
+            // 1. Group Data
+            const categories = {};
+            topics.forEach((t, i) => {
+                if(!categories[t.cat]) categories[t.cat] = [];
+                categories[t.cat].push({ ...t, index: i });
             });
+
+            // 2. Build DOM
+            for(const [cat, items] of Object.entries(categories)) {
+                const group = document.createElement('div');
+                group.className = 'cat-group';
+                group.id = `cat-${cat}`;
+
+                // Header
+                const header = document.createElement('div');
+                header.className = 'cat-header';
+                header.innerHTML = `
+                    <span>${cat} <span class="badge">${items.length}</span></span>
+                    <span class="cat-icon">▼</span>
+                `;
+                header.onclick = () => toggleCat(cat);
+
+                // List
+                const list = document.createElement('ul');
+                list.className = 'cat-list';
+                
+                items.forEach(t => {
+                    const li = document.createElement('li');
+                    li.className = 'nav-item';
+                    li.id = `item-${t.index}`;
+                    li.innerHTML = `<span class="nav-id">#${t.id}</span> ${t.title}`;
+                    li.onclick = () => loadTopic(t.index);
+                    list.appendChild(li);
+                });
+
+                group.appendChild(header);
+                group.appendChild(list);
+                container.appendChild(group);
+            }
         }
 
-        function loadTopic(index) {
-            currentTopicIndex = index;
-            const t = topics[index];
+        function toggleCat(cat) {
+            document.getElementById(`cat-${cat}`).classList.toggle('open');
+        }
 
-            // 1. Sidebar Active State
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            const activeItem = document.getElementById(`nav-${index}`);
-            if(activeItem) {
-                activeItem.classList.add('active');
-                activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
+        // --- LOAD CONTENT ---
+        function loadTopic(idx) {
+            currentIndex = idx;
+            const t = topics[idx];
 
-            // 2. Button States
-            const prevDisabled = (index === 0);
-            const nextDisabled = (index === topics.length - 1);
-            
-            document.getElementById('prevBtnTop').disabled = prevDisabled;
-            document.getElementById('nextBtnTop').disabled = nextDisabled;
-            document.getElementById('prevBtnBot').disabled = prevDisabled;
-            document.getElementById('nextBtnBot').disabled = nextDisabled;
-
-            // 3. Render Header
-            document.getElementById('topicTitle').innerText = t.id + ". " + t.title;
-            document.getElementById('topicCat').innerText = t.cat + (t.src ? ` | ${t.src}` : "");
-
-            // 4. Render Core Content
-            document.getElementById('contextText').innerText = t.context;
-            
-            // 5. Render Links (Core Tab)
-            const linkArea = document.getElementById('linkSection');
-            linkArea.innerHTML = "";
-            
-            if (t.link) {
-                linkArea.innerHTML += `<a href="${t.link}" target="_blank" class="ext-link link-note">🔗 Open Original Note / PDF</a>`;
-            }
-            if (t.git) {
-                linkArea.innerHTML += `<a href="${t.git}" target="_blank" class="ext-link link-git">🦊 View Source Code</a>`;
-            }
-
-            // 6. Render Scenario & Code
-            document.getElementById('scenarioText').innerHTML = `<strong>Use Case:</strong> ${t.example}`;
+            // Update UI
+            document.getElementById('topicTitle').innerText = `${t.id}. ${t.title}`;
+            document.getElementById('topicCat').innerText = t.cat;
+            document.getElementById('coreText').innerText = t.context;
+            document.getElementById('scenarioText').innerHTML = `<strong>Scenario:</strong> ${t.example}`;
             document.getElementById('codeText').innerText = t.code;
 
-            // 7. Render "All" Tab
-            const allHtml = `
-                <div class="content-block">
-                    <div class="block-title">Overview</div>
-                    <div class="context-text">${t.context}</div>
-                    <div class="link-group">${linkArea.innerHTML}</div>
-                </div>
-                <div class="content-block">
-                    <div class="block-title">Real-World Scenario</div>
-                    <div class="scenario-box"><strong>Use Case:</strong> ${t.example}</div>
-                </div>
-                <div class="content-block">
-                    <div class="block-title">Implementation</div>
-                    <div class="code-block">${t.code}</div>
-                </div>
+            // Update Sidebar Active State
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            const activeItem = document.getElementById(`item-${idx}`);
+            if(activeItem) {
+                activeItem.classList.add('active');
+                // Auto Expand Category
+                const parentGroup = activeItem.closest('.cat-group');
+                if(parentGroup && !parentGroup.classList.contains('open')) {
+                    parentGroup.classList.add('open');
+                }
+                setTimeout(() => activeItem.scrollIntoView({block: 'nearest'}), 200);
+            }
+
+            // Buttons
+            document.getElementById('prevBtnTop').disabled = (idx === 0);
+            document.getElementById('prevBtnBot').disabled = (idx === 0);
+            document.getElementById('nextBtnTop').disabled = (idx === topics.length - 1);
+            document.getElementById('nextBtnBot').disabled = (idx === topics.length - 1);
+
+            // Links
+            const linkArea = document.getElementById('linkArea');
+            linkArea.innerHTML = "";
+            if(t.link) linkArea.innerHTML += `<a href="${t.link}" target="_blank" class="link-btn link-note">📄 View Note</a>`;
+            if(t.git) linkArea.innerHTML += `<a href="${t.git}" target="_blank" class="link-btn link-git">🦊 GitLab Code</a>`;
+            
+            // All Tab
+            document.getElementById('allContent').innerHTML = `
+                <div class="block-title">Overview</div>
+                <div class="text-content">${t.context}</div>
+                <div class="link-area">${linkArea.innerHTML}</div>
+                <br>
+                <div class="block-title">Scenario</div>
+                <div class="scenario-box"><strong>Scenario:</strong> ${t.example}</div>
+                <br>
+                <div class="block-title">Code</div>
+                <pre class="code-block">${t.code}</pre>
             `;
-            document.getElementById('allContent').innerHTML = allHtml;
-
-            // Reset to Core tab by default or keep current if valid logic added
-            // switchTab('core'); // Optional: force reset on switch
         }
 
-        function prevTopic() {
-            if(currentTopicIndex > 0) loadTopic(currentTopicIndex - 1);
+        function changeTopic(dir) {
+            const newIndex = currentIndex + dir;
+            if(newIndex >= 0 && newIndex < topics.length) {
+                loadTopic(newIndex);
+            }
         }
 
-        function nextTopic() {
-            if(currentTopicIndex < topics.length - 1) loadTopic(currentTopicIndex + 1);
-        }
-
-        function switchTab(tabName) {
-            // Update Headers
-            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
-            // Find specific tab by text or index relies on order, simpler to use onclick classes
+        function switchTab(name) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            // Activate
+            // Simple logic: mapping index or finding by text. Here we use onclick logic in HTML
+            // to pass name. We need to find the specific tab element to add 'active'.
             const tabs = document.querySelectorAll('.tab');
-            if(tabName === 'core') tabs[0].classList.add('active');
-            if(tabName === 'scenario') tabs[1].classList.add('active');
-            if(tabName === 'impl') tabs[2].classList.add('active');
-            if(tabName === 'all') tabs[3].classList.add('active');
+            if(name==='core') tabs[0].classList.add('active');
+            if(name==='scenario') tabs[1].classList.add('active');
+            if(name==='impl') tabs[2].classList.add('active');
+            if(name==='all') tabs[3].classList.add('active');
 
-            // Update Content Visibility
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.getElementById(`tab-${tabName}`).classList.add('active');
+            document.getElementById(`tab-${name}`).classList.add('active');
         }
 
         function filterTopics(query) {
-            const lower = query.toLowerCase();
-            const filteredIndices = [];
-            topics.forEach((t, i) => {
-                if(t.title.toLowerCase().includes(lower) || t.cat.toLowerCase().includes(lower)) {
-                    filteredIndices.push(i);
-                }
-            });
+            const term = query.toLowerCase();
+            const groups = document.querySelectorAll('.cat-group');
             
-            // Re-render sidebar based on filter? 
-            // Simpler approach: Just hide/show items
-            const items = document.querySelectorAll('.nav-item');
-            items.forEach((item, index) => {
-                const t = topics[index];
-                const match = t.title.toLowerCase().includes(lower) || t.cat.toLowerCase().includes(lower);
-                item.style.display = match ? 'flex' : 'none';
+            groups.forEach(group => {
+                let hasMatch = false;
+                const items = group.querySelectorAll('.nav-item');
+                items.forEach(item => {
+                    const text = item.innerText.toLowerCase();
+                    const match = text.includes(term);
+                    item.style.display = match ? 'flex' : 'none';
+                    if(match) hasMatch = true;
+                });
+                
+                group.style.display = hasMatch ? 'block' : 'none';
+                if(term !== "" && hasMatch) group.classList.add('open');
+                else group.classList.remove('open');
             });
         }
 
         // Init
-        renderSidebar(topics);
-        loadTopic(0); // Load first
+        renderSidebar();
+        loadTopic(0);
 
     </script>
 </body>
