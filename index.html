@@ -3,102 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Professional Mastery v3</title>
+    <title>Java Professional Mastery v6</title>
     <style>
         :root { 
             --primary: #2c3e50; 
-            --secondary: #34495e;
             --accent: #27ae60; 
+            --project: #d35400; 
+            --bg: #f4f6f8; 
             --text: #333;
-            --bg: #ecf0f1;
-            --sidebar-width: 320px;
+            --sidebar-width: 360px;
         }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; display: flex; height: 100vh; background: var(--bg); color: var(--text); }
         
-        /* SIDEBAR STYLES */
+        /* Sidebar */
         .sidebar { width: var(--sidebar-width); background: #1e272e; color: #ecf0f1; display: flex; flex-direction: column; border-right: 1px solid #111; flex-shrink: 0; }
-        .sidebar-header { padding: 20px; background: #111; text-align: center; border-bottom: 4px solid var(--accent); }
+        .sidebar-header { padding: 20px; background: #151b1f; text-align: center; border-bottom: 4px solid var(--accent); }
         .sidebar-header h2 { margin: 0; font-size: 1.2rem; letter-spacing: 1px; color: var(--accent); }
+        .search-box { padding: 12px; background: #2d3436; }
+        .search-input { width: 100%; padding: 10px; border-radius: 4px; border: none; outline: none; background: #dfe6e9; color: #333; font-weight: 700; box-sizing: border-box; }
         
-        .search-box { padding: 10px; background: #2d3436; }
-        .search-input { width: 100%; padding: 8px; border-radius: 4px; border: none; outline: none; background: #dfe6e9; color: #333; font-weight: 600; box-sizing: border-box;}
-
         .nav-container { flex: 1; overflow-y: auto; scrollbar-width: thin; }
         
-        /* Accordion Categories */
+        /* Accordion */
         .cat-group { border-bottom: 1px solid #2d3436; }
-        .cat-header { 
-            padding: 12px 15px; 
-            background: #232d36; 
-            cursor: pointer; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            font-weight: 600; 
-            font-size: 0.9rem;
-            transition: background 0.2s;
-        }
+        .cat-header { padding: 14px 20px; background: #232d36; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 0.9rem; transition: 0.2s; }
         .cat-header:hover { background: #2c3e50; }
-        .cat-header .badge { font-size: 0.75rem; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 10px; }
-        .cat-icon { font-size: 0.7rem; transition: transform 0.3s; }
+        .cat-header .badge { background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; }
+        .cat-group.open .cat-header { color: var(--accent); border-left: 4px solid var(--accent); background: #1a2126; }
+        .cat-list { display: none; background: #181f24; padding: 0; margin: 0; list-style: none; }
+        .cat-group.open .cat-list { display: block; }
         
-        /* Active Category State */
-        .cat-group.open .cat-header { color: var(--accent); border-left: 3px solid var(--accent); background: #1a2126; }
-        .cat-group.open .cat-icon { transform: rotate(180deg); }
-        
-        /* Topic List */
-        .cat-list { display: none; background: #151a1e; list-style: none; padding: 0; margin: 0; }
-        .cat-group.open .cat-list { display: block; animation: slideDown 0.3s ease; }
-        
-        .nav-item { padding: 10px 15px 10px 25px; cursor: pointer; font-size: 0.85rem; border-bottom: 1px solid #232d36; color: #bdc3c7; transition: 0.2s; display: flex; align-items: center; }
+        .nav-item { padding: 10px 15px 10px 30px; cursor: pointer; font-size: 0.85rem; border-bottom: 1px solid #232d36; color: #bdc3c7; transition: 0.2s; display: flex; align-items: center; }
         .nav-item:hover { background: rgba(255,255,255,0.05); color: white; }
-        .nav-item.active { background: rgba(39, 174, 96, 0.15); color: var(--accent); border-left: 3px solid var(--accent); padding-left: 22px; font-weight: 700; }
-        .nav-id { opacity: 0.5; margin-right: 8px; min-width: 25px; font-size: 0.75rem; }
+        .nav-item.active { background: rgba(39, 174, 96, 0.15); color: var(--accent); border-left: 3px solid var(--accent); padding-left: 27px; font-weight: 700; }
+        
+        /* Project Item Style */
+        .nav-item.project-item { color: #e67e22; font-weight: 700; background: rgba(230, 126, 34, 0.05); }
+        .nav-item.project-item.active { border-left-color: #e67e22; color: #e67e22; background: rgba(230, 126, 34, 0.15); }
 
-        /* MAIN CONTENT */
+        /* Main Content */
         .main-content { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; }
-        .container { max-width: 900px; margin: 0 auto; width: 100%; }
-
-        /* Controls */
+        .container { max-width: 1000px; margin: 0 auto; width: 100%; }
+        
         .nav-controls { display: flex; justify-content: space-between; margin-bottom: 15px; }
         .btn-nav { padding: 8px 20px; background: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
         .btn-nav:hover { background: var(--accent); transform: translateY(-2px); }
         .btn-nav:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
 
-        /* Content Card */
         .card { background: white; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; min-height: 500px; display: flex; flex-direction: column; }
         .card-header { background: var(--primary); color: white; padding: 25px; display: flex; justify-content: space-between; align-items: center; }
         .card-header h1 { margin: 0; font-size: 1.5rem; }
         .cat-tag { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
 
         /* Tabs */
-        .tabs { display: flex; background: #f8f9fa; border-bottom: 1px solid #e9ecef; padding: 0 20px; overflow-x: auto; }
-        .tab { padding: 15px 20px; cursor: pointer; font-weight: 600; color: #7f8c8d; border-bottom: 3px solid transparent; transition: 0.2s; white-space: nowrap; font-size: 0.9rem; }
+        .tabs { display: flex; background: #f8f9fa; border-bottom: 1px solid #e9ecef; padding: 0 20px; flex-wrap: wrap; }
+        .tab { padding: 15px 20px; cursor: pointer; font-weight: 600; color: #7f8c8d; border-bottom: 3px solid transparent; transition: 0.2s; white-space: nowrap; }
         .tab:hover { color: var(--primary); }
         .tab.active { color: var(--accent); border-bottom: 3px solid var(--accent); background: white; }
+        .tab.hidden { display: none; }
 
-        .card-body { padding: 30px; flex: 1; }
+        .card-body { padding: 35px; flex: 1; }
         .tab-content { display: none; animation: fadeIn 0.3s; }
         .tab-content.active { display: block; }
 
-        /* Typography */
-        .block-title { font-size: 1.1rem; color: var(--primary); margin-bottom: 15px; font-weight: 700; border-bottom: 2px solid #f1f1f1; padding-bottom: 8px; }
-        .text-content { font-size: 1.05rem; line-height: 1.7; color: #444; }
+        /* Content Blocks */
+        .block-title { font-size: 1.1rem; color: var(--primary); margin-bottom: 15px; font-weight: 700; border-bottom: 2px solid #f1f1f1; padding-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .text-content { font-size: 1.05rem; line-height: 1.7; color: #444; background: #fafafa; padding: 20px; border-radius: 8px; border: 1px solid #eee; }
         
-        .scenario-box { background: #e8f8f5; padding: 20px; border-radius: 6px; border-left: 4px solid var(--accent); color: #0e6251; line-height: 1.6; }
-        .code-block { background: #2d3436; color: #dfe6e9; padding: 20px; border-radius: 6px; overflow-x: auto; font-family: 'Consolas', monospace; font-size: 0.95rem; line-height: 1.5; border: 1px solid #444; }
+        .scenario-box { background: #e8f8f5; padding: 25px; border-radius: 8px; border-left: 5px solid var(--accent); color: #0b5345; line-height: 1.6; }
+        
+        /* Project Box Style */
+        .project-box { background: #fdf2e9; padding: 25px; border-radius: 8px; border-left: 5px solid var(--project); color: #873600; line-height: 1.6; }
+        .project-title { color: var(--project); font-weight: 800; font-size: 1.2rem; display: block; margin-bottom: 10px; }
 
-        /* Links */
-        .link-area { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; }
-        .link-btn { text-decoration: none; padding: 8px 12px; border-radius: 4px; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
-        .link-note { background: #e3f2fd; color: #2980b9; border: 1px solid #a9cce3; }
-        .link-note:hover { background: #2980b9; color: white; }
-        .link-git { background: #fbeee6; color: #d35400; border: 1px solid #edbb99; }
-        .link-git:hover { background: #d35400; color: white; }
+        .code-block { background: #282c34; color: #abb2bf; padding: 20px; border-radius: 8px; overflow-x: auto; font-family: 'Consolas', monospace; font-size: 0.9rem; line-height: 1.5; border: 1px solid #444; }
+        
+        .link-area { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
+        .link-btn { text-decoration: none; padding: 8px 14px; border-radius: 4px; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; background: #e3f2fd; color: #2980b9; border: 1px solid #a9cce3; }
+        .link-btn:hover { background: #2980b9; color: white; }
 
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Types Grid */
+        .types-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .type-card { background: white; border: 1px solid #eee; border-radius: 8px; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: transform 0.2s; }
+        .type-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .type-header { font-weight: 700; color: var(--primary); margin-bottom: 8px; font-size: 1rem; color: var(--accent); }
+        .type-desc { font-size: 0.9rem; color: #555; margin-bottom: 12px; line-height: 1.5; }
+        .type-code { background: #f8f9fa; padding: 8px; border-radius: 4px; font-family: monospace; font-size: 0.85rem; color: #c0392b; border: 1px solid #eee; }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        
         @media (max-width: 900px) { body { flex-direction: column; } .sidebar { width: 100%; height: 350px; } }
     </style>
 </head>
@@ -109,15 +101,13 @@
             <h2>☕ Java Ultimate</h2>
         </div>
         <div class="search-box">
-            <input type="text" class="search-input" placeholder="Search Topic..." onkeyup="filterTopics(this.value)">
+            <input type="text" class="search-input" placeholder="Search..." onkeyup="filterTopics(this.value)">
         </div>
-        <div class="nav-container" id="navContainer">
-            </div>
+        <div class="nav-container" id="navContainer"></div>
     </div>
 
     <div class="main-content">
         <div class="container">
-            
             <div class="nav-controls">
                 <button class="btn-nav" id="prevBtnTop" onclick="changeTopic(-1)">← Prev</button>
                 <button class="btn-nav" id="nextBtnTop" onclick="changeTopic(1)">Next →</button>
@@ -125,13 +115,14 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h1 id="topicTitle">Select a Topic</h1>
+                    <h1 id="topicTitle">Select Topic</h1>
                     <span class="cat-tag" id="topicCat">Category</span>
                 </div>
 
                 <div class="tabs">
                     <div class="tab active" onclick="switchTab('core')">📖 Core Concept</div>
-                    <div class="tab" onclick="switchTab('scenario')">🏢 Real-World Scenario</div>
+                    <div class="tab" id="btn-types" onclick="switchTab('types')">🗂️ Types & Variations</div>
+                    <div class="tab" onclick="switchTab('scenario')">🏢 Real-World</div>
                     <div class="tab" onclick="switchTab('impl')">💻 Implementation</div>
                     <div class="tab" onclick="switchTab('all')">📑 View All</div>
                 </div>
@@ -142,17 +133,20 @@
                         <div class="text-content" id="coreText"></div>
                         <div class="link-area" id="linkArea"></div>
                     </div>
+                    
+                    <div id="tab-types" class="tab-content">
+                        <div class="block-title">Types Breakdown</div>
+                        <div class="types-grid" id="typesContainer"></div>
+                    </div>
 
                     <div id="tab-scenario" class="tab-content">
                         <div class="block-title">Business Use Case</div>
-                        <div class="scenario-box" id="scenarioText"></div>
+                        <div id="scenarioContainer"></div>
                     </div>
-
                     <div id="tab-impl" class="tab-content">
                         <div class="block-title">Code Example</div>
                         <pre class="code-block" id="codeText"></pre>
                     </div>
-
                     <div id="tab-all" class="tab-content">
                         <div id="allContent"></div>
                     </div>
@@ -163,152 +157,178 @@
                 <button class="btn-nav" id="prevBtnBot" onclick="changeTopic(-1)">← Prev</button>
                 <button class="btn-nav" id="nextBtnBot" onclick="changeTopic(1)">Next →</button>
             </div>
-
         </div>
     </div>
 
     <script>
-        // --- 75 TOPIC DATA ARRAY ---
+        // --- 75 TOPIC DATASET ---
         const topics = [
-            // 1. BASICS
-            { id: 1, cat: "Basics", title: "Java Architecture", context: "JDK (Dev Kit) > JRE (Runtime) > JVM (Virtual Machine). JVM executes Bytecode, enabling 'Write Once, Run Anywhere'.", example: "Spotify app running identically on Windows and Mac using the JVM.", code: "java -version\njavac Code.java", src: "2_JDK_JRE_JVM.pdf" },
-            { id: 2, cat: "Basics", title: "Static Typing", context: "Java enforces variable types at compile-time to prevent runtime crashes.", example: "Banking: Cannot subtract a String name from a Double balance.", code: "int id = 10;\n// id = \"Text\"; // Error", src: "4_Primitive_Variables.pdf" },
-            { id: 3, cat: "Basics", title: "Primitive vs Reference", context: "Primitives (int, boolean) in Stack (Fast). Objects (User, String) in Heap (Managed).", example: "Stock Price (Stack) vs User Profile (Heap).", code: "int x = 5;\nUser u = new User();", src: "4_Primitive_Variables.pdf" },
-            { id: 4, cat: "Basics", title: "Type Casting", context: "Widening (Auto) vs Narrowing (Manual/Risk of data loss).", example: "GPS: Satellite gives 10.987km, Display shows 10km (Narrowing).", code: "double d = 10.5;\nint i = (int) d;", src: "4_Primitive_Variables.pdf" },
-            { id: 5, cat: "Basics", title: "Operators & Ternary", context: "Shorthand if-else for cleaner UI logic.", example: "Login: (loggedIn) ? 'Welcome' : 'Login'.", code: "String s = (auth) ? \"User\" : \"Guest\";", src: "General" },
-            { id: 6, cat: "Basics", title: "Switch Expressions", context: "Modern Java 14+ switch with arrow syntax and return values.", example: "Order Status: 1 -> 'Pending', 2 -> 'Shipped'.", code: "String s = switch(i) { case 1 -> \"A\"; default -> \"B\"; };", src: "Link 42", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5" },
-            { id: 7, cat: "Basics", title: "Loops", context: "For (Known count) vs While (Unknown condition).", example: "Payroll (For 500 employees) vs Server Listener (While running).", code: "for(User u : users) { sendEmail(u); }", src: "General" },
-            { id: 8, cat: "Basics", title: "Arrays", context: "Fixed size, fast access (O(1)). Contiguous memory.", example: "Image Pixels: Fixed grid 1920x1080.", code: "int[] arr = new int[10];", src: "6_NonPrimitive_Variables.pdf" },
-            { id: 9, cat: "Basics", title: "Methods", context: "Reusable code blocks. Inputs (Params) -> Logic -> Output (Return).", example: "Tax Calc: logic reused in Cart, Invoice, and Email.", code: "double calc(double val) { return val * 0.18; }", src: "7_METHODS.pdf" },
-            { id: 10, cat: "Basics", title: "Overloading", context: "Same method name, different params.", example: "Search(ID) vs Search(Name).", code: "void search(int id){}\nvoid search(String s){}", src: "7_METHODS.pdf" },
-            { id: 11, cat: "Basics", title: "Constructors", context: "Init object state. No return type.", example: "DB Connection: Must allow URL/Pass on creation.", code: "class DB { DB(String url) { connect(url); } }", src: "7_METHODS.pdf" },
+            // --- 1. BASICS & FUNDAMENTALS ---
+            { id: 1, cat: "Basics", title: "Java Ecosystem", context: "Java is built on 3 pillars: JDK (Development Kit) contains tools like compilers. JRE (Runtime) contains libraries. JVM (Virtual Machine) executes the code.", example: "Spotify: Devs use JDK. You use JRE. JVM makes it run on Windows/Mac.", code: "java -version", src: "2_JDK_JRE_JVM.pdf" },
+            { id: 2, cat: "Basics", title: "Variables", context: "Java is Statically Typed. Variables are containers that must have a declared type which cannot change.", example: "Banking: 'Balance' must be a number (Double), never text.", code: "double bal = 100.50;", src: "4_Primitive_Variables.pdf",
+              types: [{name: "Primitive", desc: "Values stored in Stack (int, boolean)", code: "int x = 10;"}, {name: "Reference", desc: "Objects stored in Heap (String, Array)", code: "String s = \"Hi\";"}] },
+            { id: 3, cat: "Basics", title: "Type Casting", context: "Converting one data type to another.", example: "GPS: Satellite gives 10.987km. Display shows 10km (Narrowing).", code: "int i = (int) 10.5;", src: "4_Primitive_Variables.pdf",
+              types: [{name: "Widening", desc: "Small to Large (Safe/Auto)", code: "int -> long"}, {name: "Narrowing", desc: "Large to Small (Risk/Manual)", code: "double -> int"}] },
+            { id: 4, cat: "Basics", title: "Operators", context: "Symbols to perform operations on variables.", example: "Login: (isAuth) ? 'Welcome' : 'Login';", code: "int sum = a + b;", src: "General",
+              types: [{name: "Arithmetic", desc: "Math (+ - * /)", code: "a + b"}, {name: "Relational", desc: "Comparison (> < ==)", code: "a > b"}, {name: "Ternary", desc: "One line If-Else", code: "? :"}] },
+            { id: 5, cat: "Basics", title: "Control Flow", context: "Directing the flow of execution based on conditions.", example: "Traffic Light: If Red -> Stop.", code: "if(red) stop();", src: "General",
+              types: [{name: "If-Else", desc: "Standard branching", code: "if(x) {} else {}"}, {name: "Switch", desc: "Multi-branch selection", code: "switch(x) { case 1: ... }"}] },
+            { id: 6, cat: "Basics", title: "Switch Expressions", context: "Modern Java 14+ feature. Concise syntax, return values, no fall-through.", example: "Status Labels: 1='Pending', 2='Sent'.", code: "val = switch(x) { case 1 -> 'A'; };", src: "Link 42" },
+            { id: 7, cat: "Basics", title: "Loops", context: "Executing a block of code multiple times.", example: "Payroll: Loop 500 times for 500 employees.", code: "for(User u : users) {}", src: "General",
+              types: [{name: "For Loop", desc: "Known iterations", code: "for(i=0; i<10; i++)"}, {name: "While Loop", desc: "Unknown iterations", code: "while(running)"}] },
+            { id: 8, cat: "Basics", title: "Arrays", context: "Fixed-size container for same-type data. Fast access.", example: "Pixel Grid: 1920x1080 fixed pixels.", code: "int[] arr = new int[5];", src: "6_NonPrimitive.pdf" },
+            { id: 9, cat: "Basics", title: "Methods", context: "Reusable blocks of code.", example: "CalculateTax() used in Cart and Invoice.", code: "void run() { ... }", src: "7_METHODS.pdf" },
+            { id: 10, cat: "Basics", title: "Overloading", context: "Same method name, different parameters.", example: "Search(ID) vs Search(Name).", code: "search(int id); search(String s);", src: "7_METHODS.pdf" },
+            { id: 11, cat: "Basics", title: "Constructors", context: "Object initialization logic.", example: "DB Connection: Require URL on creation.", code: "DB(String url) { ... }", src: "7_METHODS.pdf" },
+            // PROJECT: BASICS
+            { id: 12, cat: "Basics", title: "⭐ PROJECT: Console Bank", isProject: true,
+              context: "Summary: Use Variables for balance, Scanner for input, Loops for the menu, and Switch for choices.",
+              example: "ATM Logic: Loop forever. Ask '1.Add 2.Sub 3.Exit'. Update variable based on input.",
+              code: "Scanner sc = new Scanner(System.in);\ndouble bal = 1000;\nwhile(true) {\n  int ch = sc.nextInt();\n  if(ch==1) bal += sc.nextDouble();\n  else break;\n}" },
 
-            // 2. OOPS
-            { id: 12, cat: "OOPS", title: "The 'this' Keyword", context: "Current instance reference. Resolves shadowing.", example: "User Input 'email' vs Class Field 'email'.", code: "this.email = email;", src: "Link 12", link: "https://notebook.zohopublic.in/public/notes/u3i1se962d56445eb4118ab4e4c0ca99e4728" },
-            { id: 13, cat: "OOPS", title: "Inheritance", context: "Child acquires Parent properties. Code reuse.", example: "Uber: UberX and UberBlack inherit Vehicle.", code: "class UberX extends Vehicle {}", src: "Link 13", link: "https://notebook.zohopublic.in/public/notes/u3i1s340edd3a883b4ef7ac90874731c865b0" },
-            { id: 14, cat: "OOPS", title: "Polymorphism", context: "Runtime method overriding. Parent ref, Child object.", example: "Payment: process() runs PayPal logic if obj is PayPal.", code: "Payment p = new PayPal(); p.pay();", src: "Link 14", link: "https://notebook.zohopublic.in/public/notes/u3i1s033d318172e442b8b8f242767b93776c" },
-            { id: 15, cat: "OOPS", title: "Encapsulation", context: "Data hiding. Private fields, Public getters/setters.", example: "Bank: withdraw() checks balance before reducing it.", code: "private double bal;\npublic void set(double b) { if(b>0) bal=b; }", src: "Link 15", link: "https://notebook.zohopublic.in/public/notes/u3i1s033d318172e442b8b8f242767b93776c" },
-            { id: 16, cat: "OOPS", title: "Abstraction", context: "Hiding implementation. Showing functionality.", example: "Car: Driver uses Brake Pedal (Interface), not Hydraulics.", code: "abstract void brake();", src: "Link 16", link: "https://notebook.zohopublic.in/public/notes/u3i1sa79b68153abe44d5aa93cc1d5b9f4dd9" },
-            { id: 17, cat: "OOPS", title: "Interfaces", context: "Contract of capabilities. Multiple inheritance.", example: "Phone: Implements Camera, GPS, MusicPlayer.", code: "class Phone implements GPS, Camera {}", src: "Link 17", link: "https://notebook.zohopublic.in/public/notes/u3i1sae669a127ac24a07842a488207750a7c" },
-            { id: 18, cat: "OOPS", title: "Static", context: "Class-level memory. Shared by all instances.", example: "Company Name: Stored once for all employees.", code: "static String company = \"Google\";", src: "Link 18", link: "https://notebook.zohopublic.in/public/notes/u3i1sd9ea4e81ceef491cb4bd1ee221daa89f" },
-            { id: 19, cat: "OOPS", title: "Final", context: "Constant (Var), No Override (Method), No Inherit (Class).", example: "Security Config: Algorithm name shouldn't change.", code: "final String ALG = \"AES\";", src: "Link 19", link: "https://notebook.zohopublic.in/public/notes/u3i1sd9ea4e81ceef491cb4bd1ee221daa89f" },
-            { id: 20, cat: "OOPS", title: "Super", context: "Access Parent class members/constructors.", example: "Manager calls super(name) to init Employee parts.", code: "super(name);", src: "Link 20", link: "https://notebook.zohopublic.in/public/notes/u3i1s38886070c7a74e9db5b0ec3b1697f7f8" },
+            // --- 2. OOPS ---
+            { id: 13, cat: "OOPS", title: "Classes & Objects", context: "Blueprint vs Instance.", example: "Blueprint: House Plan. Object: The House.", code: "House h = new House();", src: "10_Classes.pdf" },
+            { id: 14, cat: "OOPS", title: "Inheritance", context: "Parent-Child relationship. Code Reuse.", example: "UberX extends Vehicle.", code: "class UberX extends Vehicle {}", src: "Link 13",
+              types: [{name: "Single", desc: "A extends B", code: "class A extends B"}, {name: "Multilevel", desc: "A extends B extends C", code: "C extends B"}] },
+            { id: 15, cat: "OOPS", title: "Polymorphism", context: "One interface, many forms.", example: "Payment.process() -> PayPal or Stripe.", code: "Pay p = new PayPal(); p.process();", src: "Link 14",
+              types: [{name: "Compile-Time", desc: "Overloading", code: "add(a), add(a,b)"}, {name: "Runtime", desc: "Overriding", code: "@Override run()"}] },
+            { id: 16, cat: "OOPS", title: "Encapsulation", context: "Data hiding.", example: "Protecting Bank Balance.", code: "private double bal;", src: "Link 15" },
+            { id: 17, cat: "OOPS", title: "Abstraction", context: "Hiding complexity.", example: "Car Brake Pedal (Interface).", code: "abstract void brake();", src: "Link 16",
+              types: [{name: "Abstract Class", desc: "Partial abstraction", code: "abstract class X"}, {name: "Interface", desc: "Full abstraction", code: "interface Y"}] },
+            { id: 18, cat: "OOPS", title: "Interfaces", context: "Contract of capabilities.", example: "Phone implements Camera, GPS.", code: "implements GPS", src: "Link 17" },
+            { id: 19, cat: "OOPS", title: "Static Keyword", context: "Class-level memory.", example: "Company Name shared by all employees.", code: "static String name;", src: "Link 18" },
+            { id: 20, cat: "OOPS", title: "Final Keyword", context: "Constants / Immutability.", example: "Math.PI", code: "final double PI = 3.14;", src: "Link 19" },
+            { id: 21, cat: "OOPS", title: "Super Keyword", context: "Parent access.", example: "Calling parent constructor.", code: "super();", src: "Link 20" },
+            { id: 22, cat: "OOPS", title: "this Keyword", context: "Current instance.", example: "Disambiguate params.", code: "this.name = name;", src: "Link 12" },
+            // PROJECT: OOPS
+            { id: 23, cat: "OOPS", title: "⭐ PROJECT: Zoo System", isProject: true,
+              context: "Summary: Inheritance for Animal types. Polymorphism for sounds. Encapsulation for health.",
+              example: "Zoo: List<Animal>. Loop and call makeSound(). Lion roars, Bird chirps.",
+              code: "abstract class Animal { abstract void sound(); }\nclass Lion extends Animal { void sound(){ print(\"Roar\"); } }\nList<Animal> zoo = List.of(new Lion());\nzoo.forEach(a -> a.sound());" },
 
-            // 3. STRINGS/EXCEPTIONS
-            { id: 21, cat: "Strings", title: "Immutability", context: "Strings can't change. String Pool saves memory.", example: "1M users with role 'USER' share 1 string object.", code: "String s = \"A\"; s = \"B\"; // New Object", src: "Link 21", link: "https://notebook.zohopublic.in/public/notes/u3i1sa26424f5a9614b35897900c90fb2c402" },
-            { id: 22, cat: "Strings", title: "StringBuilder", context: "Mutable string for loops/manipulation.", example: "Building a CSV report row by row.", code: "sb.append(\"data\");", src: "Link 22", link: "https://notebook.zohopublic.in/public/notes/u3i1sf9bea7a6f25c4a60941d06a07ac8d76c" },
-            { id: 23, cat: "Exceptions", title: "Try-Catch", context: "Handle runtime errors gracefully.", example: "File Upload: Catch 'CorruptFile' and warn user.", code: "try { } catch(Ex e) { }", src: "Link 23", link: "https://notebook.zohopublic.in/public/notes/u3i1sf9bea7a6f25c4a60941d06a07ac8d76c" },
-            { id: 24, cat: "Exceptions", title: "Finally", context: "Always runs. Cleanup logic.", example: "Close DB connection.", code: "finally { db.close(); }", src: "Link 24", link: "https://notebook.zohopublic.in/public/notes/u3i1sf9bea7a6f25c4a60941d06a07ac8d76c" },
-            { id: 25, cat: "Exceptions", title: "Throw vs Throws", context: "Throw action vs Method Declaration.", example: "ATM: Throw 'NoFunds'.", code: "void pay() throws Ex { throw new Ex(); }", src: "Link 25", link: "https://notebook.zohopublic.in/public/notes/u3i1sf9bea7a6f25c4a60941d06a07ac8d76c" },
+            // --- 3. STRINGS & EXCEPTIONS ---
+            { id: 24, cat: "Exceptions", title: "Try-Catch", context: "Handling runtime errors.", example: "File Upload failure.", code: "try {} catch(e) {}", src: "Link 23",
+              types: [{name: "Checked", desc: "Compile-time (File)", code: "IOException"}, {name: "Unchecked", desc: "Runtime (Logic)", code: "NullPointer"}] },
+            { id: 25, cat: "Exceptions", title: "Throw vs Throws", context: "Action vs Declaration.", example: "Throw 'NoFunds'.", code: "throw new Ex();", src: "Link 25" },
+            { id: 26, cat: "Exceptions", title: "Finally", context: "Cleanup.", example: "Close DB.", code: "finally { close(); }", src: "Link 24" },
+            { id: 27, cat: "Strings", title: "Immutability", context: "Strings cannot change.", example: "String Pool efficiency.", code: "s = \"New\";", src: "Link 21" },
+            { id: 28, cat: "Strings", title: "StringBuilder", context: "Mutable strings.", example: "Building CSV reports.", code: "sb.append();", src: "Link 22" },
+            // PROJECT: EXCEPTIONS
+            { id: 29, cat: "Exceptions", title: "⭐ PROJECT: Error Logger", isProject: true,
+              context: "Summary: Try-Catch to handle failures. StringBuilder to format logs.",
+              example: "Server Log: Catch crash, format timestamp+error, save to file.",
+              code: "try { process(); } catch(Exception e) {\n  StringBuilder log = new StringBuilder();\n  log.append(\"[ERR] \").append(e.msg);\n  save(log.toString());\n}" },
 
-            // 4. MEMORY/COLLECTIONS
-            { id: 26, cat: "Memory", title: "Stack vs Heap", context: "Stack=Execution/Primitives. Heap=Objects.", example: "Recursion fills Stack. Large Data fills Heap.", code: "int i=0; User u = new User();", src: "9_Memory.pdf", link: "https://notebook.zohopublic.in/public/notes/74tdo3074d38916474ae096fe57ad9f2ff54b" },
-            { id: 27, cat: "Memory", title: "Garbage Collection", context: "Auto delete unused objects. Mark & Sweep.", example: "Closing Browser Tab frees RAM.", code: "obj = null;", src: "9_Memory.pdf" },
-            { id: 28, cat: "Collections", title: "ArrayList", context: "Dynamic Array. Fast Read, Slow Insert.", example: "News Feed (Read heavy).", code: "list.get(0);", src: "Link 46", link: "https://notebook.zohopublic.in/public/notes/bietvaf4a031eeb7245f19e651a16232e077a" },
-            { id: 29, cat: "Collections", title: "LinkedList", context: "Nodes. Fast Insert, Slow Read.", example: "Music Queue (Insert Next).", code: "list.addFirst(song);", src: "Link 47", link: "https://notebook.zohopublic.in/public/notes/bietv97e0afeb8fcf41e191da86e3898422b7" },
-            { id: 30, cat: "Collections", title: "HashMap", context: "Key-Value. O(1) lookup.", example: "Session Cache (ID -> User).", code: "map.put(id, user);", src: "Link 52", link: "https://notebook.zohopublic.in/public/notes/bietv379bff087eca47eaa84a3024d7e14b46" },
-            { id: 31, cat: "Collections", title: "HashSet", context: "Unique items only.", example: "Email List (No duplicates).", code: "set.add(email);", src: "Link 49", link: "https://notebook.zohopublic.in/public/notes/bietv2018487e1de84b009904a4dfeda24def" },
-            { id: 32, cat: "Collections", title: "Generics", context: "Type Safety.", example: "Box<Shoes> prevents storing Pizza.", code: "List<String> s;", src: "10_Classes.pdf", link: "https://notebook.zohopublic.in/public/notes/74tdo47dcfcf05e644cf192c411a6d78ec1dc" },
+            // --- 4. MEMORY & COLLECTIONS ---
+            { id: 30, cat: "Memory", title: "Stack vs Heap", context: "Execution vs Storage.", example: "Recursion (Stack), Objects (Heap).", code: "int x; User u;", src: "9_Memory.pdf" },
+            { id: 31, cat: "Memory", title: "Garbage Collection", context: "Auto memory cleanup.", example: "Closing Browser Tab.", code: "obj = null;", src: "9_Memory.pdf" },
+            { id: 32, cat: "Collections", title: "List Interface", context: "Ordered collection.", example: "Shopping Cart.", code: "List<String> l;", src: "Link 46",
+              types: [{name: "ArrayList", desc: "Fast Read", code: "new ArrayList()"}, {name: "LinkedList", desc: "Fast Insert", code: "new LinkedList()"}] },
+            { id: 33, cat: "Collections", title: "Map Interface", context: "Key-Value.", example: "Session Cache.", code: "Map<K,V> m;", src: "Link 52",
+              types: [{name: "HashMap", desc: "Unordered Fast", code: "new HashMap()"}, {name: "TreeMap", desc: "Sorted Keys", code: "new TreeMap()"}] },
+            { id: 34, cat: "Collections", title: "Set Interface", context: "Unique items.", example: "Email List.", code: "Set<T> s;", src: "Link 49",
+              types: [{name: "HashSet", desc: "Unordered", code: "new HashSet()"}, {name: "TreeSet", desc: "Sorted", code: "new TreeSet()"}] },
+            { id: 35, cat: "Collections", title: "Generics", context: "Type Safety.", example: "Box<Shoes>.", code: "List<String> s;", src: "10_Classes.pdf" },
+            { id: 36, cat: "Collections", title: "Comparable", context: "Sorting.", example: "Sort by ID.", code: "compareTo()", src: "General" },
+            // PROJECT: COLLECTIONS
+            { id: 37, cat: "Collections", title: "⭐ PROJECT: Cart System", isProject: true,
+              context: "Summary: HashMap for item lookup. ArrayList for display.",
+              example: "Amazon: Add item -> Check Map (Exists?). Display Cart -> Iterate List.",
+              code: "Map<String, Item> cart = new HashMap<>();\ncart.put(\"ID_1\", new Item(\"Apple\", 2.0));\n\nfor(Item i : cart.values()) {\n  total += i.price;\n}" },
 
-            // 5. THREADS/MODERN
-            { id: 33, cat: "Threads", title: "Multithreading", context: "Parallel Tasks.", example: "Typing + SpellCheck.", code: "Thread t = new Thread(task);", src: "Link 54", link: "https://notebook.zohopublic.in/public/notes/dcr5ze84495de6ad14cadbf5fe38b99b18b9d" },
-            { id: 34, cat: "Threads", title: "Synchronization", context: "Thread Safety (Locks).", example: "Booking Seat A1 (Only 1 user).", code: "synchronized book() {}", src: "Link 58", link: "https://notebook.zohopublic.in/public/notes/dcr5z827d4c4d67cf491494f30a7733eeb3e1" },
-            { id: 35, cat: "Modern", title: "Lambdas", context: "Concise functional code (Java 8).", example: "Button OnClick.", code: "btn.onClick(e -> print(e));", src: "Link 69", link: "https://notebook.zohopublic.in/public/notes/9wn9o2d75e726a75c4b7eb7aaec1bd35d99b5" },
-            { id: 36, cat: "Modern", title: "Stream API", context: "Declarative processing (Filter/Map).", example: "Filter products > $50.", code: "list.stream().filter().toList();", src: "General" },
-            { id: 37, cat: "Modern", title: "Optional", context: "Null handling container.", example: "DB Result might be empty.", code: "opt.orElse(\"None\");", src: "General" },
-            { id: 38, cat: "Tools", title: "Lombok", context: "Boilerplate Generator.", example: "@Data for Getters/Setters.", code: "@Data class User {}", src: "Link 39", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5" },
-            { id: 39, cat: "Modern", title: "Records", context: "Immutable Data Carrier.", example: "DTOs (Data Transfer).", code: "record Point(int x, int y){}", src: "Link 45", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5" },
+            // --- 5. THREADS & MODERN ---
+            { id: 38, cat: "Threads", title: "Multithreading", context: "Parallelism.", example: "UI + Background Task.", code: "thread.start()", src: "Link 54",
+              types: [{name: "Thread", desc: "Extend Thread", code: "class T extends Thread"}, {name: "Runnable", desc: "Implement Interface", code: "implements Runnable"}] },
+            { id: 39, cat: "Threads", title: "Synchronization", context: "Thread Safety.", example: "Booking Seat.", code: "synchronized method()", src: "Link 58" },
+            { id: 40, cat: "Modern", title: "Lambdas", context: "Functional Code.", example: "OnClick Listener.", code: "e -> print(e)", src: "Link 69" },
+            { id: 41, cat: "Modern", title: "Streams", context: "Declarative Data.", example: "Filter > $50.", code: "list.stream().filter()", src: "General" },
+            { id: 42, cat: "Modern", title: "Optional", context: "Null Safety.", example: "DB Result.", code: "opt.orElse()", src: "General" },
+            { id: 43, cat: "Tools", title: "Lombok", context: "Boilerplate.", example: "@Data DTOs.", code: "@Data class User{}", src: "Link 39" },
+            { id: 44, cat: "Modern", title: "Records", context: "Data Carrier.", example: "API Response.", code: "record Pt(x,y){}", src: "Link 45" },
+            // PROJECT: THREADS
+            { id: 45, cat: "Threads", title: "⭐ PROJECT: Downloader", isProject: true,
+              context: "Summary: Threads for background tasks. Sync to update progress bar.",
+              example: "Chrome: 3 files downloading at once.",
+              code: "new Thread(() -> {\n  print(\"Downloading File 1...\");\n}).start();\nnew Thread(() -> {\n  print(\"Downloading File 2...\");\n}).start();" },
 
-            // 6. SPRING BOOT
-            { id: 40, cat: "Spring Boot", title: "Architecture", context: "Auto-Config, Embedded Server.", example: "Run Web App in 5 mins.", code: "@SpringBootApplication", src: "User Link", link: "https://onedrive.live.com/:o:/g/personal/6B364628C29FEB52/EksLbbBuPIhDjFYNjtEw6kEB7wRxe5wd2oWXREL9gKphEg?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&ithint=onenote&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc" },
-            { id: 41, cat: "Security", title: "Basics", context: "AuthN (Who) & AuthZ (What). Filters.", example: "Login protection.", code: "http.authenticated();", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc&wd=target(SpringBoot.one%7Cd37c24fe-34a1-2046-885f-ef3807025388%2FSpringBoot%20Security%20-%20Part2%20and%20Part3%7C7e5c2090-8ff6-dc46-9ade-25cf32f7e4eb%2F)&wdorigin=703" },
-            { id: 42, cat: "Security", title: "OAuth 2.0", context: "Delegated Auth (Google/FB).", example: "Sign in with Google.", code: "@EnableOAuth2Sso", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc&wd=target(SpringBoot.one%7Cd37c24fe-34a1-2046-885f-ef3807025388%2FSpringBoot%20Security%20-%20Part8%20(OAuth%20Authentication%5C)%7Cf5c0fea5-77d9-bb45-a1fc-fc6285059c1a%2F)&wdorigin=703", git: "https://gitlab.com/shrayansh8/interviewcodingpractise/-/tree/main/src/main/java/com/conceptandcoding/learningspringboot/OAuth" },
-            { id: 43, cat: "Security", title: "RBAC", context: "Role Based Access.", example: "Admin vs User API access.", code: "@PreAuthorize('ADMIN')", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc&wd=target(SpringBoot.one%7Cd37c24fe-34a1-2046-885f-ef3807025388%2FSpring%20boot%20-%20Part9%20(Role%20based%20Authorization%20-%20Annotations%5C)%7C941edfd8-801e-9c46-963e-d79b8b8c9607%2F)&wdorigin=703" },
+            // --- 6. SPRING BOOT ---
+            { id: 46, cat: "Spring Boot", title: "Architecture", context: "Auto-Config.", example: "Web App 5 mins.", code: "@SpringBootApp", src: "User Link" },
+            { id: 47, cat: "Spring Boot", title: "Dependency Injection", context: "Wiring Beans.", example: "Inject Service.", code: "@Autowired", src: "General",
+              types: [{name: "Constructor", desc: "Best Practice", code: "User(Svc s)"}, {name: "Field", desc: "Easier", code: "@Autowired Svc s"}] },
+            { id: 48, cat: "Spring Boot", title: "Scopes", context: "Bean Lifecycle.", example: "Singleton Svc.", code: "@Scope", src: "General",
+              types: [{name: "Singleton", desc: "1 per App", code: "Default"}, {name: "Prototype", desc: "New per req", code: "@Scope('prototype')"}] },
+            { id: 49, cat: "Spring Boot", title: "REST API", context: "Endpoints.", example: "GET /users.", code: "@RestController", src: "General" },
+            { id: 50, cat: "Security", title: "Basics", context: "AuthN/AuthZ.", example: "Login.", code: "http.auth()", src: "User Link" },
+            { id: 51, cat: "Security", title: "OAuth 2", context: "Social Login.", example: "Google Signin.", code: "@EnableOAuth2", src: "User Link" },
+            { id: 52, cat: "Security", title: "RBAC", context: "Roles.", example: "Admin Only.", code: "@PreAuthorize", src: "User Link" },
+            // PROJECT: SPRING
+            { id: 53, cat: "Spring Boot", title: "⭐ PROJECT: Todo API", isProject: true,
+              context: "Summary: Controller for endpoints, Service for logic, Repo for data.",
+              example: "Todo App: POST /add, GET /list.",
+              code: "@RestController\nclass API {\n  @Autowired Svc s;\n  @GetMapping(\"/todos\")\n  List<T> get() { return s.getAll(); }\n}" },
 
-            // 7. MICROSERVICES
-            { id: 44, cat: "Microservices", title: "RestClient", context: "Sync HTTP Client (Spring 3.2).", example: "Order Svc calling Inventory Svc.", code: "restClient.get().retrieve()", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FRestClient%7C0d8b2f2c-6b98-4a43-b5e7-c85058aaed36%2F%29&wdorigin=703" },
-            { id: 45, cat: "Microservices", title: "Feign Client", context: "Declarative HTTP Client.", example: "Interface based calls.", code: "@FeignClient interface API {}", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FFeignClient%7C58a280a8-cde1-2744-9639-da22cbd670c2%2F%29&wdorigin=703" },
-            { id: 46, cat: "Microservices", title: "Discovery", context: "Eureka. Service Registry.", example: "Dynamic Scaling (IP lookup).", code: "@EnableEurekaServer", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FService+Discovery%7Cbe9efdfc-f515-344f-b765-9b58c71e6cdb%2F%29&wdorigin=703" },
-            { id: 47, cat: "Microservices", title: "Load Balancing", context: "Client-side traffic distribution.", example: "Round Robin requests.", code: "@LoadBalanced", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FClient+Side+Load+Balancer%7Ca0e35fce-9ab3-774d-a9a5-1a83bcd9e0f9%2F%29&wdorigin=703" },
-            { id: 48, cat: "Microservices", title: "Resilience4j", context: "Fault Tolerance.", example: "Handling downtimes gracefully.", code: "// CircuitBreaker", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FResilience4j+Building+Fault-Tolerant+Microservice%7Ca0095666-1317-4f4c-b672-a8915839634d%2F%29&wdorigin=703" },
-            { id: 49, cat: "Microservices", title: "Bulkhead", context: "Resource Isolation (Thread Pools).", example: "Payment Threads vs Browse Threads.", code: "@Bulkhead(name='api')", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FBulkhead+Fault-Tolerant+Microservice+%28Part-2%5C%29%7Cc82898a8-8c19-df43-a956-00d6d5ce44fc%2F%29&wdorigin=703" },
-            { id: 50, cat: "Microservices", title: "Retry", context: "Retrying failed ops.", example: "Network Blip.", code: "@Retry(name='api')", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FRetry+Fault-Tolerant+Microservice+%28Part-3%5C%29%7C8d82083b-9805-4b47-bafa-6cea3f88f6a4%2F%29&wdorigin=703" },
-            { id: 51, cat: "Microservices", title: "Circuit Breaker", context: "Fail Fast. Stop calling dead service.", example: "Email Service Dead.", code: "@CircuitBreaker", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FCircuit+Breaker+Fault-Tolerant+Microservice+%28Part-%7Caff21d09-7e7c-4a43-b09c-50e7a2c70e82%2F%29&wdorigin=703" },
-            { id: 52, cat: "Microservices", title: "API Gateway", context: "Single Entry Point. Routing.", example: "Route /orders -> OrderSvc.", code: "routes: \n - id: order\n uri: lb://ORDER", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FAPI+Gateway%7C3bb17da8-1963-2f47-b15a-a530443924cf%2F%29&wdorigin=703", git: "https://gitlab.com/shrayansh8/springboot-microservices/-/tree/main/apigateway_part1?ref_type=heads" },
-            { id: 53, cat: "Microservices", title: "Gateway Filters", context: "Modify Request/Response.", example: "Add Trace Headers.", code: "filters: AddHeader", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FAPI+Gateway+-+Part2%7C669be8ba-609d-734a-a8ce-72a0ea3e27cc%2F%29&wdorigin=703", git: "https://gitlab.com/shrayansh8/springboot-microservices/-/tree/main/apigateway_part2/apigateway?ref_type=heads" },
-            { id: 54, cat: "Microservices", title: "Central Config", context: "Git-backed configs.", example: "Change props without redeploy.", code: "spring.config.import", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FCentralized+Configuration%7Cfc15fdca-d6a1-8f40-b677-08a3d45ac351%2F%29&wdorigin=703" },
-            { id: 55, cat: "Advanced", title: "Serialization", context: "Object to Byte Stream.", example: "Saving Game State.", code: "implements Serializable", src: "Link 65", link: "https://notebook.zohopublic.in/public/notes/9wn9o2148145a9ab9476ca8b75e801ca27882" },
-            
-            // 8. ADVANCED / SPRING BOOT EXTENDED
-            { id: 56, cat: "Design Patterns", title: "Singleton Pattern", context: "Class with only one instance. Private constructor.", example: "Database Connection Pool.", code: "private static Singleton instance;", src: "10_Classes.pdf" },
-            { id: 57, cat: "Design Patterns", title: "Factory Pattern", context: "Creating objects without exposing logic.", example: "CarFactory.getCar('Sports') -> Returns Ferrari.", code: "Shape s = ShapeFactory.get('CIRCLE');", src: "7_METHODS.pdf" },
-            { id: 58, cat: "Spring Boot", title: "Dependency Injection", context: "Spring provides objects (beans) to your class. Loosely coupled.", example: "Controller asks for Service, Spring gives it.", code: "@Autowired private UserService service;", src: "General" },
-            { id: 59, cat: "Spring Boot", title: "Inversion of Control", context: "Container manages lifecycle of objects, not the dev.", example: "Don't call 'new User()', ask Spring Context.", code: "ApplicationContext ctx = ...;", src: "General" },
-            { id: 60, cat: "Spring Boot", title: "Spring Bean Scopes", context: "Singleton (Default), Prototype (New every time), Request, Session.", example: "Service is Singleton. UserCart is Session.", code: "@Scope('prototype')", src: "General" },
-            { id: 61, cat: "Spring Boot", title: "Spring Annotations", context: "@Component, @Service, @Repository, @Controller.", example: "Stereotypes for cleaner code.", code: "@Service public class MyService { }", src: "General" },
-            { id: 62, cat: "Spring Boot", title: "Spring Boot Intro", context: "Opinionated view of Spring. Auto-configuration. Embedded Server.", example: "Running web app with 'java -jar' (No Tomcat install needed).", code: "@SpringBootApplication", src: "General" },
-            { id: 63, cat: "Spring Boot", title: "REST APIs", context: "Building Web Services using HTTP methods.", example: "GET /users, POST /users.", code: "@RestController @GetMapping", src: "General" },
-            { id: 64, cat: "Spring Boot", title: "Exception Handling", context: "Global Exception Handler in Spring.", example: "Returning 404 JSON when entity not found.", code: "@ControllerAdvice @ExceptionHandler", src: "General" },
-            { id: 65, cat: "Spring Boot", title: "Properties Config", context: "Externalizing configuration.", example: "application.properties for DB creds.", code: "@Value('${app.name}')", src: "General" },
-            { id: 66, cat: "Spring Boot", title: "Profiles", context: "Different configs for Dev/Prod.", example: "Dev DB (H2) vs Prod DB (MySQL).", code: "spring.profiles.active=dev", src: "General" },
-            { id: 67, cat: "Spring Boot", title: "Actuator", context: "Monitoring and managing app.", example: "/actuator/health check.", code: "spring-boot-starter-actuator", src: "General" },
-            { id: 68, cat: "Spring Boot", title: "Testing", context: "Unit and Integration testing support.", example: "JUnit 5 + Mockito.", code: "@SpringBootTest", src: "General" },
-            { id: 69, cat: "Spring Boot", title: "Data JPA", context: "Simplifying DB access.", example: "CRUD operations without SQL.", code: "extends JpaRepository", src: "General" },
-            { id: 70, cat: "Spring Boot", title: "Transactions", context: "Managing DB transactions.", example: "@Transactional ensures atomic operations.", code: "@Transactional", src: "General" },
-            { id: 71, cat: "Spring Boot", title: "AOP", context: "Aspect Oriented Programming.", example: "Logging every method call.", code: "@Aspect @Before", src: "General" },
+            // --- 7. MICROSERVICES ---
+            { id: 54, cat: "Microservices", title: "RestClient", context: "Sync HTTP.", example: "Order->Inventory.", code: "client.get()", src: "User Link" },
+            { id: 55, cat: "Microservices", title: "Feign", context: "Declarative HTTP.", example: "Interface calls.", code: "@FeignClient", src: "User Link" },
+            { id: 56, cat: "Microservices", title: "Discovery", context: "Eureka.", example: "Scaling.", code: "@EnableEureka", src: "User Link" },
+            { id: 57, cat: "Microservices", title: "Gateway", context: "Entry Point.", example: "Routing.", code: "routes: /api", src: "User Link" },
+            { id: 58, cat: "Microservices", title: "Load Balancer", context: "Distribution.", example: "Round Robin.", code: "@LoadBalanced", src: "User Link" },
+            { id: 59, cat: "Microservices", title: "Resilience", context: "Fault Tolerance.", example: "Circuit Breaker.", code: "Resilience4j", src: "User Link" },
+            { id: 60, cat: "Microservices", title: "Config Server", context: "Central Props.", example: "Git Config.", code: "config-server", src: "User Link" },
+            { id: 61, cat: "Microservices", title: "Circuit Breaker", context: "Fail Fast.", example: "Stop dead calls.", code: "@CircuitBreaker", src: "User Link" },
+            // PROJECT: MICROSERVICES
+            { id: 62, cat: "Microservices", title: "⭐ PROJECT: Shop Mesh", isProject: true,
+              context: "Summary: Order Service checks Inventory via Feign. Registered on Eureka.",
+              example: "E-commerce: Order Svc -> Discovery -> Inventory Svc.",
+              code: "@FeignClient(\"inventory\")\ninterface Inv {\n  @GetMapping(\"/stock\") int check();\n}\n// Use in Order Service\nif(inv.check() > 0) buy();" },
 
-            // 9. JPA MAPPINGS
-            { id: 72, cat: "JPA", title: "OneToOne Mapping", context: "1 Entity related to exactly 1 other Entity.", example: "User <-> Profile.", code: "@OneToOne private Profile profile;", src: "Link 72", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41" },
-            { id: 73, cat: "JPA", title: "OneToMany Mapping", context: "1 Entity related to Many.", example: "User <-> Orders.", code: "@OneToMany private List<Order> orders;", src: "Link 73", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41" },
-            { id: 74, cat: "JPA", title: "ManyToMany Mapping", context: "Many related to Many.", example: "Student <-> Course.", code: "@ManyToMany private List<Course> courses;", src: "Link 74", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41" },
-            { id: 75, cat: "JPA", title: "Spring Data Repos", context: "Interface extending JpaRepository.", example: "findByUsername(String name);", code: "interface UserRepo extends JpaRepository<User, Long> {}", src: "Link 75", link: "https://onedrive.live.com/:o:/g/personal/6B364628C29FEB52/EksLbbBuPIhDjFYNjtEw6kEB7wRxe5wd2oWXREL9gKphEg?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&ithint=onenote&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc" }
+            // --- 8. JPA & ADVANCED ---
+            { id: 63, cat: "JPA", title: "Mappings", context: "Relations.", example: "User-Profile.", code: "@OneToOne", src: "Link 72",
+              types: [{name: "1-1", desc: "User-Profile", code: "@OneToOne"}, {name: "1-N", desc: "User-Orders", code: "@OneToMany"}] },
+            { id: 64, cat: "JPA", title: "Repositories", context: "DB Access.", example: "FindByID.", code: "extends JpaRepo", src: "Link 75" },
+            { id: 65, cat: "Advanced", title: "Serialization", context: "Byte Stream.", example: "Save State.", code: "Serializable", src: "Link 65" },
+            { id: 66, cat: "Advanced", title: "Design Patterns", context: "Solutions.", example: "Singleton.", code: "getInstance()", src: "10_Classes.pdf",
+              types: [{name: "Singleton", desc: "1 Instance", code: "static Inst"}, {name: "Factory", desc: "Creator", code: "create()"}] },
+            { id: 67, cat: "Advanced", title: "Docker", context: "Container.", example: "Ship App.", code: "Dockerfile", src: "General" },
+            // PROJECT: JPA
+            { id: 68, cat: "JPA", title: "⭐ PROJECT: Blog DB", isProject: true,
+              context: "Summary: User (1) <-> (N) Posts. Save to MySQL.",
+              example: "Blog: User writes many posts. Fetch User gets Posts too.",
+              code: "@Entity User { @Id int id; @OneToMany List<Post> p; }\n@Entity Post { @ManyToOne User u; }\n// Repo saves relations auto" }
         ];
 
         let currentIndex = 0;
 
-        // --- RENDER SIDEBAR ---
+        // --- RENDER LOGIC ---
         function renderSidebar() {
             const container = document.getElementById('navContainer');
             container.innerHTML = "";
+            const groups = {};
             
-            // 1. Group Data
-            const categories = {};
             topics.forEach((t, i) => {
-                if(!categories[t.cat]) categories[t.cat] = [];
-                categories[t.cat].push({ ...t, index: i });
+                if(!groups[t.cat]) groups[t.cat] = [];
+                groups[t.cat].push({...t, idx: i});
             });
 
-            // 2. Build DOM
-            for(const [cat, items] of Object.entries(categories)) {
-                const group = document.createElement('div');
-                group.className = 'cat-group';
-                group.id = `cat-${cat}`;
-
-                // Header
-                const header = document.createElement('div');
-                header.className = 'cat-header';
-                header.innerHTML = `
-                    <span>${cat} <span class="badge">${items.length}</span></span>
-                    <span class="cat-icon">▼</span>
-                `;
-                header.onclick = () => toggleCat(cat);
-
-                // List
-                const list = document.createElement('ul');
-                list.className = 'cat-list';
+            for(const [cat, items] of Object.entries(groups)) {
+                const grp = document.createElement('div');
+                grp.className = 'cat-group';
+                grp.id = `cat-${cat}`;
                 
-                items.forEach(t => {
-                    const li = document.createElement('li');
-                    li.className = 'nav-item';
-                    li.id = `item-${t.index}`;
-                    li.innerHTML = `<span class="nav-id">#${t.id}</span> ${t.title}`;
-                    li.onclick = () => loadTopic(t.index);
-                    list.appendChild(li);
-                });
-
-                group.appendChild(header);
-                group.appendChild(list);
-                container.appendChild(group);
+                grp.innerHTML = `
+                    <div class="cat-header" onclick="toggleCat('${cat}')">
+                        <span>${cat} <span class="badge">${items.length}</span></span>
+                        <span>▼</span>
+                    </div>
+                    <ul class="cat-list">
+                        ${items.map(item => `
+                            <li class="nav-item ${item.isProject ? 'project-item' : ''}" id="nav-${item.idx}" onclick="loadTopic(${item.idx})">
+                                ${item.isProject ? item.title : item.id + '. ' + item.title}
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+                container.appendChild(grp);
             }
         }
 
@@ -316,97 +336,124 @@
             document.getElementById(`cat-${cat}`).classList.toggle('open');
         }
 
-        // --- LOAD CONTENT ---
-        function loadTopic(idx) {
-            currentIndex = idx;
-            const t = topics[idx];
+        function loadTopic(index) {
+            currentIndex = index;
+            const t = topics[index];
 
-            // Update UI
-            document.getElementById('topicTitle').innerText = `${t.id}. ${t.title}`;
-            document.getElementById('topicCat').innerText = t.cat;
-            document.getElementById('coreText').innerText = t.context;
-            document.getElementById('scenarioText').innerHTML = `<strong>Scenario:</strong> ${t.example}`;
-            document.getElementById('codeText').innerText = t.code;
-
-            // Update Sidebar Active State
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            const activeItem = document.getElementById(`item-${idx}`);
-            if(activeItem) {
-                activeItem.classList.add('active');
-                // Auto Expand Category
-                const parentGroup = activeItem.closest('.cat-group');
-                if(parentGroup && !parentGroup.classList.contains('open')) {
-                    parentGroup.classList.add('open');
-                }
-                setTimeout(() => activeItem.scrollIntoView({block: 'nearest'}), 200);
+            // 1. Sidebar Active
+            document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
+            const activeNav = document.getElementById(`nav-${index}`);
+            if(activeNav) {
+                activeNav.classList.add('active');
+                const group = activeNav.closest('.cat-group');
+                if(!group.classList.contains('open')) group.classList.add('open');
+                setTimeout(() => activeNav.scrollIntoView({block: 'nearest'}), 100);
             }
 
-            // Buttons
-            document.getElementById('prevBtnTop').disabled = (idx === 0);
-            document.getElementById('prevBtnBot').disabled = (idx === 0);
-            document.getElementById('nextBtnTop').disabled = (idx === topics.length - 1);
-            document.getElementById('nextBtnBot').disabled = (idx === topics.length - 1);
-
-            // Links
-            const linkArea = document.getElementById('linkArea');
-            linkArea.innerHTML = "";
-            if(t.link) linkArea.innerHTML += `<a href="${t.link}" target="_blank" class="link-btn link-note">📄 View Note</a>`;
-            if(t.git) linkArea.innerHTML += `<a href="${t.git}" target="_blank" class="link-btn link-git">🦊 GitLab Code</a>`;
+            // 2. Header
+            document.getElementById('topicTitle').innerText = t.title;
+            document.getElementById('topicCat').innerText = t.cat;
             
-            // All Tab
+            // 3. Core
+            document.getElementById('coreText').innerText = t.context;
+            const linkDiv = document.getElementById('linkArea');
+            linkDiv.innerHTML = "";
+            if(t.src && !t.isProject) linkDiv.innerHTML += `<a href="#" class="link-btn link-note">📄 ${t.src}</a>`;
+            if(t.link) linkDiv.innerHTML += `<a href="${t.link}" target="_blank" class="link-btn link-note">🔗 Open Link</a>`;
+            if(t.git) linkDiv.innerHTML += `<a href="${t.git}" target="_blank" class="link-btn link-git">🦊 Git Code</a>`;
+
+            // 4. Types Tab Visibility
+            const typesBtn = document.getElementById('btn-types');
+            const typesContainer = document.getElementById('typesContainer');
+            if(t.types && t.types.length > 0) {
+                typesBtn.classList.remove('hidden');
+                typesContainer.innerHTML = t.types.map(type => `
+                    <div class="type-card">
+                        <div class="type-header">${type.name}</div>
+                        <div class="type-desc">${type.desc}</div>
+                        <div class="type-code">${type.code}</div>
+                    </div>
+                `).join('');
+            } else {
+                typesBtn.classList.add('hidden');
+                // Ensure we aren't stuck on the hidden Types tab
+                if(document.querySelector('.tab.active').id === 'btn-types') switchTab('core');
+            }
+
+            // 5. Scenario vs Project
+            const scenBox = document.getElementById('scenarioContainer');
+            if(t.isProject) {
+                scenBox.className = 'project-box';
+                scenBox.innerHTML = `<span class="project-title">Mini Project Scope</span>${t.example}`;
+            } else {
+                scenBox.className = 'scenario-box';
+                scenBox.innerHTML = `<strong>Real-World Use Case:</strong> ${t.example}`;
+            }
+
+            // 6. Code
+            document.getElementById('codeText').innerText = t.code;
+
+            // 7. All Tab
+            let typesHtml = t.types ? `<div class="block-title">Types</div><div class="types-grid">${typesContainer.innerHTML}</div><br>` : '';
             document.getElementById('allContent').innerHTML = `
                 <div class="block-title">Overview</div>
                 <div class="text-content">${t.context}</div>
-                <div class="link-area">${linkArea.innerHTML}</div>
                 <br>
-                <div class="block-title">Scenario</div>
-                <div class="scenario-box"><strong>Scenario:</strong> ${t.example}</div>
+                ${typesHtml}
+                <div class="block-title">${t.isProject ? 'Project Scope' : 'Scenario'}</div>
+                <div class="${t.isProject ? 'project-box' : 'scenario-box'}">${t.example}</div>
                 <br>
                 <div class="block-title">Code</div>
                 <pre class="code-block">${t.code}</pre>
             `;
+
+            // 8. Buttons
+            document.getElementById('prevBtnTop').disabled = (index === 0);
+            document.getElementById('prevBtnBot').disabled = (index === 0);
+            document.getElementById('nextBtnTop').disabled = (index === topics.length - 1);
+            document.getElementById('nextBtnBot').disabled = (index === topics.length - 1);
         }
 
         function changeTopic(dir) {
-            const newIndex = currentIndex + dir;
-            if(newIndex >= 0 && newIndex < topics.length) {
-                loadTopic(newIndex);
-            }
+            const next = currentIndex + dir;
+            if(next >= 0 && next < topics.length) loadTopic(next);
         }
 
         function switchTab(name) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(e => e.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
             
-            // Activate
-            // Simple logic: mapping index or finding by text. Here we use onclick logic in HTML
-            // to pass name. We need to find the specific tab element to add 'active'.
-            const tabs = document.querySelectorAll('.tab');
-            if(name==='core') tabs[0].classList.add('active');
-            if(name==='scenario') tabs[1].classList.add('active');
-            if(name==='impl') tabs[2].classList.add('active');
-            if(name==='all') tabs[3].classList.add('active');
-
+            const tabMap = { 'core': 0, 'types': 1, 'scenario': 2, 'impl': 3, 'all': 4 };
+            // Find tab index logic adjusted for dynamic tabs
+            // Simpler: use ID if possible, or query selector
+            if(name === 'types') document.getElementById('btn-types').classList.add('active');
+            else {
+                // Approximate mapping, fallback to removing 'types' from calculation if hidden
+                // For simplicity in this demo, just iterating
+                const tabs = Array.from(document.querySelectorAll('.tab:not(.hidden)'));
+                // This logic handles dynamic hiding
+                document.querySelectorAll('.tab').forEach(t => {
+                    if(t.getAttribute('onclick').includes(name)) t.classList.add('active');
+                });
+            }
             document.getElementById(`tab-${name}`).classList.add('active');
         }
 
-        function filterTopics(query) {
-            const term = query.toLowerCase();
+        function filterTopics(val) {
+            const term = val.toLowerCase();
             const groups = document.querySelectorAll('.cat-group');
             
-            groups.forEach(group => {
+            groups.forEach(grp => {
+                const items = grp.querySelectorAll('.nav-item');
                 let hasMatch = false;
-                const items = group.querySelectorAll('.nav-item');
                 items.forEach(item => {
-                    const text = item.innerText.toLowerCase();
-                    const match = text.includes(term);
-                    item.style.display = match ? 'flex' : 'none';
+                    const txt = item.innerText.toLowerCase();
+                    const match = txt.includes(term);
+                    item.style.display = match ? 'block' : 'none';
                     if(match) hasMatch = true;
                 });
-                
-                group.style.display = hasMatch ? 'block' : 'none';
-                if(term !== "" && hasMatch) group.classList.add('open');
-                else group.classList.remove('open');
+                grp.style.display = hasMatch ? 'block' : 'none';
+                if(term) grp.classList.add('open');
             });
         }
 
