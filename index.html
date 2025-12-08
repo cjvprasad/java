@@ -3,61 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java & Spring Boot Ultimate Dashboard</title>
+    <title>Java Professional Mastery v2</title>
     <style>
         :root { 
             --primary: #2c3e50; 
-            --accent: #27ae60; /* Changed to Green for Spring vibes */
-            --bg: #f0f3f5; 
+            --accent: #27ae60; 
+            --bg: #eaeff2; 
             --text: #333;
-            --sidebar-width: 360px;
+            --sidebar-width: 340px;
+            --tab-active: #fff;
+            --tab-inactive: #f1f1f1;
         }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; background: var(--bg); color: var(--text); }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; display: flex; height: 100vh; background: var(--bg); color: var(--text); }
         
         /* Sidebar */
-        .sidebar { width: var(--sidebar-width); background: #1e272e; color: white; display: flex; flex-direction: column; border-right: 1px solid #1a252f; flex-shrink: 0; }
-        .sidebar-header { padding: 25px; background: #111; text-align: center; border-bottom: 4px solid var(--accent); }
-        .sidebar-header h2 { margin: 0; font-size: 1.3rem; letter-spacing: 1px; color: var(--accent); }
-        .search-box { padding: 15px; background: #2d3436; }
-        .search-input { width: 100%; padding: 12px; border-radius: 4px; border: none; outline: none; background: #dfe6e9; color: #333; font-weight: bold; }
+        .sidebar { width: var(--sidebar-width); background: #1e272e; color: white; display: flex; flex-direction: column; border-right: 1px solid #1a252f; flex-shrink: 0; transition: width 0.3s; }
+        .sidebar-header { padding: 20px; background: #111; text-align: center; border-bottom: 4px solid var(--accent); }
+        .sidebar-header h2 { margin: 0; font-size: 1.2rem; letter-spacing: 1px; color: var(--accent); }
+        .search-box { padding: 10px 15px; background: #2d3436; }
+        .search-input { width: 100%; padding: 10px; border-radius: 4px; border: none; outline: none; background: #dfe6e9; color: #333; font-weight: 600; }
         
         .nav-list { list-style: none; padding: 0; margin: 0; overflow-y: auto; flex: 1; }
-        .nav-item { padding: 15px 20px; border-bottom: 1px solid #2d3436; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; }
-        .nav-item:hover, .nav-item.active { background: var(--accent); color: white; padding-left: 25px; }
-        .nav-id { font-weight: bold; background: rgba(0,0,0,0.3); padding: 3px 8px; border-radius: 4px; margin-right: 12px; font-size: 0.8rem; min-width: 30px; text-align: center; }
-        .nav-cat { font-size: 0.75rem; text-transform: uppercase; opacity: 0.7; margin-left: auto; letter-spacing: 0.5px; }
+        .nav-item { padding: 12px 18px; border-bottom: 1px solid #2d3436; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; }
+        .nav-item:hover { background: rgba(255,255,255,0.05); padding-left: 22px; }
+        .nav-item.active { background: var(--accent); color: white; padding-left: 22px; border-left: 4px solid white; }
+        .nav-id { font-weight: bold; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; margin-right: 10px; font-size: 0.75rem; min-width: 25px; text-align: center; }
+        .nav-cat { font-size: 0.7rem; text-transform: uppercase; opacity: 0.7; margin-left: auto; letter-spacing: 0.5px; border: 1px solid rgba(255,255,255,0.2); padding: 1px 4px; border-radius: 3px; }
 
         /* Main Content */
-        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
-        .container { max-width: 1000px; margin: 0 auto; }
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; }
+        .container { max-width: 950px; margin: 0 auto; width: 100%; }
         
-        .card { background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; animation: slideUp 0.4s ease; margin-bottom: 30px; }
-        .card-header { background: var(--primary); color: white; padding: 25px; display: flex; justify-content: space-between; align-items: center; }
-        .card-header h1 { margin: 0; font-size: 1.6rem; }
-        
-        .card-body { padding: 30px; }
-        
-        /* Typography & layout */
-        .section-label { color: var(--accent); font-weight: 800; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-top: 25px; margin-bottom: 10px; display: flex; align-items: center; }
-        .section-label::before { content: ''; display: inline-block; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; margin-right: 10px; }
-        
-        .context-text { font-size: 1.05rem; line-height: 1.6; color: #444; background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #cbd5e0; }
-        
-        .scenario-box { background: #e8f8f5; padding: 20px; border-radius: 8px; border: 1px solid #a2d9ce; color: #0b5345; }
-        .scenario-title { font-weight: bold; font-size: 1.1rem; display: block; margin-bottom: 8px; color: #117864; }
+        /* Navigation Controls (Top/Bottom) */
+        .nav-controls { display: flex; justify-content: space-between; margin-bottom: 15px; margin-top: 15px; }
+        .btn-nav { padding: 8px 16px; background: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 5px; transition: 0.2s; }
+        .btn-nav:hover { background: var(--accent); }
+        .btn-nav:disabled { background: #bdc3c7; cursor: not-allowed; }
 
-        .code-container { position: relative; margin-top: 15px; }
-        .code-block { background: #282c34; color: #abb2bf; padding: 20px; border-radius: 8px; overflow-x: auto; font-family: 'Consolas', monospace; font-size: 0.95rem; line-height: 1.5; border: 1px solid #333; }
-        
-        /* Buttons */
-        .action-bar { margin-top: 25px; display: flex; gap: 10px; flex-wrap: wrap; }
-        .btn { text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; transition: transform 0.2s; display: inline-flex; align-items: center; }
-        .btn:hover { transform: translateY(-2px); }
-        .btn-note { background: var(--accent); color: white; }
-        .btn-git { background: #e05d44; color: white; } /* GitLab Orange */
+        /* Card */
+        .card { background: white; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; display: flex; flex-direction: column; min-height: 400px; }
+        .card-header { background: var(--primary); color: white; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .card-header h1 { margin: 0; font-size: 1.5rem; }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @media (max-width: 900px) { body { flex-direction: column; } .sidebar { width: 100%; height: 300px; } }
+        /* Tabs */
+        .tabs { display: flex; background: #f1f2f6; border-bottom: 1px solid #ddd; padding: 0 20px; gap: 5px; overflow-x: auto;}
+        .tab { padding: 12px 20px; cursor: pointer; font-weight: 600; color: #7f8c8d; border-bottom: 3px solid transparent; transition: 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 6px; }
+        .tab:hover { color: var(--primary); background: rgba(0,0,0,0.02); }
+        .tab.active { color: var(--accent); border-bottom: 3px solid var(--accent); background: white; }
+
+        .card-body { padding: 30px; flex: 1; }
+        .tab-content { display: none; animation: fadeIn 0.3s; }
+        .tab-content.active { display: block; }
+
+        /* Content Blocks */
+        .content-block { margin-bottom: 25px; }
+        .block-title { font-size: 1.1rem; color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; font-weight: 700; border-bottom: 2px solid #eee; padding-bottom: 5px; }
+        
+        .context-text { font-size: 1.05rem; line-height: 1.6; color: #444; }
+        .link-group { margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap; }
+        .ext-link { text-decoration: none; font-size: 0.9rem; padding: 6px 12px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; border: 1px solid transparent; }
+        .link-note { background: #eaf2f8; color: #2980b9; border-color: #aed6f1; }
+        .link-note:hover { background: #d4e6f1; }
+        .link-git { background: #fdf2e9; color: #d35400; border-color: #fad7a0; }
+        .link-git:hover { background: #fbeee6; }
+
+        .scenario-box { background: #e8f8f5; padding: 20px; border-radius: 6px; border-left: 4px solid var(--accent); color: #0b5345; }
+        .code-block { background: #282c34; color: #abb2bf; padding: 20px; border-radius: 6px; overflow-x: auto; font-family: 'Consolas', monospace; line-height: 1.5; font-size: 0.95rem; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 900px) { body { flex-direction: column; } .sidebar { width: 100%; height: 250px; } .tabs { flex-wrap: wrap; } }
     </style>
 </head>
 <body>
@@ -67,218 +81,238 @@
             <h2>☕ Java Ultimate</h2>
         </div>
         <div class="search-box">
-            <input type="text" class="search-input" placeholder="Search (e.g., Security, OAuth)..." onkeyup="filterTopics(this.value)">
+            <input type="text" class="search-input" placeholder="Search Topic..." onkeyup="filterTopics(this.value)">
         </div>
         <ul class="nav-list" id="navList"></ul>
     </div>
 
     <div class="main-content">
-        <div class="container" id="contentArea"></div>
+        <div class="container">
+            
+            <div class="nav-controls">
+                <button class="btn-nav" id="prevBtnTop" onclick="prevTopic()">← Prev</button>
+                <button class="btn-nav" id="nextBtnTop" onclick="nextTopic()">Next →</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h1 id="topicTitle">Select a Topic</h1>
+                    <span id="topicCat" style="opacity:0.8; font-size: 0.9rem; background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 12px;">Category</span>
+                </div>
+
+                <div class="tabs">
+                    <div class="tab active" onclick="switchTab('core')">📖 Core Concept</div>
+                    <div class="tab" onclick="switchTab('scenario')">🏢 Real-World Scenario</div>
+                    <div class="tab" onclick="switchTab('impl')">💻 Implementation</div>
+                    <div class="tab" onclick="switchTab('all')">📑 View All</div>
+                </div>
+
+                <div class="card-body">
+                    <div id="tab-core" class="tab-content active">
+                        <div class="content-block">
+                            <div class="block-title">Overview</div>
+                            <div class="context-text" id="contextText"></div>
+                            
+                            <div id="linkSection" class="link-group"></div>
+                        </div>
+                    </div>
+
+                    <div id="tab-scenario" class="tab-content">
+                        <div class="content-block">
+                            <div class="block-title">Use Case</div>
+                            <div class="scenario-box" id="scenarioText"></div>
+                        </div>
+                    </div>
+
+                    <div id="tab-impl" class="tab-content">
+                        <div class="content-block">
+                            <div class="block-title">Code Example</div>
+                            <div class="code-block" id="codeText"></div>
+                        </div>
+                    </div>
+
+                    <div id="tab-all" class="tab-content">
+                        <div id="allContent"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-controls">
+                <button class="btn-nav" id="prevBtnBot" onclick="prevTopic()">← Prev</button>
+                <button class="btn-nav" id="nextBtnBot" onclick="nextTopic()">Next →</button>
+            </div>
+
+        </div>
     </div>
 
     <script>
-        // --- DATA CONTENT ---
-        // 1-39: Java Core (Summarized from previous turns for performance)
-        const coreTopics = [
-            { id: 1, cat: "Core", title: "Java Architecture", context: "JDK/JRE/JVM. WORA principle.", example: "Spotify running on Mac/Windows via JVM.", code: "java -version", src: "2_JDK_JRE_JVM.pdf" },
-            { id: 2, cat: "Core", title: "Static Typing", context: "Variables must have declared types. Prevents runtime crashes.", example: "Banking Ledger (Double vs String).", code: "int id = 10;", src: "4_Primitive_Variables.pdf" },
-            { id: 3, cat: "Core", title: "Stack vs Heap", context: "Stack=Methods/Primitives (Fast). Heap=Objects (Heavy).", example: "Trading System (Primitives) vs User Profile (Heap).", code: "int x=10; User u = new User();", src: "9_Memory.pdf", link: "https://notebook.zohopublic.in/public/notes/74tdo3074d38916474ae096fe57ad9f2ff54b" },
-            { id: 4, cat: "OOPS", title: "Polymorphism", context: "One interface, many forms. Runtime overriding.", example: "PaymentGateway (PayPal/Stripe).", code: "payment.process();", src: "1_OOPS.pdf", link: "https://notebook.zohopublic.in/public/notes/u3i1s033d318172e442b8b8f242767b93776c" },
-            { id: 5, cat: "OOPS", title: "Encapsulation", context: "Hiding data via private fields + getters/setters.", example: "Bank Account Balance protection.", code: "private double balance;", src: "1_OOPS.pdf" },
-            { id: 6, cat: "Collections", title: "HashMap", context: "Key-Value pairs. O(1) lookup.", example: "Caching User Sessions.", code: "map.get(sessionId);", src: "Link 52", link: "https://notebook.zohopublic.in/public/notes/bietv379bff087eca47eaa84a3024d7e14b46" },
-            { id: 7, cat: "Threads", title: "Multithreading", context: "Parallel execution for efficiency.", example: "Word Processor (Typing + SpellCheck).", code: "thread.start();", src: "Link 54", link: "https://notebook.zohopublic.in/public/notes/dcr5ze84495de6ad14cadbf5fe38b99b18b9d" },
-            { id: 8, cat: "Tools", title: "Lombok", context: "Boilerplate killer. @Data generates code.", example: "User DTOs.", code: "@Data class User{}", src: "Link 39", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5" },
-            { id: 9, cat: "Modern", title: "Java Records", context: "Immutable data carriers.", example: "API Responses.", code: "record Point(int x, int y){}", src: "Link 45", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5" },
-            { id: 10, cat: "JPA", title: "OneToOne Mapping", context: "1 Entity <-> 1 Entity.", example: "User <-> Profile.", code: "@OneToOne", src: "Link 72", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41" }
+        // --- DATA ---
+        // Merged dataset (Core + Spring + Microservices)
+        const topics = [
+            // BASICS & CORE
+            { id: 1, cat: "Core", title: "Java Architecture", context: "JDK (Dev Kit) > JRE (Runtime) > JVM (Virtual Machine). The JVM acts as an interpreter between Bytecode (.class) and the Operating System, enabling 'Write Once, Run Anywhere'.", example: "Spotify app running identically on Windows, Mac, and Linux because the JVM abstracts the OS differences.", code: "java -version\njavac MyCode.java", src: "2_JDK_JRE_JVM.pdf" },
+            { id: 2, cat: "Core", title: "Static Typing", context: "Java enforces variable types at compile-time. You cannot assign a String to an Integer variable. This strictness catches bugs early.", example: "Banking Ledger: You cannot accidentally subtract a User Name (String) from a Balance (Double).", code: "int id = 10;\n// id = \"Hello\"; // Compile Error", src: "4_Primitive_Variables.pdf" },
+            { id: 3, cat: "Core", title: "Stack vs Heap", context: "Stack stores primitive variables and method calls (LIFO). It is fast and thread-specific. Heap stores Objects. It is large, shared, and managed by GC.", example: "Recursion (Stack) vs Database Result Set (Heap).", code: "int x = 5; // Stack\nUser u = new User(); // Heap", src: "9_Memory.pdf", link: "https://notebook.zohopublic.in/public/notes/74tdo3074d38916474ae096fe57ad9f2ff54b" },
+            { id: 4, cat: "OOPS", title: "Polymorphism", context: "The ability of an object to take on many forms. A parent reference can hold a child object, and the child's overridden method will execute.", example: "Notification System: send(Email), send(SMS), send(Push). All implement 'Notification'.", code: "Notification n = new Email();\nn.send(); // Sends Email", src: "1_OOPS.pdf", link: "https://notebook.zohopublic.in/public/notes/u3i1s033d318172e442b8b8f242767b93776c" },
+            { id: 5, cat: "OOPS", title: "Encapsulation", context: "Restricting direct access to data fields. Using 'private' variables and 'public' getters/setters allows validation logic.", example: "Bank Account: You can't set balance = -500. You must call withdraw(500) which checks funds.", code: "private double balance;\npublic void setBal(double b) { if(b>0) balance=b; }", src: "1_OOPS.pdf" },
+            
+            // COLLECTIONS & THREADS
+            { id: 6, cat: "Collections", title: "HashMap", context: "Stores data in Key-Value pairs. Uses hashing to compute an index, providing O(1) average time complexity for retrieval.", example: "Caching: Storing User Sessions where Key=SessionID and Value=UserProfile.", code: "Map<String, User> cache = new HashMap<>();\ncache.put(\"SID_123\", userObj);", src: "Link 52", link: "https://notebook.zohopublic.in/public/notes/bietv379bff087eca47eaa84a3024d7e14b46" },
+            { id: 7, cat: "Threads", title: "Multithreading", context: "Executing multiple threads simultaneously to maximize CPU usage. Essential for responsive UIs and handling multiple server requests.", example: "Web Browser: One thread downloads the file, another keeps the UI responsive so you can scroll.", code: "Thread t = new Thread(() -> downloadFile());\nt.start();", src: "Link 54", link: "https://notebook.zohopublic.in/public/notes/dcr5ze84495de6ad14cadbf5fe38b99b18b9d" },
+            
+            // TOOLS & MODERN JAVA
+            { id: 8, cat: "Tools", title: "Lombok", context: "A library that generates boilerplate code (Getters, Setters, Constructors) at compile time using annotations.", example: "User DTOs: Instead of writing 100 lines of getters/setters, use @Data.", code: "@Data\npublic class User {\n  private String name;\n}", src: "Link 39", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5" },
+            { id: 9, cat: "Modern", title: "Java Records", context: "Introduced in Java 16. A concise way to create immutable data carrier classes. Replaces POJOs for simple data holding.", example: "API Response: Returning Coordinates (x,y) from a backend.", code: "public record Point(int x, int y) {}", src: "Link 45", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5" },
+            
+            // SPRING BOOT & SECURITY
+            { id: 40, cat: "Spring Boot", title: "Spring Boot Architecture", context: "Simplifies Spring apps with 'Auto-Configuration' and 'Embedded Servers' (Tomcat). It scans your classpath and configures beans automatically.", example: "Microservices: Spinning up a new service in 5 mins without XML config.", code: "@SpringBootApplication\npublic class App { main() { run(App.class); } }", src: "User Link", link: "https://onedrive.live.com/:o:/g/personal/6B364628C29FEB52/EksLbbBuPIhDjFYNjtEw6kEB7wRxe5wd2oWXREL9gKphEg?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&ithint=onenote&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc" },
+            { id: 41, cat: "Security", title: "Spring Security Basics", context: "Authentication (Who) and Authorization (What). Uses a filter chain to intercept requests.", example: "Login Page: Intercepts request, checks credentials, issues Session/Token.", code: "http.authorizeRequests().anyRequest().authenticated();", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc&wd=target(SpringBoot.one%7Cd37c24fe-34a1-2046-885f-ef3807025388%2FSpringBoot%20Security%20-%20Part2%20and%20Part3%7C7e5c2090-8ff6-dc46-9ade-25cf32f7e4eb%2F)&wdorigin=703" },
+            { id: 42, cat: "Security", title: "OAuth 2.0 Integration", context: "Delegated authorization. Allows users to log in via Google/Facebook without sharing passwords.", example: "Social Login: 'Sign in with Google' button.", code: "@EnableOAuth2Sso", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc&wd=target(SpringBoot.one%7Cd37c24fe-34a1-2046-885f-ef3807025388%2FSpringBoot%20Security%20-%20Part8%20(OAuth%20Authentication%5C)%7Cf5c0fea5-77d9-bb45-a1fc-fc6285059c1a%2F)&wdorigin=703", git: "https://gitlab.com/shrayansh8/interviewcodingpractise/-/tree/main/src/main/java/com/conceptandcoding/learningspringboot/OAuth" },
+            { id: 43, cat: "Security", title: "RBAC (Role Based)", context: "Restricting access based on User Roles (Admin, User, Manager).", example: "HR Portal: Only 'Admin' can delete employees.", code: "@PreAuthorize(\"hasRole('ADMIN')\")", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc&wd=target(SpringBoot.one%7Cd37c24fe-34a1-2046-885f-ef3807025388%2FSpring%20boot%20-%20Part9%20(Role%20based%20Authorization%20-%20Annotations%5C)%7C941edfd8-801e-9c46-963e-d79b8b8c9607%2F)&wdorigin=703" },
+            
+            // MICROSERVICES
+            { id: 44, cat: "Microservices", title: "RestClient", context: "Modern synchronous HTTP client (Spring 3.2+). Replaces RestTemplate.", example: "Order Service calling Inventory Service API.", code: "restClient.get().uri(\"/stock\").retrieve();", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FRestClient%7C0d8b2f2c-6b98-4a43-b5e7-c85058aaed36%2F%29&wdorigin=703" },
+            { id: 45, cat: "Microservices", title: "Feign Client", context: "Declarative Web Service Client. You write an Interface, Spring writes the implementation.", example: "Simplifying HTTP calls between services.", code: "@FeignClient(name=\"inventory\") interface InvClient {}", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FFeignClient%7C58a280a8-cde1-2744-9639-da22cbd670c2%2F%29&wdorigin=703" },
+            { id: 46, cat: "Microservices", title: "Service Discovery", context: "Eureka Server. Services register themselves so others can find them by name, not IP.", example: "Scaling: Adding 5 Inventory instances dynamically.", code: "@EnableEurekaServer", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FService+Discovery%7Cbe9efdfc-f515-344f-b765-9b58c71e6cdb%2F%29&wdorigin=703" },
+            { id: 47, cat: "Microservices", title: "Load Balancing", context: "Client-side load balancing. Distributing requests among available service instances.", example: "Round-robin requests to 3 different Inventory nodes.", code: "@LoadBalanced WebClient.Builder", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FClient+Side+Load+Balancer%7Ca0e35fce-9ab3-774d-a9a5-1a83bcd9e0f9%2F%29&wdorigin=703" },
+            { id: 48, cat: "Resilience", title: "Resilience4j", context: "Fault tolerance library. Prevents cascading failures when a service goes down.", example: "Fallback: Return cached data if DB is down.", code: "// CircuitBreaker, Retry, Bulkhead", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FResilience4j+Building+Fault-Tolerant+Microservice%7Ca0095666-1317-4f4c-b672-a8915839634d%2F%29&wdorigin=703" },
+            { id: 49, cat: "Resilience", title: "Bulkhead Pattern", context: "Isolating resources (thread pools). Failure in one part doesn't crash the whole system.", example: "Payment Service threads separate from Browsing threads.", code: "@Bulkhead(name=\"api\")", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FBulkhead+Fault-Tolerant+Microservice+%28Part-2%5C%29%7Cc82898a8-8c19-df43-a956-00d6d5ce44fc%2F%29&wdorigin=703" },
+            { id: 50, cat: "Resilience", title: "Retry Pattern", context: "Automatically retrying failed operations for transient errors.", example: "Network timeout? Try again in 200ms.", code: "@Retry(name=\"backend\")", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FRetry+Fault-Tolerant+Microservice+%28Part-3%5C%29%7C8d82083b-9805-4b47-bafa-6cea3f88f6a4%2F%29&wdorigin=703" },
+            { id: 51, cat: "Resilience", title: "Circuit Breaker", context: "Stops making requests to a dead service to allow it to recover.", example: "Email Service dead? Stop calling it for 30s.", code: "@CircuitBreaker", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FCircuit+Breaker+Fault-Tolerant+Microservice+%28Part-%7Caff21d09-7e7c-4a43-b09c-50e7a2c70e82%2F%29&wdorigin=703" },
+            { id: 52, cat: "Microservices", title: "API Gateway", context: "Single entry point for all clients. Handles Routing, Auth, and Throttling.", example: "Route /orders -> OrderService.", code: "spring.cloud.gateway.routes", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FAPI+Gateway%7C3bb17da8-1963-2f47-b15a-a530443924cf%2F%29&wdorigin=703", git: "https://gitlab.com/shrayansh8/springboot-microservices/-/tree/main/apigateway_part1?ref_type=heads" },
+            { id: 53, cat: "Microservices", title: "Centralized Config", context: "Managing properties for all services in one Git repo. Services fetch config at startup.", example: "Changing 'Dark Mode' feature flag for 10 apps at once.", code: "spring.config.import=configserver:", src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FCentralized+Configuration%7Cfc15fdca-d6a1-8f40-b677-08a3d45ac351%2F%29&wdorigin=703" }
         ];
 
-        // --- NEW SPRING & MICROSERVICES CONTENT (Mapped from your new links) ---
-        const springTopics = [
-            {
-                id: 40, cat: "Spring Boot", title: "Spring Boot Architecture",
-                src: "User Link", link: "https://onedrive.live.com/:o:/g/personal/6B364628C29FEB52/EksLbbBuPIhDjFYNjtEw6kEB7wRxe5wd2oWXREL9gKphEg?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&ithint=onenote&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc",
-                context: "Spring Boot simplifies Spring development by providing 'Starter Dependencies' and 'Auto-Configuration'. It embeds the server (Tomcat) directly into the JAR file.",
-                scenario: "**Rapid Prototyping**. Instead of spending 2 days configuring XML files and installing Tomcat, you just add `spring-boot-starter-web` and run `main()`. You have a web server running in 5 minutes.",
-                code: "@SpringBootApplication\npublic class App {\n    public static void main(String[] args) {\n        SpringApplication.run(App.class, args);\n    }\n}"
-            },
-            {
-                id: 41, cat: "Security", title: "Spring Security Basics (AuthN/AuthZ)",
-                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc&wd=target(SpringBoot.one%7Cd37c24fe-34a1-2046-885f-ef3807025388%2FSpringBoot%20Security%20-%20Part2%20and%20Part3%7C7e5c2090-8ff6-dc46-9ade-25cf32f7e4eb%2F)&wdorigin=703",
-                context: "Handles **Authentication** (Who are you?) and **Authorization** (What can you do?). It uses a chain of filters to intercept every request before it reaches your controller.",
-                scenario: "**Login Screen**. Spring Security intercepts the request. 1) Checks Username/Password (AuthN). 2) Checks if user has 'ROLE_ADMIN' to access `/admin` (AuthZ). [Image of Spring Security Authentication Flow]",
-                code: "http.authorizeRequests()\n    .antMatchers(\"/public/**\").permitAll()\n    .antMatchers(\"/admin/**\").hasRole(\"ADMIN\")\n    .anyRequest().authenticated();"
-            },
-            {
-                id: 42, cat: "Security", title: "OAuth 2.0 Integration",
-                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc&wd=target(SpringBoot.one%7Cd37c24fe-34a1-2046-885f-ef3807025388%2FSpringBoot%20Security%20-%20Part8%20(OAuth%20Authentication%5C)%7Cf5c0fea5-77d9-bb45-a1fc-fc6285059c1a%2F)&wdorigin=703",
-                git: "https://gitlab.com/shrayansh8/interviewcodingpractise/-/tree/main/src/main/java/com/conceptandcoding/learningspringboot/OAuth",
-                [cite_start]context: "OAuth 2.0 is an authorization framework that enables applications to obtain limited access to user accounts on an HTTP service, such as Facebook or Google. [cite: 1]",
-                scenario: "**Social Login**. Instead of storing passwords, you let users 'Log in with Google'. Your app gets a Token from Google saying 'This is John', without ever seeing John's password. ",
-                code: "@EnableOAuth2Sso\n// Spring Boot handles the redirect to Google\n// and the exchange of tokens automatically."
-            },
-            {
-                id: 43, cat: "Security", title: "Role-Based Access Control (RBAC)",
-                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc&wd=target(SpringBoot.one%7Cd37c24fe-34a1-2046-885f-ef3807025388%2FSpring%20boot%20-%20Part9%20(Role%20based%20Authorization%20-%20Annotations%5C)%7C941edfd8-801e-9c46-963e-d79b8b8c9607%2F)&wdorigin=703",
-                context: "RBAC restricts network access based on the roles of individual users within an enterprise. In Spring, we use annotations to protect specific methods.",
-                scenario: "**HR Portal**. Everyone can view 'Holidays'. Only `ROLE_MANAGER` can 'Approve Leave'. Only `ROLE_ADMIN` can 'Delete Employee'.",
-                code: "@PreAuthorize(\"hasRole('ADMIN')\")\npublic void deleteEmployee(String id) {\n    repo.deleteById(id);\n}"
-            },
-            {
-                id: 44, cat: "Microservices", title: "RestClient (Sync Communication)",
-                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FRestClient%7C0d8b2f2c-6b98-4a43-b5e7-c85058aaed36%2F%29&wdorigin=703&wdpartid=%7B1aa52097-7ccd-f643-b337-5b2fc83f867f%7D%7B1%7D&wdsectionfileid=6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692",
-                context: "`RestClient` is the modern, fluent synchronous HTTP client introduced in Spring Boot 3.2, replacing `RestTemplate`. It allows microservices to talk to each other.",
-                scenario: "**Order Service calls Inventory**. When a user places an order, the OrderService must synchronously call the InventoryService API to check if stock is available.",
-                code: "String result = restClient.get()\n  .uri(\"http://inventory-service/stock/{id}\", 101)\n  .retrieve()\n  .body(String.class);"
-            },
-            {
-                id: 45, cat: "Microservices", title: "Feign Client (Declarative REST)",
-                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FFeignClient%7C58a280a8-cde1-2744-9639-da22cbd670c2%2F%29&wdorigin=703&wdpartid=%7B373c9d93-f9c7-7946-bc81-bb91743d3625%7D%7B1%7D&wdsectionfileid=6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692",
-                context: "Feign makes writing Java HTTP clients easier. Instead of writing connection logic, you define an Interface and Spring creates the implementation at runtime.",
-                scenario: "**Simplifying Calls**. Instead of writing `restClient.get()...`, you just write an interface method `getInventory(id)`.",
-                code: "@FeignClient(name = \"inventory-service\")\npublic interface InventoryClient {\n    @GetMapping(\"/stock/{id}\")\n    int checkStock(@PathVariable(\"id\") Long id);\n}"
-            },
-            {
-                id: 46, cat: "Microservices", title: "Service Discovery (Eureka)",
-                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FService+Discovery%7Cbe9efdfc-f515-344f-b765-9b58c71e6cdb%2F%29&wdorigin=703&wdpartid=%7B1d6ee994-9a33-9e49-9efe-8d00ba724950%7D%7B1%7D&wdsectionfileid=6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692",
-                context: "In the cloud, IP addresses change dynamically. Service Discovery (like Netflix Eureka) acts as a phonebook where services register themselves so others can find them by name, not IP. [Image of Microservices Architecture with API Gateway and Discovery Server]",
-                scenario: "**Scaling**. If you spin up 5 new instances of 'Inventory Service', they automatically register with Eureka. The 'Order Service' asks Eureka 'Where is Inventory?' and gets the new addresses immediately.",
-                code: "@EnableEurekaServer // On the Server App\n@EnableDiscoveryClient // On the Client Apps"
-            },
-            {
-                id: 47, cat: "Microservices", title: "Load Balancing (Client Side)",
-                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FClient+Side+Load+Balancer%7Ca0e35fce-9ab3-774d-a9a5-1a83bcd9e0f9%2F%29&wdorigin=703&wdpartid=%7B30b07022-43ba-9b4a-bdfd-669f3a4e28f5%7D%7B1%7D&wdsectionfileid=6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692",
-                context: "When Service Discovery returns 5 IP addresses for 'Inventory Service', the Client Side Load Balancer (Spring Cloud LoadBalancer) decides which one to call (e.g., Round Robin) to distribute traffic evenly.",
-                scenario: "**Traffic Distribution**. You have 3 instances of a service. The Load Balancer ensures Instance 1 doesn't get 100% of the traffic while Instance 2 and 3 sit idle.",
-                code: "@LoadBalanced // Add this to RestTemplate/WebClient builder\n@Bean\npublic WebClient.Builder loadBalancedWebClientBuilder() {\n    return WebClient.builder();\n}"
-            },
-            {
-                id: 48, cat: "Resilience", title: "Resilience4j & Fault Tolerance",
-                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FResilience4j+Building+Fault-Tolerant+Microservice%7Ca0095666-1317-4f4c-b672-a8915839634d%2F%29&wdorigin=703&wdpartid=%7B33040e75-114a-e603-3e60-15ff88227e15%7D%7B1%7D&wdsectionfileid=6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692",
-                context: "Microservices fail. Resilience4j is a library that helps your application stay functional when a dependent service goes down. Key patterns: Circuit Breaker, Retry, Bulkhead.",
-                scenario: "**Cascading Failure**. If 'Inventory Service' is slow, 'Order Service' shouldn't freeze waiting for it. It should 'Fail Fast' or return a default response so the user isn't stuck loading.",
-                code: "// Resilience4j is lightweight and designed for Java 8 functional style"
-            },
-            {
-                id: 49, cat: "Resilience", title: "Bulkhead Pattern",
-                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FBulkhead+Fault-Tolerant+Microservice+%28Part-2%5C%29%7Cc82898a8-8c19-df43-a956-00d6d5ce44fc%2F%29&wdorigin=703&wdpartid=%7B275c27b2-26cb-c609-3c5c-06e012553b64%7D%7B1%7D&wdsectionfileid=6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692",
-                context: "Based on ship design. It isolates resources (like thread pools) so that if one part of the system is overloaded, it doesn't sink the whole ship.",
-                scenario: "**Payment vs Browsing**. You separate the thread pools for 'Payment Processing' and 'Product Browsing'. If the Payment system hangs, users can still browse products because those threads are free.",
-                code: "@Bulkhead(name = \"paymentApi\", type = Bulkhead.Type.THREADPOOL)\npublic void processPayment() { ... }"
-            },
-            {
-                id: 50, cat: "Resilience", title: "Retry Pattern",
-                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FRetry+Fault-Tolerant+Microservice+%28Part-3%5C%29%7C8d82083b-9805-4b47-bafa-6cea3f88f6a4%2F%29&wdorigin=703&wdpartid=%7B04c0293d-7c70-3b0b-126c-4bf3b6964a94%7D%7B1%7D&wdsectionfileid=6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692",
-                context: "Automatically retries a failed operation a configured number of times. Useful for temporary network blips.",
-                scenario: "**Network Glitch**. You call the DB and it times out. Instead of showing 'Error' to the user immediately, the system waits 200ms and tries again. Often, it works the second time.",
-                code: "@Retry(name = \"inventoryApi\", fallbackMethod = \"fallback\")\npublic String checkStock(String id) { ... }"
-            },
-            {
-                id: 51, cat: "Resilience", title: "Circuit Breaker Pattern",
-                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FCircuit+Breaker+Fault-Tolerant+Microservice+%28Part-%7Caff21d09-7e7c-4a43-b09c-50e7a2c70e82%2F%29&wdorigin=703&wdpartid=%7B5058ad85-08d9-b107-24e5-0d85cd4fee1d%7D%7B1%7D&wdsectionfileid=6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692",
-                context: "If a service is down, the Circuit Breaker 'Opens' (stops calls) to prevent flooding the dead service. After a while, it 'Half-Opens' (tests connection). If successful, it 'Closes' (resumes). ",
-                scenario: "**Protecting the System**. If the 'Email Service' is dead, stop trying to send emails. Just log them to a file for later. Don't waste threads waiting for timeouts.",
-                code: "@CircuitBreaker(name = \"emailService\", fallbackMethod = \"logEmail\")\npublic void sendEmail() { ... }"
-            },
-            {
-                id: 52, cat: "Microservices", title: "API Gateway (Entry Point)",
-                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FAPI+Gateway%7C3bb17da8-1963-2f47-b15a-a530443924cf%2F%29&wdorigin=703&wdpartid=%7B525681df-dce3-a70d-100b-292531aa3913%7D%7B1%7D&wdsectionfileid=%7B6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692%7D",
-                git: "https://gitlab.com/shrayansh8/springboot-microservices/-/tree/main/apigateway_part1?ref_type=heads",
-                context: "Acts as a single entry point for all clients. It routes requests to the appropriate microservices, handles authentication, and rate limiting. Clients don't talk to services directly.",
-                scenario: "**Routing**. Client calls `api.myapp.com/orders`. Gateway sees `/orders` and routes it to `Order Service`. Client calls `/users`, Gateway routes to `User Service`.",
-                code: "spring.cloud.gateway.routes:\n  - id: order-service\n    uri: lb://ORDER-SERVICE\n    predicates:\n      - Path=/orders/**"
-            },
-            {
-                id: 53, cat: "Microservices", title: "API Gateway (Advanced Filters)",
-                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FAPI+Gateway+-+Part2%7C669be8ba-609d-734a-a8ce-72a0ea3e27cc%2F%29&wdorigin=703&wdpartid=%7B620e8163-706d-bf0a-3e78-7067f0466108%7D%7B1%7D&wdsectionfileid=%7B6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692%7D",
-                git: "https://gitlab.com/shrayansh8/springboot-microservices/-/tree/main/apigateway_part2/apigateway?ref_type=heads",
-                context: "Filters allow you to modify incoming requests or outgoing responses globally. You can add headers, log requests, or validate tokens at the gateway level.",
-                scenario: "**Adding Trace ID**. Every request hitting the Gateway gets a `X-Trace-Id` header added automatically. This ID is passed to all downstream services so you can track the request across the system.",
-                code: "filters:\n  - AddRequestHeader=X-Trace-Id, 12345"
-            },
-            {
-                id: 54, cat: "Microservices", title: "Centralized Configuration",
-                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FCentralized+Configuration%7Cfc15fdca-d6a1-8f40-b677-08a3d45ac351%2F%29&wdorigin=703&wdpartid=%7B30a1fd5e-aafa-ac0f-1edc-edf25c201198%7D%7B1%7D&wdsectionfileid=%7B6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692%7D",
-                context: "Managing `application.properties` for 50 services is hard. Spring Cloud Config Server allows you to store all configs in a Git Repo. Services fetch their config from the server at startup.",
-                scenario: "**Feature Flags**. You want to enable 'Dark Mode' for all users. Instead of redeploying 10 services, you change `feature.darkmode=true` in the Git repo, and refresh the services.",
-                code: "spring.config.import=optional:configserver:http://localhost:8888"
-            }
-        ];
+        let currentTopicIndex = 0;
 
-        // Merge all data
-        const allTopics = [...coreTopics, ...springTopics];
-
-        // --- RENDER LOGIC ---
-        function renderNav(items) {
+        // --- FUNCTIONS ---
+        function renderSidebar(items) {
             const list = document.getElementById('navList');
             list.innerHTML = "";
-            items.forEach(t => {
+            items.forEach((t, index) => {
                 const li = document.createElement('li');
                 li.className = 'nav-item';
+                li.id = `nav-${index}`;
                 li.innerHTML = `
                     <span class="nav-id">${t.id}</span>
-                    <span>${t.title}</span>
+                    <span class="nav-text">${t.title}</span>
                     <span class="nav-cat">${t.cat}</span>
                 `;
-                li.onclick = () => loadTopic(t.id);
+                li.onclick = () => loadTopic(index);
                 list.appendChild(li);
             });
         }
 
-        function loadTopic(id) {
-            const t = allTopics.find(item => item.id === id);
-            const area = document.getElementById('contentArea');
-            
-            // Highlight
+        function loadTopic(index) {
+            currentTopicIndex = index;
+            const t = topics[index];
+
+            // 1. Sidebar Active State
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            // In a real implementation we would select the element by ID
+            const activeItem = document.getElementById(`nav-${index}`);
+            if(activeItem) {
+                activeItem.classList.add('active');
+                activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            // 2. Button States
+            const prevDisabled = (index === 0);
+            const nextDisabled = (index === topics.length - 1);
             
-            // Buttons
-            let buttonsHTML = "";
-            if (t.link) buttonsHTML += `<a href="${t.link}" target="_blank" class="btn btn-note">📖 Open Note / PDF</a>`;
-            if (t.git) buttonsHTML += `<a href="${t.git}" target="_blank" class="btn btn-git">🦊 View Source Code (GitLab)</a>`;
+            document.getElementById('prevBtnTop').disabled = prevDisabled;
+            document.getElementById('nextBtnTop').disabled = nextDisabled;
+            document.getElementById('prevBtnBot').disabled = prevDisabled;
+            document.getElementById('nextBtnBot').disabled = nextDisabled;
 
-            area.innerHTML = `
-                <div class="card">
-                    <div class="card-header">
-                        <h1>${t.title}</h1>
-                        <span style="opacity:0.8">${t.cat}</span>
-                    </div>
-                    <div class="card-body">
-                        
-                        <div class="section-label">Core Concept</div>
-                        <div class="context-text">${t.context}</div>
+            // 3. Render Header
+            document.getElementById('topicTitle').innerText = t.id + ". " + t.title;
+            document.getElementById('topicCat').innerText = t.cat + (t.src ? ` | ${t.src}` : "");
 
-                        <div class="section-label">Real World Scenario</div>
-                        <div class="scenario-box">
-                            <span class="scenario-title">Use Case:</span>
-                            ${t.example || t.scenario}
-                        </div>
+            // 4. Render Core Content
+            document.getElementById('contextText').innerText = t.context;
+            
+            // 5. Render Links (Core Tab)
+            const linkArea = document.getElementById('linkSection');
+            linkArea.innerHTML = "";
+            
+            if (t.link) {
+                linkArea.innerHTML += `<a href="${t.link}" target="_blank" class="ext-link link-note">🔗 Open Original Note / PDF</a>`;
+            }
+            if (t.git) {
+                linkArea.innerHTML += `<a href="${t.git}" target="_blank" class="ext-link link-git">🦊 View Source Code</a>`;
+            }
 
-                        <div class="section-label">Implementation</div>
-                        <div class="code-block">${t.code}</div>
+            // 6. Render Scenario & Code
+            document.getElementById('scenarioText').innerHTML = `<strong>Use Case:</strong> ${t.example}`;
+            document.getElementById('codeText').innerText = t.code;
 
-                        <div class="action-bar">
-                            ${buttonsHTML}
-                        </div>
-
-                    </div>
+            // 7. Render "All" Tab
+            const allHtml = `
+                <div class="content-block">
+                    <div class="block-title">Overview</div>
+                    <div class="context-text">${t.context}</div>
+                    <div class="link-group">${linkArea.innerHTML}</div>
+                </div>
+                <div class="content-block">
+                    <div class="block-title">Real-World Scenario</div>
+                    <div class="scenario-box"><strong>Use Case:</strong> ${t.example}</div>
+                </div>
+                <div class="content-block">
+                    <div class="block-title">Implementation</div>
+                    <div class="code-block">${t.code}</div>
                 </div>
             `;
+            document.getElementById('allContent').innerHTML = allHtml;
+
+            // Reset to Core tab by default or keep current if valid logic added
+            // switchTab('core'); // Optional: force reset on switch
+        }
+
+        function prevTopic() {
+            if(currentTopicIndex > 0) loadTopic(currentTopicIndex - 1);
+        }
+
+        function nextTopic() {
+            if(currentTopicIndex < topics.length - 1) loadTopic(currentTopicIndex + 1);
+        }
+
+        function switchTab(tabName) {
+            // Update Headers
+            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+            // Find specific tab by text or index relies on order, simpler to use onclick classes
+            const tabs = document.querySelectorAll('.tab');
+            if(tabName === 'core') tabs[0].classList.add('active');
+            if(tabName === 'scenario') tabs[1].classList.add('active');
+            if(tabName === 'impl') tabs[2].classList.add('active');
+            if(tabName === 'all') tabs[3].classList.add('active');
+
+            // Update Content Visibility
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${tabName}`).classList.add('active');
         }
 
         function filterTopics(query) {
             const lower = query.toLowerCase();
-            const filtered = allTopics.filter(t => 
-                t.title.toLowerCase().includes(lower) || 
-                t.cat.toLowerCase().includes(lower) ||
-                t.context.toLowerCase().includes(lower)
-            );
-            renderNav(filtered);
+            const filteredIndices = [];
+            topics.forEach((t, i) => {
+                if(t.title.toLowerCase().includes(lower) || t.cat.toLowerCase().includes(lower)) {
+                    filteredIndices.push(i);
+                }
+            });
+            
+            // Re-render sidebar based on filter? 
+            // Simpler approach: Just hide/show items
+            const items = document.querySelectorAll('.nav-item');
+            items.forEach((item, index) => {
+                const t = topics[index];
+                const match = t.title.toLowerCase().includes(lower) || t.cat.toLowerCase().includes(lower);
+                item.style.display = match ? 'flex' : 'none';
+            });
         }
 
         // Init
-        renderNav(allTopics);
-        loadTopic(1); // Load first topic
+        renderSidebar(topics);
+        loadTopic(0); // Load first
 
     </script>
 </body>
