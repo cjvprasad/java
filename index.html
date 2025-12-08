@@ -3,58 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Professional Mastery Dashboard</title>
+    <title>Java & Spring Boot Ultimate Dashboard</title>
     <style>
         :root { 
             --primary: #2c3e50; 
-            --accent: #2980b9; 
-            --bg: #f4f7f6; 
+            --accent: #27ae60; /* Changed to Green for Spring vibes */
+            --bg: #f0f3f5; 
             --text: #333;
-            --sidebar-width: 350px;
+            --sidebar-width: 360px;
         }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; background: var(--bg); color: var(--text); }
         
         /* Sidebar */
-        .sidebar { width: var(--sidebar-width); background: var(--primary); color: white; display: flex; flex-direction: column; border-right: 1px solid #1a252f; flex-shrink: 0; }
-        .sidebar-header { padding: 25px; background: #1a252f; text-align: center; border-bottom: 4px solid var(--accent); }
-        .sidebar-header h2 { margin: 0; font-size: 1.2rem; letter-spacing: 1px; }
-        .search-box { padding: 15px; background: #34495e; }
-        .search-input { width: 100%; padding: 10px; border-radius: 4px; border: none; outline: none; }
+        .sidebar { width: var(--sidebar-width); background: #1e272e; color: white; display: flex; flex-direction: column; border-right: 1px solid #1a252f; flex-shrink: 0; }
+        .sidebar-header { padding: 25px; background: #111; text-align: center; border-bottom: 4px solid var(--accent); }
+        .sidebar-header h2 { margin: 0; font-size: 1.3rem; letter-spacing: 1px; color: var(--accent); }
+        .search-box { padding: 15px; background: #2d3436; }
+        .search-input { width: 100%; padding: 12px; border-radius: 4px; border: none; outline: none; background: #dfe6e9; color: #333; font-weight: bold; }
         
         .nav-list { list-style: none; padding: 0; margin: 0; overflow-y: auto; flex: 1; }
-        .nav-item { padding: 15px 20px; border-bottom: 1px solid #34495e; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; }
-        .nav-item:hover, .nav-item.active { background: var(--accent); border-left: 5px solid #ecf0f1; }
-        .nav-id { font-weight: bold; background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 4px; margin-right: 12px; font-size: 0.85rem; }
-        .nav-text { font-size: 0.95rem; }
+        .nav-item { padding: 15px 20px; border-bottom: 1px solid #2d3436; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; }
+        .nav-item:hover, .nav-item.active { background: var(--accent); color: white; padding-left: 25px; }
+        .nav-id { font-weight: bold; background: rgba(0,0,0,0.3); padding: 3px 8px; border-radius: 4px; margin-right: 12px; font-size: 0.8rem; min-width: 30px; text-align: center; }
+        .nav-cat { font-size: 0.75rem; text-transform: uppercase; opacity: 0.7; margin-left: auto; letter-spacing: 0.5px; }
 
         /* Main Content */
         .main-content { flex: 1; padding: 40px; overflow-y: auto; }
         .container { max-width: 1000px; margin: 0 auto; }
         
-        .card { background: white; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); overflow: hidden; animation: fadeIn 0.4s ease; }
+        .card { background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; animation: slideUp 0.4s ease; margin-bottom: 30px; }
         .card-header { background: var(--primary); color: white; padding: 25px; display: flex; justify-content: space-between; align-items: center; }
-        .card-header h1 { margin: 0; font-size: 1.8rem; }
-        .source-tag { background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; font-size: 0.85rem; }
-
+        .card-header h1 { margin: 0; font-size: 1.6rem; }
+        
         .card-body { padding: 30px; }
         
-        /* Sections */
-        .section-title { color: var(--accent); font-size: 1.1rem; text-transform: uppercase; font-weight: 700; margin-top: 30px; margin-bottom: 10px; border-left: 4px solid var(--accent); padding-left: 10px; }
-        .section-title:first-of-type { margin-top: 0; }
+        /* Typography & layout */
+        .section-label { color: var(--accent); font-weight: 800; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-top: 25px; margin-bottom: 10px; display: flex; align-items: center; }
+        .section-label::before { content: ''; display: inline-block; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; margin-right: 10px; }
         
-        .content-text { line-height: 1.7; font-size: 1.05rem; color: #444; background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e9ecef; }
+        .context-text { font-size: 1.05rem; line-height: 1.6; color: #444; background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #cbd5e0; }
         
-        .real-world-box { background: #e8f6f3; border: 1px solid #d1f2eb; padding: 20px; border-radius: 8px; color: #0e6251; }
-        .real-world-box strong { display: block; margin-bottom: 8px; font-size: 1.1rem; color: #0b5345; }
+        .scenario-box { background: #e8f8f5; padding: 20px; border-radius: 8px; border: 1px solid #a2d9ce; color: #0b5345; }
+        .scenario-title { font-weight: bold; font-size: 1.1rem; display: block; margin-bottom: 8px; color: #117864; }
 
-        .code-block { background: #282c34; color: #abb2bf; padding: 20px; border-radius: 8px; overflow-x: auto; font-family: 'Consolas', 'Monaco', monospace; font-size: 0.95rem; line-height: 1.5; border: 1px solid #ddd; margin-top: 10px; }
+        .code-container { position: relative; margin-top: 15px; }
+        .code-block { background: #282c34; color: #abb2bf; padding: 20px; border-radius: 8px; overflow-x: auto; font-family: 'Consolas', monospace; font-size: 0.95rem; line-height: 1.5; border: 1px solid #333; }
         
-        .btn-link { display: inline-block; margin-top: 10px; text-decoration: none; background: var(--accent); color: white; padding: 8px 16px; border-radius: 4px; font-weight: 600; font-size: 0.9rem; transition: background 0.3s; }
-        .btn-link:hover { background: #1f618d; }
+        /* Buttons */
+        .action-bar { margin-top: 25px; display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn { text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; transition: transform 0.2s; display: inline-flex; align-items: center; }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-note { background: var(--accent); color: white; }
+        .btn-git { background: #e05d44; color: white; } /* GitLab Orange */
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Responsive */
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 900px) { body { flex-direction: column; } .sidebar { width: 100%; height: 300px; } }
     </style>
 </head>
@@ -62,10 +64,10 @@
 
     <div class="sidebar">
         <div class="sidebar-header">
-            <h2>☕ Java Professional</h2>
+            <h2>☕ Java Ultimate</h2>
         </div>
         <div class="search-box">
-            <input type="text" class="search-input" placeholder="Search Topic..." onkeyup="filterTopics(this.value)">
+            <input type="text" class="search-input" placeholder="Search (e.g., Security, OAuth)..." onkeyup="filterTopics(this.value)">
         </div>
         <ul class="nav-list" id="navList"></ul>
     </div>
@@ -75,338 +77,137 @@
     </div>
 
     <script>
-        // --- PROFESSIONAL DATA CONTENT ---
-        const topics = [
-            // --- BASICS & MEMORY ---
-            { 
-                id: 1, title: "Java Architecture (JDK/JRE/JVM)", 
-                src: "2_JDK_JRE_JVM.pdf",
-                context: "Java is built on a 3-tier architecture. 1) **JDK (Development Kit)** is the toolbox containing the compiler (`javac`). 2) **JRE (Runtime Environment)** allows programs to run but not be modified. 3) **JVM (Virtual Machine)** is the engine that translates Java Bytecode into machine-specific code. This architecture enables the 'Write Once, Run Anywhere' capability.",
-                scenario: "Imagine **Spotify**. The developers use the **JDK** on Windows to write the code. When you download Spotify, it includes a **JRE** so it runs on your machine. The **JVM** ensures the exact same code plays music on Mac, Windows, and Linux without the developers rewriting it.",
-                code: "// 1. Developer writes Code.java\n// 2. JDK Compiler: javac Code.java -> Code.class (Bytecode)\n// 3. JVM Interpreter: java Code -> Machine Code (010101)\n\nSystem.out.println(\"Running on \" + System.getProperty(\"os.name\"));" 
-            },
-            { 
-                id: 2, title: "Variables & Static Typing", 
-                src: "4_Primitive_Variables.pdf",
-                context: "Java is Statically Typed, meaning every variable must have a declared type (like `int` or `String`) that cannot change. This strictness catches errors at compile-time (before the app runs), making large enterprise applications more stable and easier to debug compared to dynamic languages like JavaScript.",
-                scenario: "In a **Banking Ledger**, you cannot risk treating a Balance ($500) as a String (\"500\"). If you try to subtract fees from text, the app crashes. Java prevents this by enforcing `double balance`.",
-                code: "int userId = 101;       // Memory allocated for Integer\ndouble balance = 500.50; // Memory for Decimal\n// balance = \"Hello\";  // COMPILER ERROR! Prevents crashing in production." 
-            },
-            { 
-                id: 3, title: "Primitive vs Reference Types", 
-                src: "4_Primitive_Variables.pdf",
-                context: "Java has 8 Primitive types (`int`, `boolean`, `char`...) which store the **actual value** directly in Stack memory for speed. Everything else is a Reference type (`String`, `Array`, `User`) which stores an **address** pointing to an object in Heap memory. Understanding this is crucial for performance and avoiding NullPointerExceptions.",
-                scenario: "A **High-Frequency Trading System**. Stock prices (`double`) update millions of times a second; using primitives ensures zero overhead. The User Profile (`User object`) is complex and shared, so it sits in the Heap.",
-                code: "int price = 100; // Value 100 stored directly in Stack\nUser user = new User(); // Address 0x99F stored in Stack -> Object in Heap\n\n// If you change 'price', copies are independent.\n// If you change 'user', all references see the update." 
-            },
-            { 
-                id: 4, title: "Type Casting (Widening/Narrowing)", 
-                src: "4_Primitive_Variables.pdf",
-                context: "Widening (Implicit) is converting a small type to a large type (int -> long) and is safe. Narrowing (Explicit) is forcing a large type into a small one (double -> int), which causes data loss. Developers must manually approve narrowing to acknowledge the risk.",
-                scenario: "A **GPS System**. It calculates distance with high precision (`double` 10.987km). However, the UI only has space to show whole numbers. You explicitly cast to `int` to display '10km', accepting the loss of precision for the UI.",
-                code: "double exactDist = 10.987;\nint displayDist = (int) exactDist; // Manual cast required\n\nSystem.out.println(displayDist); // Output: 10 (0.987 is lost)" 
-            },
-            { 
-                id: 5, title: "Operators & Ternary", 
-                src: "General",
-                context: "Java provides standard arithmetic and logical operators. The Ternary Operator (`? :`) is a concise, one-line replacement for simple `if-else` statements, used heavily in modern coding to keep UI logic clean.",
-                scenario: "A **Website Login Screen**. You need to display 'Welcome' if the user is logged in, or 'Guest' if they are not. Using an `if-else` block takes 5 lines; ternary takes 1.",
-                code: "boolean isLoggedIn = true;\n\n// Real-world concise logic\nString statusLabel = (isLoggedIn) ? \"Welcome Back!\" : \"Please Login\";" 
-            },
-            { 
-                id: 6, title: "Control Flow (Switch Expressions)", 
-                src: "Link 42", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5",
-                context: "Control flow directs the program execution. Modern Java (14+) introduced 'Switch Expressions' which allows switches to return values directly and use lambda-style arrows `->` to prevent 'fall-through' bugs (where multiple cases run accidentally).",
-                scenario: "An **Order Processing System**. Based on the status code (1, 2, 3), you need to determine the text label. Old switch was verbose; new switch allows you to assign the status label in a single clean block.",
-                code: "int statusCode = 2;\n\nString status = switch(statusCode) {\n    case 1 -> \"Pending\";\n    case 2 -> \"Shipped\";\n    case 3 -> \"Delivered\";\n    default -> \"Unknown\";\n};" 
-            },
-            { 
-                id: 7, title: "Loops (For vs While)", 
-                src: "General",
-                context: "Loops automate repetitive tasks. Use a `for` loop when you know exactly how many times to run (iterations). Use a `while` loop when you are waiting for a condition to change (unknown iterations).",
-                scenario: "1. **For Loop:** Processing a **Payroll**. You know exactly how many employees (500) you have, so you iterate 500 times to pay them.\n2. **While Loop:** A **Game Server**. The server keeps running `while(serverIsRunning)` until an admin sends a shutdown command.",
-                code: "// For Loop: Known Count\nfor(int i=0; i<employees.size(); i++) { pay(employees.get(i)); }\n\n// While Loop: Unknown Duration\nwhile(server.isActive()) { listenForConnections(); }" 
-            },
-            { 
-                id: 8, title: "Arrays & Memory", 
-                src: "6_NonPrimitive_Variables.pdf",
-                context: "An Array is a container of **fixed size** that stores elements of the same type sequentially in memory. Because the memory is contiguous, accessing data by index is incredibly fast (O(1)), but resizing is impossible (you must create a new array).",
-                scenario: "An **Image Processing App (Photoshop)**. An image is a fixed grid of pixels (e.g., 1920x1080). You never randomly add a pixel in the middle; the size is fixed. Arrays are perfect here because you can instantly access `pixel[500][500]` to change its color without searching.",
-                code: "// Fixed grid of 10x10 pixels\nint[][] image = new int[10][10];\n\n// Instant access to modify one pixel\nimage[5][5] = 0xFF0000; // Set to Red" 
-            },
-            { 
-                id: 9, title: "Method Definition & Return Types", 
-                src: "7_METHODS.pdf",
-                context: "Methods break complex problems into small, reusable actions. A method signature defines inputs (Parameters) and output (Return Type). 'Void' means it performs an action but gives nothing back.",
-                scenario: "An **E-commerce Cart**. Instead of writing the tax calculation code on every page, you create one method `calculateTax(amount)`. If the tax law changes, you update only one place.",
-                code: "public double calculateTax(double price) {\n    return price * 0.18; // Returns calculated value\n}\n\npublic void printReceipt() {\n    // Performs action (Printing), returns nothing\n    System.out.println(\"Printed.\");\n}" 
-            },
-            { 
-                id: 10, title: "Method Overloading", 
-                src: "7_METHODS.pdf",
-                context: "Overloading allows multiple methods to have the same name but different parameters. This improves code readability by allowing a single action name (like 'Search') to handle different input types automatically.",
-                scenario: "A **Search Engine**. Users might search by typing a keyword (String) OR by uploading an image (File). You don't want methods named `searchByString` and `searchByImage`. You name both `search` and let Java pick the right one.",
-                code: "public void search(String keyword) { ... }\npublic void search(File image) { ... }\n\n// Usage is clean:\nsearch(\"Java\"); \nsearch(myPhoto);" 
-            },
-            { 
-                id: 11, title: "Constructors", 
-                src: "7_METHODS.pdf",
-                context: "A Constructor is a special method called *instantly* when an object is created. It is used to ensure an object starts in a valid state (e.g., ensuring a User always has an ID).",
-                scenario: "A **Database Connection**. You cannot allow a connection object to exist without a URL and Password. The constructor forces the developer to provide these credentials immediately upon creation, preventing 'empty' useless connections.",
-                code: "public class DBConnection {\n    public DBConnection(String url, String pass) {\n        // Forces setup before object can be used\n        this.connect(url, pass);\n    }\n}" 
-            },
+        // --- DATA CONTENT ---
+        // 1-39: Java Core (Summarized from previous turns for performance)
+        const coreTopics = [
+            { id: 1, cat: "Core", title: "Java Architecture", context: "JDK/JRE/JVM. WORA principle.", example: "Spotify running on Mac/Windows via JVM.", code: "java -version", src: "2_JDK_JRE_JVM.pdf" },
+            { id: 2, cat: "Core", title: "Static Typing", context: "Variables must have declared types. Prevents runtime crashes.", example: "Banking Ledger (Double vs String).", code: "int id = 10;", src: "4_Primitive_Variables.pdf" },
+            { id: 3, cat: "Core", title: "Stack vs Heap", context: "Stack=Methods/Primitives (Fast). Heap=Objects (Heavy).", example: "Trading System (Primitives) vs User Profile (Heap).", code: "int x=10; User u = new User();", src: "9_Memory.pdf", link: "https://notebook.zohopublic.in/public/notes/74tdo3074d38916474ae096fe57ad9f2ff54b" },
+            { id: 4, cat: "OOPS", title: "Polymorphism", context: "One interface, many forms. Runtime overriding.", example: "PaymentGateway (PayPal/Stripe).", code: "payment.process();", src: "1_OOPS.pdf", link: "https://notebook.zohopublic.in/public/notes/u3i1s033d318172e442b8b8f242767b93776c" },
+            { id: 5, cat: "OOPS", title: "Encapsulation", context: "Hiding data via private fields + getters/setters.", example: "Bank Account Balance protection.", code: "private double balance;", src: "1_OOPS.pdf" },
+            { id: 6, cat: "Collections", title: "HashMap", context: "Key-Value pairs. O(1) lookup.", example: "Caching User Sessions.", code: "map.get(sessionId);", src: "Link 52", link: "https://notebook.zohopublic.in/public/notes/bietv379bff087eca47eaa84a3024d7e14b46" },
+            { id: 7, cat: "Threads", title: "Multithreading", context: "Parallel execution for efficiency.", example: "Word Processor (Typing + SpellCheck).", code: "thread.start();", src: "Link 54", link: "https://notebook.zohopublic.in/public/notes/dcr5ze84495de6ad14cadbf5fe38b99b18b9d" },
+            { id: 8, cat: "Tools", title: "Lombok", context: "Boilerplate killer. @Data generates code.", example: "User DTOs.", code: "@Data class User{}", src: "Link 39", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5" },
+            { id: 9, cat: "Modern", title: "Java Records", context: "Immutable data carriers.", example: "API Responses.", code: "record Point(int x, int y){}", src: "Link 45", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5" },
+            { id: 10, cat: "JPA", title: "OneToOne Mapping", context: "1 Entity <-> 1 Entity.", example: "User <-> Profile.", code: "@OneToOne", src: "Link 72", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41" }
+        ];
 
-            // --- OOP CONCEPTS ---
-            { 
-                id: 12, title: "The 'this' Keyword", 
-                src: "Link 12", link: "https://notebook.zohopublic.in/public/notes/u3i1se962d56445eb4118ab4e4c0ca99e4728",
-                context: "The `this` keyword refers to the **current instance** of the class. It is primarily used to resolve ambiguity when a method parameter has the same name as a class attribute (Shadowing).",
-                scenario: "A **User Registration Form**. The input field is named 'email', and your class field is named 'email'. To tell Java 'Take the input email and save it into the object's email', you use `this.email = email`.",
-                code: "class User {\n    String email;\n\n    public void setEmail(String email) {\n        this.email = email; // LHS is Class Field, RHS is Parameter\n    }\n}" 
-            },
-            { 
-                id: 13, title: "Inheritance (Is-A Relationship)", 
-                src: "1_OOPS.pdf", link: "https://notebook.zohopublic.in/public/notes/u3i1s340edd3a883b4ef7ac90874731c865b0",
-                context: "Inheritance allows a Child class to acquire properties from a Parent class to avoid code duplication. It represents an 'IS-A' relationship.",
-                scenario: "**Uber's Vehicle Types**. `UberX`, `UberBlack`, and `UberXL` are all Vehicles. The parent class `Vehicle` handles logic like 'Calculate Distance' and 'GPS'. The child classes only override the 'PricePerKm'. This avoids rewriting GPS logic 3 times.",
-                code: "class Vehicle {\n    void trackGPS() { ... }\n}\n\nclass UberBlack extends Vehicle {\n    // Inherits trackGPS(), only adds luxury pricing\n    double getPrice() { return base * 2.0; }\n}" 
-            },
-            { 
-                id: 14, title: "Polymorphism (Overriding)", 
-                src: "1_OOPS.pdf", link: "https://notebook.zohopublic.in/public/notes/u3i1s033d318172e442b8b8f242767b93776c",
-                context: "Runtime Polymorphism allows a parent reference to hold a child object, and the *child's* method is executed. This makes systems flexible and pluggable.",
-                scenario: "**Payment Gateway**. Your checkout system works with `PaymentMethod` (Parent). Users can select `CreditCard`, `PayPal`, or `Bitcoin`. The system calls `payment.process()`, and Java automatically runs the correct processing logic based on what the user clicked.",
-                code: "PaymentMethod pm = new PayPal(); // Parent ref, Child Obj\npm.process(); // Runs PayPal's logic, not generic logic" 
-            },
-            { 
-                id: 15, title: "Encapsulation (Data Security)", 
-                src: "1_OOPS.pdf", link: "https://notebook.zohopublic.in/public/notes/u3i1s033d318172e442b8b8f242767b93776c",
-                context: "Encapsulation wraps data (variables) and code (methods) together. By marking variables `private`, you prevent direct modification. Access is only allowed via `public` methods (Getters/Setters) where you can add validation logic.",
-                scenario: "A **Bank Account**. You cannot simply edit the database to say `balance = 1000000`. You must go through a method `deposit(amount)`. The method checks if the amount is valid (>0) before updating the private balance.",
-                code: "public class Account {\n    private double balance;\n\n    public void deposit(double amount) {\n        if(amount > 0) {\n            this.balance += amount;\n        }\n    }\n}" 
-            },
-            { 
-                id: 16, title: "Abstraction (Hiding Complexity)", 
-                src: "1_OOPS.pdf", link: "https://notebook.zohopublic.in/public/notes/u3i1sa79b68153abe44d5aa93cc1d5b9f4dd9",
-                context: "Abstraction hides the internal implementation details and shows only the functionality. It reduces complexity for the user of the code.",
-                scenario: "A **Car Driver**. To stop the car, you press the 'Brake Pedal' (Abstract Method). You do not need to know how the hydraulic pumps and brake pads work (Implementation). The car manufacturer abstracts that complexity away from you.",
-                code: "abstract class Car {\n    abstract void brake(); // Driver just knows 'brake'\n}\n\nclass Audi extends Car {\n    void brake() { /* complex hydraulic logic */ }\n}" 
-            },
-            { 
-                id: 17, title: "Interfaces (Multiple Inheritance)", 
-                src: "10_Classes.pdf", link: "https://notebook.zohopublic.in/public/notes/u3i1sae669a127ac24a07842a488207750a7c",
-                context: "An Interface is a blueprint that defines *capabilities*. A class can implement multiple interfaces (e.g., a `SmartPhone` is a `Camera`, `Phone`, and `MusicPlayer`). This solves the problem that Java classes cannot extend multiple parents.",
-                scenario: "**Smart Home Devices**. A `SmartBulb` might implement `Switchable` (On/Off) and `Dimmable` (Brightness). A `SmartFan` implements `Switchable` but NOT `Dimmable`. The `GoogleHome` app just looks for anything `Switchable` to turn it off.",
-                code: "interface Switchable { void turnOn(); }\ninterface Dimmable { void setBrightness(int level); }\n\nclass Bulb implements Switchable, Dimmable { ... }" 
-            },
-            { 
-                id: 18, title: "Static Keyword (Memory Efficiency)", 
-                src: "10_Classes.pdf", link: "https://notebook.zohopublic.in/public/notes/u3i1sd9ea4e81ceef491cb4bd1ee221daa89f",
-                context: "Static members belong to the **Class**, not the object. There is only ONE copy in memory, shared by all instances. It is used for constants and utility methods.",
-                scenario: "The **Company Name** in an Employee system. If you have 10,000 employees, you don't want to store the string \"Google\" 10,000 times in memory. You make it `static`, so it is stored once and shared by all.",
-                code: "class Employee {\n    static String companyName = \"Google\"; // Shared memory\n    String name; // Unique per object\n}" 
-            },
-            { 
-                id: 19, title: "Final Keyword (Immutability)", 
-                src: "7_METHODS.pdf", link: "https://notebook.zohopublic.in/public/notes/u3i1sd9ea4e81ceef491cb4bd1ee221daa89f",
-                context: "Final restricts modification. A final variable is a constant. A final method cannot be overridden. A final class cannot be inherited.",
-                scenario: "**Security Configurations**. The encryption key or the maximum password attempts allowed should never be changed by the code at runtime. Declaring them `final` guarantees safety.",
-                code: "final int MAX_LOGIN_ATTEMPTS = 3;\n// MAX_LOGIN_ATTEMPTS = 4; // Compiler Error!" 
-            },
-            { 
-                id: 20, title: "Super Keyword", 
-                src: "7_METHODS.pdf", link: "https://notebook.zohopublic.in/public/notes/u3i1s38886070c7a74e9db5b0ec3b1697f7f8",
-                context: "Super refers to the Parent class. It is commonly used in constructors to pass data up to the parent to ensure the parent is initialized correctly before the child adds its own data.",
-                scenario: "Creating a **Manager**. A Manager is an Employee. When creating a Manager, you first need to set their basic Name and ID (handled by Employee parent) before setting their Bonus (handled by Manager).",
-                code: "class Employee { \n    Employee(String name) { this.name = name; } \n}\n\nclass Manager extends Employee {\n    Manager(String name) {\n        super(name); // Pass name to Parent first\n    }\n}" 
-            },
-
-            // --- STRINGS & EXCEPTIONS ---
-            { 
-                id: 21, title: "String Immutability & Pool", 
-                src: "6_NonPrimitive.pdf", link: "https://notebook.zohopublic.in/public/notes/u3i1sf9bea7a6f25c4a60941d06a07ac8d76c",
-                context: "Strings in Java are immutable (cannot change). If you modify a string, Java creates a new one. This allows Java to save memory by using a 'String Pool' where identical strings share the same memory address.",
-                scenario: "**User Roles**. In an app with 1 million users, 80% are \"GUEST\". Instead of creating 800,000 string objects, Java stores \"GUEST\" once in the pool and points all 800,000 users to that single memory location.",
-                code: "String s1 = \"Guest\";\nString s2 = \"Guest\";\n// s1 == s2 is TRUE (Same memory address)" 
-            },
-            { 
-                id: 22, title: "StringBuilder (Mutable Strings)", 
-                src: "Link 24", link: "https://notebook.zohopublic.in/public/notes/u3i1sf9bea7a6f25c4a60941d06a07ac8d76c",
-                context: "Since Strings are immutable, concatenating them in a loop (`s = s + \"a\"`) creates junk objects in memory. `StringBuilder` is mutable—it modifies the text in place, making it highly efficient for building long text.",
-                scenario: "**Generating a CSV Report**. If you are looping through 10,000 database rows to create a text file, using String concatenation will crash your memory. StringBuilder efficiently appends the data line by line.",
-                code: "StringBuilder sb = new StringBuilder();\nfor(int i=0; i<1000; i++) {\n    sb.append(\"Data \").append(i);\n}\nString result = sb.toString();" 
-            },
-            { 
-                id: 23, title: "Exception Handling (Try-Catch)", 
-                src: "General", link: "https://notebook.zohopublic.in/public/notes/u3i1sf9bea7a6f25c4a60941d06a07ac8d76c",
-                context: "Exceptions are runtime errors (like File Not Found). Try-Catch blocks allow you to 'catch' the error and provide a backup plan instead of letting the entire application crash.",
-                scenario: "**Reading a Config File**. If the `settings.txt` file is missing, the app shouldn't crash. It should catch the error and load 'Default Settings' instead so the user can still use the app.",
-                code: "try {\n    loadFile(\"config.txt\");\n} catch (FileNotFoundException e) {\n    loadDefaults(); // Fallback plan\n}" 
-            },
-            { 
-                id: 24, title: "Finally Block", 
-                src: "General",
-                context: "The `finally` block ALWAYS runs, regardless of whether an error occurred or not. It is critical for 'Cleanup' tasks like closing database connections or files.",
-                scenario: "**Database Transaction**. Whether the money transfer succeeded (Try) or failed (Catch), you MUST close the connection to the bank server to free up resources. `finally` guarantees this closure.",
-                code: "try {\n    db.connect();\n    db.transfer();\n} finally {\n    db.close(); // Runs even if transfer fails\n}" 
-            },
-            { 
-                id: 25, title: "Throw vs Throws", 
-                src: "General", link: "https://notebook.zohopublic.in/public/notes/u3i1sf9bea7a6f25c4a60941d06a07ac8d76c",
-                context: "`throw` is used to explicitly generate an exception. `throws` is used in the method signature to warn the caller that this method *might* fail.",
-                scenario: "**ATM Withdraw Logic**. If a user requests more money than they have, the logic explicitly `throw`s an `InsufficientFundsException`. The method signature declares `throws` so the UI knows it needs to handle this error message.",
-                code: "void withdraw(int amount) throws Exception {\n    if(amount > balance) {\n        throw new Exception(\"Not enough money\");\n    }\n}" 
-            },
-
-            // --- MEMORY & COLLECTIONS ---
-            { 
-                id: 26, title: "Stack vs Heap Memory", 
-                src: "9_Memory.pdf", link: "https://notebook.zohopublic.in/public/notes/74tdo3074d38916474ae096fe57ad9f2ff54b",
-                context: "Java memory is divided. **Stack** stores method executions and local variables (LIFO). It is fast and thread-specific. **Heap** stores Objects. It is large, shared, and managed by Garbage Collection.",
-                scenario: "**Recursion vs Objects**. Deep recursion (method calling method) can fill the Stack (`StackOverflowError`). Creating too many large objects (like loading a 4GB video into RAM) fills the Heap (`OutOfMemoryError`).",
-                code: "void method() {\n    int x = 10; // Stack\n    User u = new User(); // 'u' ref in Stack, Object in Heap\n}" 
-            },
-            { 
-                id: 27, title: "Garbage Collection (GC)", 
-                src: "9_Memory.pdf",
-                context: "GC is Java's automatic memory manager. It runs in the background, identifies objects that are no longer being used (unreferenced), and deletes them to free up memory. This prevents memory leaks.",
-                scenario: "**Closing a Browser Tab**. When you close a tab, the website objects (images, text) are no longer needed. The GC identifies they are 'unreachable' and deletes them from RAM so your computer doesn't slow down.",
-                code: "User u = new User();\nu = null; // Object is now unreferenced.\n// GC will eventually delete the User object." 
-            },
-            { 
-                id: 28, title: "ArrayList (Dynamic Array)", 
-                src: "Link 46", link: "https://notebook.zohopublic.in/public/notes/bietvaf4a031eeb7245f19e651a16232e077a",
-                context: "ArrayList is a resizeable array. It is fast for retrieving data (`get(i)`) but slow for inserting/deleting in the middle (because it has to shift all subsequent elements).",
-                scenario: "**Twitter Feed**. You mainly scroll down (Reading/Getting data). You rarely insert a tweet in the middle of a loaded feed. ArrayList is perfect because retrieval is fast.",
-                code: "List<String> feed = new ArrayList<>();\nfeed.add(\"Tweet 1\");\nString t = feed.get(0); // Very Fast" 
-            },
-            { 
-                id: 29, title: "LinkedList", 
-                src: "Link 47", link: "https://notebook.zohopublic.in/public/notes/bietv97e0afeb8fcf41e191da86e3898422b7",
-                context: "LinkedList stores data in nodes where each node points to the next. It is fast for Insertion/Deletion (just update pointers) but slow for Searching (must traverse nodes one by one).",
-                scenario: "**Music Playlist (Queue)**. You frequently add 'Play Next' or remove songs from the middle. LinkedList handles these shifts efficiently without rewriting the whole memory block.",
-                code: "List<Song> playlist = new LinkedList<>();\nplaylist.add(songA);\nplaylist.remove(0); // Fast removal" 
-            },
-            { 
-                id: 30, title: "HashMap (Key-Value)", 
-                src: "Link 52", link: "https://notebook.zohopublic.in/public/notes/bietv379bff087eca47eaa84a3024d7e14b46",
-                context: "HashMap stores data as Key-Value pairs. It uses a hashing algorithm to find the location of data instantly (O(1)), making it the fastest way to look up data by ID.",
-                scenario: "**Caching User Sessions**. When a user sends a request with `SessionID: ABC`, you need to instantly find their User Profile. Scanning a list is too slow. HashMap looks up `ABC` instantly.",
-                code: "Map<String, User> cache = new HashMap<>();\ncache.put(\"ABC\", userObj);\n\n// Instant retrieval\nUser u = cache.get(\"ABC\");" 
-            },
-            { 
-                id: 31, title: "HashSet (Uniqueness)", 
-                src: "Link 49", link: "https://notebook.zohopublic.in/public/notes/bietv2018487e1de84b009904a4dfeda24def",
-                context: "HashSet is a collection that forces uniqueness. It does not allow duplicates. Internally it uses a HashMap.",
-                scenario: "**Email List for Newsletter**. You want to ensure you never send the same email twice to the same person. Adding emails to a HashSet automatically rejects duplicates.",
-                code: "Set<String> emails = new HashSet<>();\nemails.add(\"a@b.com\");\nemails.add(\"a@b.com\"); // Ignored!\n\nSystem.out.println(emails.size()); // Output: 1" 
+        // --- NEW SPRING & MICROSERVICES CONTENT (Mapped from your new links) ---
+        const springTopics = [
+            {
+                id: 40, cat: "Spring Boot", title: "Spring Boot Architecture",
+                src: "User Link", link: "https://onedrive.live.com/:o:/g/personal/6B364628C29FEB52/EksLbbBuPIhDjFYNjtEw6kEB7wRxe5wd2oWXREL9gKphEg?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&ithint=onenote&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc",
+                context: "Spring Boot simplifies Spring development by providing 'Starter Dependencies' and 'Auto-Configuration'. It embeds the server (Tomcat) directly into the JAR file.",
+                scenario: "**Rapid Prototyping**. Instead of spending 2 days configuring XML files and installing Tomcat, you just add `spring-boot-starter-web` and run `main()`. You have a web server running in 5 minutes.",
+                code: "@SpringBootApplication\npublic class App {\n    public static void main(String[] args) {\n        SpringApplication.run(App.class, args);\n    }\n}"
             },
             {
-                id: 32, title: "Generics (Type Safety)",
-                src: "10_Classes.pdf", link: "https://notebook.zohopublic.in/public/notes/74tdo47dcfcf05e644cf192c411a6d78ec1dc",
-                context: "Generics allow you to write a class or method that works with any data type, while still enforcing compile-time type safety. It eliminates the need for casting.",
-                scenario: "**A Courier Box**. A box can hold anything (Shoes, Phone). But if you label the box `Box<Shoes>`, the compiler prevents you from accidentally putting a Pizza in it.",
-                code: "class Box<T> { T item; }\n\nBox<Shoes> shoeBox = new Box<>();\nshoeBox.item = new Shoes();\n// shoeBox.item = new Pizza(); // Compiler Error! Safe."
+                id: 41, cat: "Security", title: "Spring Security Basics (AuthN/AuthZ)",
+                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc&wd=target(SpringBoot.one%7Cd37c24fe-34a1-2046-885f-ef3807025388%2FSpringBoot%20Security%20-%20Part2%20and%20Part3%7C7e5c2090-8ff6-dc46-9ade-25cf32f7e4eb%2F)&wdorigin=703",
+                context: "Handles **Authentication** (Who are you?) and **Authorization** (What can you do?). It uses a chain of filters to intercept every request before it reaches your controller.",
+                scenario: "**Login Screen**. Spring Security intercepts the request. 1) Checks Username/Password (AuthN). 2) Checks if user has 'ROLE_ADMIN' to access `/admin` (AuthZ). [Image of Spring Security Authentication Flow]",
+                code: "http.authorizeRequests()\n    .antMatchers(\"/public/**\").permitAll()\n    .antMatchers(\"/admin/**\").hasRole(\"ADMIN\")\n    .anyRequest().authenticated();"
             },
-
-            // --- MODERN JAVA & TOOLS ---
-            { 
-                id: 33, title: "Lambda Expressions (Java 8)", 
-                src: "Link 69", link: "https://notebook.zohopublic.in/public/notes/9wn9o2d75e726a75c4b7eb7aaec1bd35d99b5",
-                context: "Lambdas are a concise way to represent a functional interface (a method). They allow you to pass behavior (code) as an argument to a method, enabling functional programming.",
-                scenario: "**Button Click Listener**. Old Java required an anonymous class (5 lines). Lambdas do it in 1 line: 'When clicked, run this code'.",
-                code: "// Old Way\nbutton.addActionListener(new ActionListener() {\n    public void actionPerformed(ActionEvent e) { System.out.println(\"Clicked\"); }\n});\n\n// Lambda Way\nbutton.addActionListener(e -> System.out.println(\"Clicked\"));" 
+            {
+                id: 42, cat: "Security", title: "OAuth 2.0 Integration",
+                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc&wd=target(SpringBoot.one%7Cd37c24fe-34a1-2046-885f-ef3807025388%2FSpringBoot%20Security%20-%20Part8%20(OAuth%20Authentication%5C)%7Cf5c0fea5-77d9-bb45-a1fc-fc6285059c1a%2F)&wdorigin=703",
+                git: "https://gitlab.com/shrayansh8/interviewcodingpractise/-/tree/main/src/main/java/com/conceptandcoding/learningspringboot/OAuth",
+                [cite_start]context: "OAuth 2.0 is an authorization framework that enables applications to obtain limited access to user accounts on an HTTP service, such as Facebook or Google. [cite: 1]",
+                scenario: "**Social Login**. Instead of storing passwords, you let users 'Log in with Google'. Your app gets a Token from Google saying 'This is John', without ever seeing John's password. ",
+                code: "@EnableOAuth2Sso\n// Spring Boot handles the redirect to Google\n// and the exchange of tokens automatically."
             },
-            { 
-                id: 34, title: "Stream API (Java 8)", 
-                src: "General",
-                context: "Streams allow you to process sequences of elements (Collections) declaratively (what you want) rather than imperatively (how to loop). It supports Filter, Map, Reduce.",
-                scenario: "**Filtering Products**. You have a list of 1000 products. You want to find all 'Electronics' that cost > $500. A Stream filters this in one readable line.",
-                code: "List<Product> results = products.stream()\n    .filter(p -> p.category.equals(\"Electronics\"))\n    .filter(p -> p.price > 500)\n    .collect(Collectors.toList());" 
+            {
+                id: 43, cat: "Security", title: "Role-Based Access Control (RBAC)",
+                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0Vrc0xiYkJ1UEloRGpGWU5qdEV3NmtFQjd3UnhlNXdkMm9XWFJFTDlnS3BoRWc&wd=target(SpringBoot.one%7Cd37c24fe-34a1-2046-885f-ef3807025388%2FSpring%20boot%20-%20Part9%20(Role%20based%20Authorization%20-%20Annotations%5C)%7C941edfd8-801e-9c46-963e-d79b8b8c9607%2F)&wdorigin=703",
+                context: "RBAC restricts network access based on the roles of individual users within an enterprise. In Spring, we use annotations to protect specific methods.",
+                scenario: "**HR Portal**. Everyone can view 'Holidays'. Only `ROLE_MANAGER` can 'Approve Leave'. Only `ROLE_ADMIN` can 'Delete Employee'.",
+                code: "@PreAuthorize(\"hasRole('ADMIN')\")\npublic void deleteEmployee(String id) {\n    repo.deleteById(id);\n}"
             },
-            { 
-                id: 35, title: "Optional (Null Safety)", 
-                src: "General",
-                context: "Optional is a container object used to contain not-null objects. It is used to avoid `NullPointerException` by forcing the developer to explicitly handle the 'Not Found' case.",
-                scenario: "**Finding a User by ID**. The DB might not find the user. Returning `null` risks a crash. Returning `Optional<User>` forces the calling code to say `.orElse(guestUser)`.",
-                code: "Optional<User> u = db.findUser(\"999\");\n\n// Safe handling\nString name = u.map(User::getName).orElse(\"Unknown User\");" 
+            {
+                id: 44, cat: "Microservices", title: "RestClient (Sync Communication)",
+                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FRestClient%7C0d8b2f2c-6b98-4a43-b5e7-c85058aaed36%2F%29&wdorigin=703&wdpartid=%7B1aa52097-7ccd-f643-b337-5b2fc83f867f%7D%7B1%7D&wdsectionfileid=6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692",
+                context: "`RestClient` is the modern, fluent synchronous HTTP client introduced in Spring Boot 3.2, replacing `RestTemplate`. It allows microservices to talk to each other.",
+                scenario: "**Order Service calls Inventory**. When a user places an order, the OrderService must synchronously call the InventoryService API to check if stock is available.",
+                code: "String result = restClient.get()\n  .uri(\"http://inventory-service/stock/{id}\", 101)\n  .retrieve()\n  .body(String.class);"
             },
-            { 
-                id: 36, title: "Lombok (Boilerplate Killer)", 
-                src: "Link 39", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5",
-                context: "Lombok is a library that plugs into your editor and build tools to auto-generate repetitive code like Getters, Setters, Constructors, and toString() using annotations.",
-                scenario: "**Data Models**. In Enterprise apps, you have hundreds of classes (User, Order, Product) that just hold data. Writing getters/setters for all of them is a waste of time. Lombok does it automatically.",
-                code: "@Data // Generates Getters, Setters, ToString, HashCode\npublic class User {\n    private String name;\n    private int age;\n}" 
+            {
+                id: 45, cat: "Microservices", title: "Feign Client (Declarative REST)",
+                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FFeignClient%7C58a280a8-cde1-2744-9639-da22cbd670c2%2F%29&wdorigin=703&wdpartid=%7B373c9d93-f9c7-7946-bc81-bb91743d3625%7D%7B1%7D&wdsectionfileid=6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692",
+                context: "Feign makes writing Java HTTP clients easier. Instead of writing connection logic, you define an Interface and Spring creates the implementation at runtime.",
+                scenario: "**Simplifying Calls**. Instead of writing `restClient.get()...`, you just write an interface method `getInventory(id)`.",
+                code: "@FeignClient(name = \"inventory-service\")\npublic interface InventoryClient {\n    @GetMapping(\"/stock/{id}\")\n    int checkStock(@PathVariable(\"id\") Long id);\n}"
             },
-            { 
-                id: 37, title: "Java Records (Java 16)", 
-                src: "Link 45", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!s702f41494956441a8efc212c0ffa52e5",
-                context: "Records are a concise way to create immutable data carriers. Unlike Classes, Records are purely for holding data. They automatically provide constructor, accessors, equals, and hashCode.",
-                scenario: "**API Response DTOs**. When sending data (like a coordinate `x, y`) from backend to frontend, you don't need a complex class with setters. You just need a data holder.",
-                code: "// Defines a class with fields, constructor, getters in 1 line\npublic record Point(int x, int y) {}" 
+            {
+                id: 46, cat: "Microservices", title: "Service Discovery (Eureka)",
+                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FService+Discovery%7Cbe9efdfc-f515-344f-b765-9b58c71e6cdb%2F%29&wdorigin=703&wdpartid=%7B1d6ee994-9a33-9e49-9efe-8d00ba724950%7D%7B1%7D&wdsectionfileid=6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692",
+                context: "In the cloud, IP addresses change dynamically. Service Discovery (like Netflix Eureka) acts as a phonebook where services register themselves so others can find them by name, not IP. [Image of Microservices Architecture with API Gateway and Discovery Server]",
+                scenario: "**Scaling**. If you spin up 5 new instances of 'Inventory Service', they automatically register with Eureka. The 'Order Service' asks Eureka 'Where is Inventory?' and gets the new addresses immediately.",
+                code: "@EnableEurekaServer // On the Server App\n@EnableDiscoveryClient // On the Client Apps"
             },
-
-            // --- THREADING ---
-            { 
-                id: 38, title: "Multithreading Basics", 
-                src: "Link 54", link: "https://notebook.zohopublic.in/public/notes/dcr5ze84495de6ad14cadbf5fe38b99b18b9d",
-                context: "Multithreading allows an application to perform multiple tasks simultaneously. This ensures the CPU is utilized efficiently and the UI doesn't freeze.",
-                scenario: "**Word Processor (MS Word)**. One thread listens to your typing (UI). Another thread runs Spell Check in the background. If they were one thread, typing would freeze every time spell check ran.",
-                code: "Thread spellChecker = new Thread(() -> {\n    checkSpelling();\n});\nspellChecker.start();" 
+            {
+                id: 47, cat: "Microservices", title: "Load Balancing (Client Side)",
+                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FClient+Side+Load+Balancer%7Ca0e35fce-9ab3-774d-a9a5-1a83bcd9e0f9%2F%29&wdorigin=703&wdpartid=%7B30b07022-43ba-9b4a-bdfd-669f3a4e28f5%7D%7B1%7D&wdsectionfileid=6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692",
+                context: "When Service Discovery returns 5 IP addresses for 'Inventory Service', the Client Side Load Balancer (Spring Cloud LoadBalancer) decides which one to call (e.g., Round Robin) to distribute traffic evenly.",
+                scenario: "**Traffic Distribution**. You have 3 instances of a service. The Load Balancer ensures Instance 1 doesn't get 100% of the traffic while Instance 2 and 3 sit idle.",
+                code: "@LoadBalanced // Add this to RestTemplate/WebClient builder\n@Bean\npublic WebClient.Builder loadBalancedWebClientBuilder() {\n    return WebClient.builder();\n}"
             },
-            { 
-                id: 39, title: "Synchronization (Thread Safety)", 
-                src: "Link 58", link: "https://notebook.zohopublic.in/public/notes/dcr5z827d4c4d67cf491494f30a7733eeb3e1",
-                context: "When multiple threads try to modify the same resource at the same time, data corruption occurs. Synchronization forces threads to wait their turn (locks the resource).",
-                scenario: "**Booking a Movie Seat**. If two people click 'Book Seat A1' at the exact same millisecond, you cannot sell the seat twice. Synchronization ensures only one thread enters the 'Booking Logic' at a time.",
-                code: "synchronized void bookSeat() {\n    if (seat.isEmpty()) {\n        seat.book();\n    }\n}" 
+            {
+                id: 48, cat: "Resilience", title: "Resilience4j & Fault Tolerance",
+                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FResilience4j+Building+Fault-Tolerant+Microservice%7Ca0095666-1317-4f4c-b672-a8915839634d%2F%29&wdorigin=703&wdpartid=%7B33040e75-114a-e603-3e60-15ff88227e15%7D%7B1%7D&wdsectionfileid=6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692",
+                context: "Microservices fail. Resilience4j is a library that helps your application stay functional when a dependent service goes down. Key patterns: Circuit Breaker, Retry, Bulkhead.",
+                scenario: "**Cascading Failure**. If 'Inventory Service' is slow, 'Order Service' shouldn't freeze waiting for it. It should 'Fail Fast' or return a default response so the user isn't stuck loading.",
+                code: "// Resilience4j is lightweight and designed for Java 8 functional style"
+            },
+            {
+                id: 49, cat: "Resilience", title: "Bulkhead Pattern",
+                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FBulkhead+Fault-Tolerant+Microservice+%28Part-2%5C%29%7Cc82898a8-8c19-df43-a956-00d6d5ce44fc%2F%29&wdorigin=703&wdpartid=%7B275c27b2-26cb-c609-3c5c-06e012553b64%7D%7B1%7D&wdsectionfileid=6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692",
+                context: "Based on ship design. It isolates resources (like thread pools) so that if one part of the system is overloaded, it doesn't sink the whole ship.",
+                scenario: "**Payment vs Browsing**. You separate the thread pools for 'Payment Processing' and 'Product Browsing'. If the Payment system hangs, users can still browse products because those threads are free.",
+                code: "@Bulkhead(name = \"paymentApi\", type = Bulkhead.Type.THREADPOOL)\npublic void processPayment() { ... }"
+            },
+            {
+                id: 50, cat: "Resilience", title: "Retry Pattern",
+                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FRetry+Fault-Tolerant+Microservice+%28Part-3%5C%29%7C8d82083b-9805-4b47-bafa-6cea3f88f6a4%2F%29&wdorigin=703&wdpartid=%7B04c0293d-7c70-3b0b-126c-4bf3b6964a94%7D%7B1%7D&wdsectionfileid=6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692",
+                context: "Automatically retries a failed operation a configured number of times. Useful for temporary network blips.",
+                scenario: "**Network Glitch**. You call the DB and it times out. Instead of showing 'Error' to the user immediately, the system waits 200ms and tries again. Often, it works the second time.",
+                code: "@Retry(name = \"inventoryApi\", fallbackMethod = \"fallback\")\npublic String checkStock(String id) { ... }"
+            },
+            {
+                id: 51, cat: "Resilience", title: "Circuit Breaker Pattern",
+                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FCircuit+Breaker+Fault-Tolerant+Microservice+%28Part-%7Caff21d09-7e7c-4a43-b09c-50e7a2c70e82%2F%29&wdorigin=703&wdpartid=%7B5058ad85-08d9-b107-24e5-0d85cd4fee1d%7D%7B1%7D&wdsectionfileid=6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692",
+                context: "If a service is down, the Circuit Breaker 'Opens' (stops calls) to prevent flooding the dead service. After a while, it 'Half-Opens' (tests connection). If successful, it 'Closes' (resumes). ",
+                scenario: "**Protecting the System**. If the 'Email Service' is dead, stop trying to send emails. Just log them to a file for later. Don't waste threads waiting for timeouts.",
+                code: "@CircuitBreaker(name = \"emailService\", fallbackMethod = \"logEmail\")\npublic void sendEmail() { ... }"
+            },
+            {
+                id: 52, cat: "Microservices", title: "API Gateway (Entry Point)",
+                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FAPI+Gateway%7C3bb17da8-1963-2f47-b15a-a530443924cf%2F%29&wdorigin=703&wdpartid=%7B525681df-dce3-a70d-100b-292531aa3913%7D%7B1%7D&wdsectionfileid=%7B6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692%7D",
+                git: "https://gitlab.com/shrayansh8/springboot-microservices/-/tree/main/apigateway_part1?ref_type=heads",
+                context: "Acts as a single entry point for all clients. It routes requests to the appropriate microservices, handles authentication, and rate limiting. Clients don't talk to services directly.",
+                scenario: "**Routing**. Client calls `api.myapp.com/orders`. Gateway sees `/orders` and routes it to `Order Service`. Client calls `/users`, Gateway routes to `User Service`.",
+                code: "spring.cloud.gateway.routes:\n  - id: order-service\n    uri: lb://ORDER-SERVICE\n    predicates:\n      - Path=/orders/**"
+            },
+            {
+                id: 53, cat: "Microservices", title: "API Gateway (Advanced Filters)",
+                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FAPI+Gateway+-+Part2%7C669be8ba-609d-734a-a8ce-72a0ea3e27cc%2F%29&wdorigin=703&wdpartid=%7B620e8163-706d-bf0a-3e78-7067f0466108%7D%7B1%7D&wdsectionfileid=%7B6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692%7D",
+                git: "https://gitlab.com/shrayansh8/springboot-microservices/-/tree/main/apigateway_part2/apigateway?ref_type=heads",
+                context: "Filters allow you to modify incoming requests or outgoing responses globally. You can add headers, log requests, or validate tokens at the gateway level.",
+                scenario: "**Adding Trace ID**. Every request hitting the Gateway gets a `X-Trace-Id` header added automatically. This ID is passed to all downstream services so you can track the request across the system.",
+                code: "filters:\n  - AddRequestHeader=X-Trace-Id, 12345"
+            },
+            {
+                id: 54, cat: "Microservices", title: "Centralized Configuration",
+                src: "User Link", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52%21s9263727369a94fcd83cbce0c0db8053c&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL28vYy82YjM2NDYyOGMyOWZlYjUyL0VuTnlZNUtwYWMxUGc4dk9EQTI0QlR3Qk5seWhEdlJlRWctS0RWWjdNZV9aWkE&wd=target%28New+Section+1.one%7C1c705580-121a-3746-9837-b97f7646a06a%2FCentralized+Configuration%7Cfc15fdca-d6a1-8f40-b677-08a3d45ac351%2F%29&wdorigin=703&wdpartid=%7B30a1fd5e-aafa-ac0f-1edc-edf25c201198%7D%7B1%7D&wdsectionfileid=%7B6b364628c29feb52%21s1965afa38c4142d88d16f8c0aad11692%7D",
+                context: "Managing `application.properties` for 50 services is hard. Spring Cloud Config Server allows you to store all configs in a Git Repo. Services fetch their config from the server at startup.",
+                scenario: "**Feature Flags**. You want to enable 'Dark Mode' for all users. Instead of redeploying 10 services, you change `feature.darkmode=true` in the Git repo, and refresh the services.",
+                code: "spring.config.import=optional:configserver:http://localhost:8888"
             }
         ];
-        
-        // Add placeholders for 40-75 to maintain the full list requested (Optimized for length)
-        const additionalTopics = [
-           { id: 40, title: "Thread Pools", context: "Reusing threads instead of creating new ones. ExecutorService.", example: "Web Server handling 1000 requests using 10 threads." },
-           { id: 41, title: "Deadlocks", context: "Threads waiting on each other forever.", example: "Traffic gridlock.", link: "https://notebook.zohopublic.in/public/notes/dcr5z0896f8dfa8ad4dcfafa5d737b2b9c26d" },
-           { id: 42, title: "Serialization", context: "Saving Object state to file.", example: "Save Game.", link: "https://notebook.zohopublic.in/public/notes/9wn9o2148145a9ab9476ca8b75e801ca27882" },
-           { id: 43, title: "Spring Boot Intro", context: "Framework for building Java Apps easily.", example: "Setup server in 5 mins." },
-           { id: 44, title: "Dependency Injection", context: "Spring provides objects to classes.", example: "@Autowired Service." },
-           { id: 45, title: "Inversion of Control", context: "Framework controls flow.", example: "Spring manages Bean lifecycle." },
-           { id: 46, title: "Spring Beans", context: "Objects managed by Spring.", example: "Singleton Service classes." },
-           { id: 47, title: "Spring Annotations", context: "Metadata for config.", example: "@Component, @Service." },
-           { id: 48, title: "REST APIs", context: "Web services using HTTP.", example: "GET /users, POST /users." },
-           { id: 49, title: "@RestController", context: "Spring annotation for API.", example: "Returns JSON automatically." },
-           { id: 50, title: "Path Variables", context: "Dynamic URL parts.", example: "/users/{id} -> @PathVariable int id." },
-           { id: 51, title: "Request Body", context: "Sending JSON data.", example: "POST data mapped to Object." },
-           { id: 52, title: "JPA (ORM)", context: "Java Persistence API. Database mapping.", example: "Java Class <-> SQL Table.", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41" },
-           { id: 53, title: "Hibernate", context: "Implementation of JPA.", example: "Generates SQL queries." },
-           { id: 54, title: "Entity Class", context: "Class mapped to DB Table.", example: "@Entity class User." },
-           { id: 55, title: "Primary Keys", context: "Unique ID for rows.", example: "@Id @GeneratedValue." },
-           { id: 56, title: "Repositories", context: "Interface for DB ops.", example: "extends JpaRepository." },
-           { id: 57, title: "OneToOne", context: "Relationship.", example: "User <-> Profile.", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41" },
-           { id: 58, title: "OneToMany", context: "Relationship.", example: "User <-> Orders.", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41" },
-           { id: 59, title: "ManyToMany", context: "Relationship.", example: "Student <-> Course.", link: "https://onedrive.live.com/view.aspx?resid=6B364628C29FEB52!sb06d0b4b3c6e43888c560d8ed130ea41" },
-           { id: 60, title: "Transaction Mgmt", context: "All or nothing.", example: "@Transactional money transfer." },
-           { id: 61, title: "Spring Security", context: "Auth & Auth.", example: "Login/Logout logic." },
-           { id: 62, title: "JWT Tokens", context: "Stateless Auth.", example: "Token based login." },
-           { id: 63, title: "Maven", context: "Build Tool.", example: "pom.xml dependency mgmt." },
-           { id: 64, title: "Unit Testing", context: "Testing small parts.", example: "JUnit @Test." },
-           { id: 65, title: "Mockito", context: "Mocking dependencies.", example: "Mocking DB for test." },
-           { id: 66, title: "Microservices", context: "Small independent apps.", example: "User Svc, Order Svc." },
-           { id: 67, title: "API Gateway", context: "Entry point.", example: "Routes req to services." },
-           { id: 68, title: "Service Discovery", context: "Finding services.", example: "Eureka Server." },
-           { id: 69, title: "Config Server", context: "Central configs.", example: "git backed properties." },
-           { id: 70, title: "Kafka", context: "Msg Broker.", example: "Async events." },
-           { id: 71, title: "Docker", context: "Containerization.", example: "Run app anywhere." },
-           { id: 72, title: "Kubernetes", context: "Orchestration.", example: "Managing containers." },
-           { id: 73, title: "CI/CD", context: "Automation.", example: "Jenkins Pipeline." },
-           { id: 74, title: "Design Patterns", context: "Common solutions.", example: "Singleton, Factory." },
-           { id: 75, title: "SOLID Principles", context: "Clean code rules.", example: "Single Responsibility." }
-        ];
 
-        // Merge arrays
-        const allTopics = [...topics, ...additionalTopics];
+        // Merge all data
+        const allTopics = [...coreTopics, ...springTopics];
 
-        // --- RENDER FUNCTIONS ---
+        // --- RENDER LOGIC ---
         function renderNav(items) {
             const list = document.getElementById('navList');
             list.innerHTML = "";
@@ -414,8 +215,9 @@
                 const li = document.createElement('li');
                 li.className = 'nav-item';
                 li.innerHTML = `
-                    <span class="nav-id">#${t.id}</span>
-                    <span class="nav-text">${t.title}</span>
+                    <span class="nav-id">${t.id}</span>
+                    <span>${t.title}</span>
+                    <span class="nav-cat">${t.cat}</span>
                 `;
                 li.onclick = () => loadTopic(t.id);
                 list.appendChild(li);
@@ -426,66 +228,57 @@
             const t = allTopics.find(item => item.id === id);
             const area = document.getElementById('contentArea');
             
-            // Highlight active
+            // Highlight
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            // In real app, highlight the clicked ID logic would go here
-
-            // Link Logic
-            let linkHTML = "";
-            if (t.link) {
-                linkHTML = `<a href="${t.link}" target="_blank" class="btn-link">🔗 Open Original Note / PDF</a>`;
-            } else if (t.src && t.src.includes("http")) {
-                 linkHTML = `<a href="${t.src}" target="_blank" class="btn-link">🔗 Open Original Note / PDF</a>`;
-            }
-
-            // Fallback for simple topics (40-75)
-            let bodyContent = "";
-            if(t.scenario) {
-                bodyContent = `
-                    <div class="section-title">📖 Core Concept</div>
-                    <div class="content-text">${t.context}</div>
-
-                    <div class="section-title">🏢 Real-World Scenario</div>
-                    <div class="real-world-box">
-                        <strong>Use Case: ${t.scenario.split('.')[0]}</strong>
-                        ${t.scenario}
-                    </div>
-
-                    <div class="section-title">💻 Implementation</div>
-                    <div class="code-block">${t.code}</div>
-                    ${linkHTML}
-                `;
-            } else {
-                bodyContent = `
-                    <div class="section-title">📖 Overview</div>
-                    <div class="content-text">${t.context}</div>
-                    <div class="section-title">💡 Example</div>
-                    <div class="real-world-box">${t.example}</div>
-                    ${linkHTML}
-                `;
-            }
+            // In a real implementation we would select the element by ID
+            
+            // Buttons
+            let buttonsHTML = "";
+            if (t.link) buttonsHTML += `<a href="${t.link}" target="_blank" class="btn btn-note">📖 Open Note / PDF</a>`;
+            if (t.git) buttonsHTML += `<a href="${t.git}" target="_blank" class="btn btn-git">🦊 View Source Code (GitLab)</a>`;
 
             area.innerHTML = `
                 <div class="card">
                     <div class="card-header">
                         <h1>${t.title}</h1>
-                        <span class="source-tag">ID: ${t.id}</span>
+                        <span style="opacity:0.8">${t.cat}</span>
                     </div>
                     <div class="card-body">
-                        ${bodyContent}
+                        
+                        <div class="section-label">Core Concept</div>
+                        <div class="context-text">${t.context}</div>
+
+                        <div class="section-label">Real World Scenario</div>
+                        <div class="scenario-box">
+                            <span class="scenario-title">Use Case:</span>
+                            ${t.example || t.scenario}
+                        </div>
+
+                        <div class="section-label">Implementation</div>
+                        <div class="code-block">${t.code}</div>
+
+                        <div class="action-bar">
+                            ${buttonsHTML}
+                        </div>
+
                     </div>
                 </div>
             `;
         }
 
         function filterTopics(query) {
-            const filtered = allTopics.filter(t => t.title.toLowerCase().includes(query.toLowerCase()));
+            const lower = query.toLowerCase();
+            const filtered = allTopics.filter(t => 
+                t.title.toLowerCase().includes(lower) || 
+                t.cat.toLowerCase().includes(lower) ||
+                t.context.toLowerCase().includes(lower)
+            );
             renderNav(filtered);
         }
 
         // Init
         renderNav(allTopics);
-        loadTopic(1);
+        loadTopic(1); // Load first topic
 
     </script>
 </body>
