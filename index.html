@@ -1093,7 +1093,7 @@
 
             const linkDiv = document.getElementById('linkArea');
             linkDiv.innerHTML = "";
-            if(t.src && !t.isProject) linkDiv.innerHTML += `<a href="#" class="link-btn link-note">📄 ${t.src}</a>`;
+            if(t.src && !t.isProject) linkDiv.innerHTML += `<a href=`./${t.src}` target="_blank" class="link-btn link-note">📄 ${t.src}</a>`;
             if(t.link) linkDiv.innerHTML += `<a href="${t.link}" target="_blank" class="link-btn link-note">🔗 Open Link</a>`;
             if(t.git) linkDiv.innerHTML += `<a href="${t.git}" target="_blank" class="link-btn link-git">🦊 Git Code</a>`;
 
