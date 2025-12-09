@@ -3,43 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Professional Mastery v6</title>
+    <title>Java Professional Mastery</title>
     <style>
+        /* CSS VARIABLES - DARK MODE DEFAULT */
         :root { 
-            --primary: #2c3e50; 
-            --accent: #27ae60; 
+            --primary: #2c3e50;
+            --accent: #00b894; /* Brighter Green for Dark Mode */
             --project: #e67e22; 
-            --bg: #f4f6f8; 
-            --text: #333;
+            
+            /* Theme Colors (Dark Default) */
+            --bg: #121212;
+            --text: #ecf0f1;
+            --text-secondary: #b2bec3;
+            
+            --sidebar-bg: #000000;
+            --sidebar-border: #333;
+            --sidebar-hover: #1e1e1e;
+            
+            --card-bg: #1e1e1e;
+            --card-border: #333;
+            
+            --input-bg: #2d3436;
+            --input-text: #fff;
+            
+            --code-bg: #111;
+            --code-text: #f1f2f6;
+            
+            --tab-bg: #1e1e1e;
+            --tab-inactive: #b2bec3;
+            --tab-hover: #2d3436;
+            
+            --block-bg: #2d3436;
+            --block-border: #444;
+            
+            --scenario-bg: #0f2b26; /* Dark Green Tint */
+            --scenario-border: #00b894;
+            --scenario-text: #55efc4;
+            
+            --proj-bg: #2d1b0e; /* Dark Orange Tint */
+            --proj-border: #e67e22;
+            --proj-text: #f39c12;
+
             --sidebar-width: 360px;
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; display: flex; height: 100vh; background: var(--bg); color: var(--text); }
+
+        /* LIGHT MODE OVERRIDES */
+        [data-theme="light"] {
+            --bg: #f4f6f8;
+            --text: #2d3436;
+            --text-secondary: #636e72;
+            
+            --sidebar-bg: #2c3e50;
+            --sidebar-border: #1a252f;
+            --sidebar-hover: rgba(255,255,255,0.1);
+            
+            --card-bg: #ffffff;
+            --card-border: #dfe6e9;
+            
+            --input-bg: #dfe6e9;
+            --input-text: #2d3436;
+            
+            --code-bg: #2d3436;
+            --code-text: #dfe6e9;
+            
+            --tab-bg: #f8f9fa;
+            --tab-inactive: #636e72;
+            --tab-hover: #e9ecef;
+            
+            --block-bg: #fafafa;
+            --block-border: #eee;
+            
+            --scenario-bg: #e8f8f5;
+            --scenario-border: #00b894;
+            --scenario-text: #006266;
+            
+            --proj-bg: #fdf2e9;
+            --proj-border: #e67e22;
+            --proj-text: #d35400;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; display: flex; height: 100vh; background: var(--bg); color: var(--text); transition: background 0.3s, color 0.3s; }
         
         /* Sidebar */
-        .sidebar { width: var(--sidebar-width); background: #1e272e; color: #ecf0f1; display: flex; flex-direction: column; border-right: 1px solid #111; flex-shrink: 0; }
-        .sidebar-header { padding: 20px; background: #151b1f; text-align: center; border-bottom: 4px solid var(--accent); }
+        .sidebar { width: var(--sidebar-width); background: var(--sidebar-bg); color: #ecf0f1; display: flex; flex-direction: column; border-right: 1px solid var(--sidebar-border); flex-shrink: 0; transition: background 0.3s; }
+        .sidebar-header { padding: 20px; text-align: center; border-bottom: 4px solid var(--accent); background: rgba(0,0,0,0.2); }
         .sidebar-header h2 { margin: 0; font-size: 1.2rem; letter-spacing: 1px; color: var(--accent); }
-        .search-box { padding: 12px; background: #2d3436; }
-        .search-input { width: 100%; padding: 10px; border-radius: 4px; border: none; outline: none; background: #dfe6e9; color: #333; font-weight: 700; box-sizing: border-box; }
+        
+        /* Theme Toggle Button */
+        .theme-btn { margin-top: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 5px 15px; border-radius: 20px; cursor: pointer; font-size: 0.8rem; transition: 0.2s; }
+        .theme-btn:hover { background: var(--accent); border-color: var(--accent); }
+
+        .search-box { padding: 12px; background: rgba(0,0,0,0.2); }
+        .search-input { width: 100%; padding: 10px; border-radius: 4px; border: none; outline: none; background: var(--input-bg); color: var(--input-text); font-weight: 700; box-sizing: border-box; transition: background 0.3s; }
         
         .nav-container { flex: 1; overflow-y: auto; scrollbar-width: thin; }
         
         /* Accordion */
-        .cat-group { border-bottom: 1px solid #2d3436; }
-        .cat-header { padding: 14px 20px; background: #232d36; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 0.9rem; transition: 0.2s; }
-        .cat-header:hover { background: #2c3e50; }
+        .cat-group { border-bottom: 1px solid var(--sidebar-border); }
+        .cat-header { padding: 14px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 0.9rem; transition: 0.2s; background: rgba(255,255,255,0.03); }
+        .cat-header:hover { background: var(--sidebar-hover); }
         .cat-header .badge { background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; }
-        .cat-group.open .cat-header { color: var(--accent); border-left: 4px solid var(--accent); background: #1a2126; }
-        .cat-list { display: none; background: #181f24; padding: 0; margin: 0; list-style: none; }
+        .cat-group.open .cat-header { color: var(--accent); border-left: 4px solid var(--accent); background: rgba(0,0,0,0.3); }
+        .cat-list { display: none; background: rgba(0,0,0,0.2); padding: 0; margin: 0; list-style: none; }
         .cat-group.open .cat-list { display: block; }
         
-        .nav-item { padding: 10px 15px 10px 30px; cursor: pointer; font-size: 0.85rem; border-bottom: 1px solid #232d36; color: #bdc3c7; transition: 0.2s; display: flex; align-items: center; }
-        .nav-item:hover { background: rgba(255,255,255,0.05); color: white; }
+        .nav-item { padding: 10px 15px 10px 30px; cursor: pointer; font-size: 0.85rem; border-bottom: 1px solid var(--sidebar-border); color: #bdc3c7; transition: 0.2s; display: flex; align-items: center; }
+        .nav-item:hover { background: var(--sidebar-hover); color: white; }
         .nav-item.active { background: rgba(39, 174, 96, 0.15); color: var(--accent); border-left: 3px solid var(--accent); padding-left: 27px; font-weight: 700; }
         
-        /* Project Item Style */
-        .nav-item.project-item { color: #e67e22; font-weight: 700; background: rgba(230, 126, 34, 0.05); }
-        .nav-item.project-item.active { border-left-color: #e67e22; color: #e67e22; background: rgba(230, 126, 34, 0.15); }
+        .nav-item.project-item { color: var(--project); font-weight: 700; background: rgba(230, 126, 34, 0.05); }
+        .nav-item.project-item.active { border-left-color: var(--project); color: var(--project); background: rgba(230, 126, 34, 0.15); }
 
         /* Main Content */
         .main-content { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; }
@@ -48,50 +121,50 @@
         .nav-controls { display: flex; justify-content: space-between; margin-bottom: 15px; }
         .btn-nav { padding: 8px 20px; background: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
         .btn-nav:hover { background: var(--accent); transform: translateY(-2px); }
-        .btn-nav:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
+        .btn-nav:disabled { background: #7f8c8d; cursor: not-allowed; transform: none; opacity: 0.5; }
 
-        .card { background: white; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; min-height: 500px; display: flex; flex-direction: column; }
+        .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); overflow: hidden; min-height: 500px; display: flex; flex-direction: column; transition: background 0.3s; }
         .card-header { background: var(--primary); color: white; padding: 25px; display: flex; justify-content: space-between; align-items: center; }
         .card-header h1 { margin: 0; font-size: 1.5rem; }
         .cat-tag { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
 
         /* Tabs */
-        .tabs { display: flex; background: #f8f9fa; border-bottom: 1px solid #e9ecef; padding: 0 20px; flex-wrap: wrap; }
-        .tab { padding: 15px 20px; cursor: pointer; font-weight: 600; color: #7f8c8d; border-bottom: 3px solid transparent; transition: 0.2s; white-space: nowrap; }
-        .tab:hover { color: var(--primary); }
-        .tab.active { color: var(--accent); border-bottom: 3px solid var(--accent); background: white; }
-        .tab.hidden { display: none; }
+        .tabs { display: flex; background: var(--tab-bg); border-bottom: 1px solid var(--block-border); padding: 0 20px; flex-wrap: wrap; }
+        .tab { padding: 15px 20px; cursor: pointer; font-weight: 600; color: var(--tab-inactive); border-bottom: 3px solid transparent; transition: 0.2s; white-space: nowrap; }
+        .tab:hover { color: var(--accent); background: var(--tab-hover); }
+        .tab.active { color: var(--accent); border-bottom: 3px solid var(--accent); background: var(--card-bg); }
+        .tab.hidden { display: none !important; }
 
         .card-body { padding: 35px; flex: 1; }
         .tab-content { display: none; animation: fadeIn 0.3s; }
         .tab-content.active { display: block; }
 
         /* Content Blocks */
-        .block-title { font-size: 1.1rem; color: var(--primary); margin-bottom: 15px; font-weight: 700; border-bottom: 2px solid #f1f1f1; padding-bottom: 8px; display: flex; align-items: center; gap: 10px; }
-        .text-content { font-size: 1.05rem; line-height: 1.7; color: #444; background: #fafafa; padding: 20px; border-radius: 8px; border: 1px solid #eee; }
+        .block-title { font-size: 1.1rem; color: var(--accent); margin-bottom: 15px; font-weight: 700; border-bottom: 2px solid var(--block-border); padding-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .text-content { font-size: 1.05rem; line-height: 1.7; color: var(--text); background: var(--block-bg); padding: 20px; border-radius: 8px; border: 1px solid var(--block-border); }
         
-        .scenario-box { background: #e8f8f5; padding: 25px; border-radius: 8px; border-left: 5px solid var(--accent); color: #0b5345; line-height: 1.6; }
+        .scenario-box { background: var(--scenario-bg); padding: 25px; border-radius: 8px; border-left: 5px solid var(--scenario-border); color: var(--scenario-text); line-height: 1.6; }
         
         /* Project Box Style */
-        .project-box { background: #fdf2e9; padding: 25px; border-radius: 8px; border-left: 5px solid var(--project); color: #873600; line-height: 1.6; }
+        .project-box { background: var(--proj-bg); padding: 25px; border-radius: 8px; border-left: 5px solid var(--proj-border); color: var(--proj-text); line-height: 1.6; }
         .project-title { color: var(--project); font-weight: 800; font-size: 1.2rem; display: block; margin-bottom: 10px; }
 
-        .code-block { background: #282c34; color: #abb2bf; padding: 20px; border-radius: 8px; overflow-x: auto; font-family: 'Consolas', monospace; font-size: 0.9rem; line-height: 1.5; border: 1px solid #444; }
+        .code-block { background: var(--code-bg); color: var(--code-text); padding: 20px; border-radius: 8px; overflow-x: auto; font-family: 'Consolas', monospace; font-size: 0.9rem; line-height: 1.5; border: 1px solid #444; }
         
         .link-area { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
-        .link-btn { text-decoration: none; padding: 8px 14px; border-radius: 4px; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; background: #e3f2fd; color: #2980b9; border: 1px solid #a9cce3; }
-        .link-btn:hover { background: #2980b9; color: white; }
+        .link-btn { text-decoration: none; padding: 8px 14px; border-radius: 4px; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; background: rgba(39, 174, 96, 0.1); color: var(--accent); border: 1px solid var(--accent); }
+        .link-btn:hover { background: var(--accent); color: white; }
 
         /* Types Grid */
         .types-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .type-card { background: white; border: 1px solid #eee; border-radius: 8px; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: transform 0.2s; }
-        .type-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .type-header { font-weight: 700; color: var(--primary); margin-bottom: 8px; font-size: 1rem; color: var(--accent); }
-        .type-desc { font-size: 0.9rem; color: #555; margin-bottom: 12px; line-height: 1.5; }
-        .type-code { background: #f8f9fa; padding: 8px; border-radius: 4px; font-family: monospace; font-size: 0.85rem; color: #c0392b; border: 1px solid #eee; }
+        .type-card { background: var(--block-bg); border: 1px solid var(--block-border); border-radius: 8px; padding: 20px; transition: transform 0.2s; }
+        .type-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+        .type-header { font-weight: 700; margin-bottom: 8px; font-size: 1rem; color: var(--accent); }
+        .type-desc { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.5; }
+        .type-code { background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; font-family: monospace; font-size: 0.85rem; color: #e74c3c; border: 1px solid var(--block-border); }
 
         /* JS Compare Badge */
-        .js-compare { margin-top: 15px; padding: 10px; background: #fff8e1; border-left: 4px solid #ffc107; color: #7f6000; font-size: 0.9rem; border-radius: 4px; display: flex; gap: 8px; align-items: start; }
+        .js-compare { margin-top: 15px; padding: 12px; background: rgba(255, 193, 7, 0.1); border-left: 4px solid #ffc107; color: #f1c40f; font-size: 0.9rem; border-radius: 4px; display: flex; gap: 10px; align-items: start; }
         .js-icon { font-size: 1.2rem; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
@@ -103,6 +176,7 @@
     <div class="sidebar">
         <div class="sidebar-header">
             <h2>☕ Java Ultimate</h2>
+            <button class="theme-btn" onclick="toggleTheme()">🌗 Switch Theme</button>
         </div>
         <div class="search-box">
             <input type="text" class="search-input" placeholder="Search..." onkeyup="filterTopics(this.value)">
@@ -168,777 +242,778 @@
     <script>
         // --- 75 TOPIC DATASET ---
         const topics = [
-    // --- 1. BASICS & FUNDAMENTALS ---
-    { 
-        id: 1, cat: "Basics", title: "Java Ecosystem", 
-        context: "Java uses a 3-step process: JDK (Compiler) converts code to Bytecode. JRE (Runtime) provides libraries. JVM (Virtual Machine) executes Bytecode on any OS.", 
-        js_compare: "In JS, the Browser Engine (V8) compiles and runs code instantly. In Java, there is an explicit Compile Step (javac) before execution (java).",
-        example: "Spotify App: Developers write code once on Windows. The JVM on your specific device (Mac, Android, Linux) translates it to run perfectly without code changes.", 
-        code: "javac Main.java  // Compiles to Main.class (Bytecode)\njava Main        // JVM executes Bytecode", 
-        src: "2_JDK_JRE_JVM.pdf",
-        types: [
-            {name: "JDK", desc: "Java Development Kit. For Developers. Includes Compiler + JRE.", code: "javac"},
-            {name: "JRE", desc: "Java Runtime Environment. For Users. Includes Libraries + JVM.", code: "java.dll"},
-            {name: "JVM", desc: "Java Virtual Machine. The engine that runs the code.", code: "java.exe"}
-        ]
-    },
-    { 
-        id: 2, cat: "Basics", title: "Variables & Static Typing", 
-        context: "Java is Statically Typed, meaning every variable must have a fixed data type (int, boolean, etc.) declared upfront.", 
-        js_compare: "JS is Dynamically Typed (var x = 10; x = 'Hi' is valid). Java is Static (int x = 10; x = 'Hi' crashes the compiler).",
-        example: "Banking Ledger: You cannot accidentally subtract a User Name (String) from a Account Balance (Double).", 
-        code: "int id = 101;\ndouble bal = 500.50;\n// bal = \"Hello\"; // COMPILER ERROR", 
-        src: "4_Primitive_Variables.pdf",
-        types: [
-            {name: "Local", desc: "Inside a method. Must initialize before use.", code: "void m() { int x=10; }"},
-            {name: "Instance", desc: "Inside a class. Default values apply.", code: "class A { int x; }"},
-            {name: "Static", desc: "Shared by all instances.", code: "static int count;"}
-        ]
-    },
-    { 
-        id: 3, cat: "Basics", title: "Primitive vs Reference Types", 
-        context: "Primitives (int, char, boolean) store actual values in Stack memory (Fast). Reference types (String, Array, User) store an address pointing to an object in Heap memory.", 
-        js_compare: "Similar to JS Primitives (Number, Boolean) vs Objects.",
-        example: "Stock Trading: Prices (double) update millions of times/sec (Stack/Fast). User Profiles are complex objects (Heap).", 
-        code: "int price = 100; // Value in Stack\nUser u = new User(); // Address in Stack -> Object in Heap", 
-        src: "4_Primitive_Variables.pdf",
-        types: [
-            {name: "Primitive", desc: "8 Types: byte, short, int, long, float, double, char, boolean.", code: "int x = 5;"},
-            {name: "Reference", desc: "Objects, Arrays, Strings.", code: "String s = new String();"}
-        ]
-    },
-    { 
-        id: 4, cat: "Basics", title: "Type Casting", 
-        context: "Converting data from one type to another. 'Widening' is automatic. 'Narrowing' requires manual confirmation.", 
-        js_compare: "JS does this implicitly (Type Coercion). Java requires explicit syntax.",
-        example: "GPS Distance: Satellite gives 10.987km (double). Display needs 10km (int). You cast it, losing precision.", 
-        code: "double precise = 10.99;\nint display = (int) precise; // Becomes 10", 
-        src: "4_Primitive_Variables.pdf",
-        types: [
-            {name: "Widening", desc: "Small to Large (Safe/Auto).", code: "int -> long"}, 
-            {name: "Narrowing", desc: "Large to Small (Risk/Manual).", code: "double -> int"}
-        ]
-    },
-    { 
-        id: 5, cat: "Basics", title: "Operators", 
-        context: "Standard symbols for math and logic. The Ternary Operator is crucial for concise UI logic.", 
-        js_compare: "Identical to JavaScript operators (+, -, *, /, %, ? :).",
-        example: "Login Status: Instead of if-else, use one line.", 
-        code: "String status = (isLoggedIn) ? \"Welcome\" : \"Login\";", 
-        src: "General",
-        types: [
-            {name: "Arithmetic", desc: "Math operations.", code: "+ - * / %"},
-            {name: "Relational", desc: "Comparison.", code: "== != > <"},
-            {name: "Logical", desc: "Boolean logic.", code: "&& || !"},
-            {name: "Ternary", desc: "Conditional assignment.", code: "? :"}
-        ]
-    },
-    { 
-        id: 6, cat: "Basics", title: "Switch Expressions", 
-        context: "Java 14+ introduced a modern Switch that uses '->' syntax. It returns values and prevents fall-through bugs.", 
-        js_compare: "Like a cleaner version of JS switch, but returns values.",
-        example: "Order Status: Converting numeric codes (1, 2) into UI labels.", 
-        code: "String label = switch(status) {\n  case 1 -> \"Pending\";\n  default -> \"Unknown\";\n};", 
-        src: "Link 42",
-        types: [
-            {name: "Classic Switch", desc: "Uses 'case', 'break'. Fall-through risk.", code: "case 1: ... break;"},
-            {name: "Enhanced Switch", desc: "Java 14+. Uses '->'. No fall-through. Returns value.", code: "case 1 -> val;"}
-        ]
-    },
-    { 
-        id: 7, cat: "Basics", title: "Loops", 
-        context: "Control structures to repeat code.", 
-        js_compare: "Same as JS `for`, `while`.",
-        example: "Payroll: Loop 500 times for 500 employees (For).", 
-        code: "for(User u : users) { sendEmail(u); }", 
-        src: "General",
-        types: [
-            {name: "For Loop", desc: "Known iterations.", code: "for(int i=0; i<10; i++)"}, 
-            {name: "Enhanced For", desc: "Iterating collections.", code: "for(String s : list)"}, 
-            {name: "While", desc: "Unknown iterations.", code: "while(condition)"},
-            {name: "Do-While", desc: "Run at least once.", code: "do { } while(con)"}
-        ] 
-    },
-    { 
-        id: 8, cat: "Basics", title: "Arrays", 
-        context: "A fixed-size container for data of the SAME type. Stores data sequentially in memory.", 
-        js_compare: "Unlike JS Arrays, Java Arrays are fixed-length and strictly typed.",
-        example: "Pixel Grid: An image is a fixed 1920x1080 grid. Arrays allow instant access.", 
-        code: "int[] pixels = new int[1920];", 
-        src: "6_NonPrimitive_Variables.pdf",
-        types: [
-            {name: "Single Dim", desc: "Standard list.", code: "int[] arr = {1,2}"},
-            {name: "Multi Dim", desc: "Matrix/Grid.", code: "int[][] matrix = {{1,2},{3,4}}"}
-        ]
-    },
-    { 
-        id: 9, cat: "Basics", title: "Methods", 
-        context: "Reusable blocks of code defining inputs (parameters) and output (return type).", 
-        js_compare: "Equivalent to JS Functions.",
-        example: "Tax Calc: 'calculateTax()' logic is defined once and reused.", 
-        code: "public double calc(double amount) { return amount * 0.18; }", 
-        src: "7_METHODS.pdf",
-        types: [
-            {name: "Instance", desc: "Requires object to call.", code: "obj.method()"},
-            {name: "Static", desc: "Belongs to class. Utility.", code: "Math.sqrt()"},
-            {name: "Void", desc: "Returns nothing.", code: "void print()"}
-        ]
-    },
-    { 
-        id: 10, cat: "Basics", title: "Overloading", 
-        context: "Defining multiple methods with the SAME name but DIFFERENT parameters.", 
-        js_compare: "JS does NOT support this (last function overwrites).",
-        example: "Search: search(int id) vs search(String name).", 
-        code: "void search(int id) { }\nvoid search(String name) { }", 
-        src: "7_METHODS.pdf" 
-    },
-    { 
-        id: 11, cat: "Basics", title: "Constructors", 
-        context: "A special method called automatically when an object is created to enforce setup.", 
-        js_compare: "Similar to `constructor()` in JS Classes.",
-        example: "DB Connection: Require URL/Password immediately.", 
-        code: "class DB { DB(String url) { ... } }", 
-        src: "7_METHODS.pdf",
-        types: [
-            {name: "Default", desc: "No arguments. Provided by Java if none defined.", code: "new User()"},
-            {name: "Parameterized", desc: "Takes arguments to init fields.", code: "new User(\"John\")"},
-            {name: "Copy", desc: "Creates object from another object.", code: "new User(otherUser)"}
-        ]
-    },
-    { 
-        id: 12, cat: "Basics", title: "⭐ PROJECT: Console Bank", isProject: true,
-        context: "Summary: Combines Variables (storage), Scanner (input), Loops (flow), and Switch (logic).",
-        js_compare: "Like building a CLI tool in Node.js.",
-        example: "ATM Logic: Loop continuously waiting for user input.",
-        code: "Scanner sc = new Scanner(System.in);\ndouble bal = 1000;\nwhile(true) {\n  System.out.println('1.Add 2.Exit');\n  int ch = sc.nextInt();\n  if(ch==1) bal += sc.nextDouble();\n  else break;\n}" 
-    },
+            // --- 1. BASICS & FUNDAMENTALS ---
+            { 
+                id: 1, cat: "Basics", title: "Java Ecosystem", 
+                context: "Java uses a 3-step process: JDK (Compiler) converts code to Bytecode. JRE (Runtime) provides libraries. JVM (Virtual Machine) executes Bytecode on any OS.", 
+                js_compare: "In JS, the Browser Engine (V8) compiles and runs code instantly. In Java, there is an explicit Compile Step (javac) before execution (java).",
+                example: "Spotify App: Developers write code once on Windows. The JVM on your specific device (Mac, Android, Linux) translates it to run perfectly without code changes.", 
+                code: "javac Main.java  // Compiles to Main.class (Bytecode)\njava Main        // JVM executes Bytecode", 
+                src: "2_JDK_JRE_JVM.pdf",
+                types: [
+                    {name: "JDK", desc: "Java Development Kit. For Developers. Includes Compiler + JRE.", code: "javac"},
+                    {name: "JRE", desc: "Java Runtime Environment. For Users. Includes Libraries + JVM.", code: "java.dll"},
+                    {name: "JVM", desc: "Java Virtual Machine. The engine that runs the code.", code: "java.exe"}
+                ]
+            },
+            { 
+                id: 2, cat: "Basics", title: "Variables & Static Typing", 
+                context: "Java is Statically Typed, meaning every variable must have a fixed data type (int, boolean, etc.) declared upfront.", 
+                js_compare: "JS is Dynamically Typed (var x = 10; x = 'Hi' is valid). Java is Static (int x = 10; x = 'Hi' crashes the compiler).",
+                example: "Banking Ledger: You cannot accidentally subtract a User Name (String) from a Account Balance (Double).", 
+                code: "int id = 101;\ndouble bal = 500.50;\n// bal = \"Hello\"; // COMPILER ERROR", 
+                src: "4_Primitive_Variables.pdf",
+                types: [
+                    {name: "Local", desc: "Inside a method. Must initialize before use.", code: "void m() { int x=10; }"},
+                    {name: "Instance", desc: "Inside a class. Default values apply.", code: "class A { int x; }"},
+                    {name: "Static", desc: "Shared by all instances.", code: "static int count;"}
+                ]
+            },
+            { 
+                id: 3, cat: "Basics", title: "Primitive vs Reference Types", 
+                context: "Primitives (int, char, boolean) store actual values in Stack memory (Fast). Reference types (String, Array, User) store an address pointing to an object in Heap memory.", 
+                js_compare: "Similar to JS Primitives (Number, Boolean) vs Objects.",
+                example: "Stock Trading: Prices (double) update millions of times/sec (Stack/Fast). User Profiles are complex objects (Heap).", 
+                code: "int price = 100; // Value in Stack\nUser u = new User(); // Address in Stack -> Object in Heap", 
+                src: "4_Primitive_Variables.pdf",
+                types: [
+                    {name: "Primitive", desc: "8 Types: byte, short, int, long, float, double, char, boolean.", code: "int x = 5;"},
+                    {name: "Reference", desc: "Objects, Arrays, Strings.", code: "String s = new String();"}
+                ]
+            },
+            { 
+                id: 4, cat: "Basics", title: "Type Casting", 
+                context: "Converting data from one type to another. 'Widening' is automatic. 'Narrowing' requires manual confirmation.", 
+                js_compare: "JS does this implicitly (Type Coercion). Java requires explicit syntax.",
+                example: "GPS Distance: Satellite gives 10.987km (double). Display needs 10km (int). You cast it, losing precision.", 
+                code: "double precise = 10.99;\nint display = (int) precise; // Becomes 10", 
+                src: "4_Primitive_Variables.pdf",
+                types: [
+                    {name: "Widening", desc: "Small to Large (Safe/Auto).", code: "int -> long"}, 
+                    {name: "Narrowing", desc: "Large to Small (Risk/Manual).", code: "double -> int"}
+                ]
+            },
+            { 
+                id: 5, cat: "Basics", title: "Operators", 
+                context: "Standard symbols for math and logic. The Ternary Operator is crucial for concise UI logic.", 
+                js_compare: "Identical to JavaScript operators (+, -, *, /, %, ? :).",
+                example: "Login Status: Instead of if-else, use one line.", 
+                code: "String status = (isLoggedIn) ? \"Welcome\" : \"Login\";", 
+                src: "General",
+                types: [
+                    {name: "Arithmetic", desc: "Math operations.", code: "+ - * / %"},
+                    {name: "Relational", desc: "Comparison.", code: "== != > <"},
+                    {name: "Logical", desc: "Boolean logic.", code: "&& || !"},
+                    {name: "Ternary", desc: "Conditional assignment.", code: "? :"}
+                ]
+            },
+            { 
+                id: 6, cat: "Basics", title: "Switch Expressions", 
+                context: "Java 14+ introduced a modern Switch that uses '->' syntax. It returns values and prevents fall-through bugs.", 
+                js_compare: "Like a cleaner version of JS switch, but returns values.",
+                example: "Order Status: Converting numeric codes (1, 2) into UI labels.", 
+                code: "String label = switch(status) {\n  case 1 -> \"Pending\";\n  default -> \"Unknown\";\n};", 
+                src: "Link 42",
+                types: [
+                    {name: "Classic Switch", desc: "Uses 'case', 'break'. Fall-through risk.", code: "case 1: ... break;"},
+                    {name: "Enhanced Switch", desc: "Java 14+. Uses '->'. No fall-through. Returns value.", code: "case 1 -> val;"}
+                ]
+            },
+            { 
+                id: 7, cat: "Basics", title: "Loops", 
+                context: "Control structures to repeat code.", 
+                js_compare: "Same as JS `for`, `while`.",
+                example: "Payroll: Loop 500 times for 500 employees (For).", 
+                code: "for(User u : users) { sendEmail(u); }", 
+                src: "General",
+                types: [
+                    {name: "For Loop", desc: "Known iterations.", code: "for(int i=0; i<10; i++)"}, 
+                    {name: "Enhanced For", desc: "Iterating collections.", code: "for(String s : list)"}, 
+                    {name: "While", desc: "Unknown iterations.", code: "while(condition)"},
+                    {name: "Do-While", desc: "Run at least once.", code: "do { } while(con)"}
+                ] 
+            },
+            { 
+                id: 8, cat: "Basics", title: "Arrays", 
+                context: "A fixed-size container for data of the SAME type. Stores data sequentially in memory.", 
+                js_compare: "Unlike JS Arrays, Java Arrays are fixed-length and strictly typed.",
+                example: "Pixel Grid: An image is a fixed 1920x1080 grid. Arrays allow instant access.", 
+                code: "int[] pixels = new int[1920];", 
+                src: "6_NonPrimitive_Variables.pdf",
+                types: [
+                    {name: "Single Dim", desc: "Standard list.", code: "int[] arr = {1,2}"},
+                    {name: "Multi Dim", desc: "Matrix/Grid.", code: "int[][] matrix = {{1,2},{3,4}}"}
+                ]
+            },
+            { 
+                id: 9, cat: "Basics", title: "Methods", 
+                context: "Reusable blocks of code defining inputs (parameters) and output (return type).", 
+                js_compare: "Equivalent to JS Functions.",
+                example: "Tax Calc: 'calculateTax()' logic is defined once and reused.", 
+                code: "public double calc(double amount) { return amount * 0.18; }", 
+                src: "7_METHODS.pdf",
+                types: [
+                    {name: "Instance", desc: "Requires object to call.", code: "obj.method()"},
+                    {name: "Static", desc: "Belongs to class. Utility.", code: "Math.sqrt()"},
+                    {name: "Void", desc: "Returns nothing.", code: "void print()"}
+                ]
+            },
+            { 
+                id: 10, cat: "Basics", title: "Overloading", 
+                context: "Defining multiple methods with the SAME name but DIFFERENT parameters.", 
+                js_compare: "JS does NOT support this (last function overwrites).",
+                example: "Search: search(int id) vs search(String name).", 
+                code: "void search(int id) { }\nvoid search(String name) { }", 
+                src: "7_METHODS.pdf" 
+            },
+            { 
+                id: 11, cat: "Basics", title: "Constructors", 
+                context: "A special method called automatically when an object is created to enforce setup.", 
+                js_compare: "Similar to `constructor()` in JS Classes.",
+                example: "DB Connection: Require URL/Password immediately.", 
+                code: "class DB { DB(String url) { ... } }", 
+                src: "7_METHODS.pdf",
+                types: [
+                    {name: "Default", desc: "No arguments. Provided by Java if none defined.", code: "new User()"},
+                    {name: "Parameterized", desc: "Takes arguments to init fields.", code: "new User(\"John\")"},
+                    {name: "Copy", desc: "Creates object from another object.", code: "new User(otherUser)"}
+                ]
+            },
+            { 
+                id: 12, cat: "Basics", title: "⭐ PROJECT: Console Bank", isProject: true,
+                context: "Summary: Combines Variables (storage), Scanner (input), Loops (flow), and Switch (logic).",
+                js_compare: "Like building a CLI tool in Node.js.",
+                example: "ATM Logic: Loop continuously waiting for user input.",
+                code: "Scanner sc = new Scanner(System.in);\ndouble bal = 1000;\nwhile(true) {\n  System.out.println('1.Add 2.Exit');\n  int ch = sc.nextInt();\n  if(ch==1) bal += sc.nextDouble();\n  else break;\n}" 
+            },
 
-    // --- 2. OOPS CONCEPTS ---
-    { 
-        id: 13, cat: "OOPS", title: "Classes & Objects", 
-        context: "Class is a blueprint. Object is the instance. Classes encapsulate data and behavior.", 
-        js_compare: "Same as ES6 Classes.",
-        example: "Blueprint: House Plan. Object: The actual House.", 
-        code: "House h = new House();", 
-        src: "10_Classes.pdf" 
-    },
-    { 
-        id: 14, cat: "OOPS", title: "Inheritance", 
-        context: "Child class acquires properties of Parent. Code reusability.", 
-        js_compare: "Same as `class Dog extends Animal`.",
-        example: "Uber: 'UberX' extends 'Vehicle'.", 
-        code: "class UberX extends Vehicle { ... }", 
-        src: "Link 13",
-        types: [
-            {name: "Single", desc: "A extends B.", code: "class A extends B"},
-            {name: "Multilevel", desc: "A extends B extends C.", code: "class C extends B"},
-            {name: "Hierarchical", desc: "B extends A, C extends A.", code: "class B extends A"}
-        ]
-    },
-    { 
-        id: 15, cat: "OOPS", title: "Polymorphism", 
-        context: "One object taking many forms. Parent reference holding Child object.", 
-        js_compare: "Dynamic typing in JS makes this implicit.",
-        example: "Payment Gateway: process() calls PayPal logic if object is PayPal.", 
-        code: "Payment p = new PayPal();\np.process();", 
-        src: "Link 14",
-        types: [
-            {name: "Compile-Time", desc: "Method Overloading (Static).", code: "add(a), add(a,b)"},
-            {name: "Runtime", desc: "Method Overriding (Dynamic).", code: "@Override void run()"}
-        ]
-    },
-    { 
-        id: 16, cat: "OOPS", title: "Encapsulation", 
-        context: "Restricting access to data. 'private' variables, 'public' Getters/Setters.", 
-        js_compare: "Closures or `#privateFields` in JS.",
-        example: "Bank Account: 'balance' is private.", 
-        code: "private double bal;\npublic void set(double b) { ... }", 
-        src: "Link 15" 
-    },
-    { 
-        id: 17, cat: "OOPS", title: "Abstraction", 
-        context: "Hiding complexity. Showing only functionality.", 
-        js_compare: "Like passing callback signatures.",
-        example: "Car Brakes: Driver uses Interface (Pedal), not Implementation (Hydraulics).", 
-        code: "abstract void brake();", 
-        src: "Link 16",
-        types: [
-            {name: "Abstract Class", desc: "0-100% Abstract. Can have state.", code: "abstract class Car"},
-            {name: "Interface", desc: "100% Abstract. Contract only.", code: "interface Drivable"}
-        ]
-    },
-    { 
-        id: 18, cat: "OOPS", title: "Interfaces", 
-        context: "A contract a class must follow. Supports Multiple Inheritance.", 
-        js_compare: "TypeScript Interfaces.",
-        example: "Phone: Implements Camera, GPS.", 
-        code: "class iPhone implements GPS, Camera { ... }", 
-        src: "Link 17",
-        types: [
-            {name: "Normal", desc: "Multiple methods.", code: "interface Car { run(); stop(); }"},
-            {name: "Functional", desc: "Single Abstract Method (SAM). For Lambdas.", code: "@FunctionalInterface"},
-            {name: "Marker", desc: "Empty. Metadata.", code: "interface Serializable {}"}
-        ]
-    },
-    { 
-        id: 19, cat: "OOPS", title: "Static Keyword", 
-        context: "Belongs to Class, not Object. Shared memory.", 
-        js_compare: "`static` methods in JS.",
-        example: "Company Name: Stored once for 10,000 employees.", 
-        code: "static String company = \"TechCorp\";", 
-        src: "Link 18",
-        types: [
-            {name: "Variable", desc: "Shared data.", code: "static int count;"},
-            {name: "Method", desc: "Utility function.", code: "static void print()"},
-            {name: "Block", desc: "Runs once on class load.", code: "static { ... }"}
-        ]
-    },
-    { 
-        id: 20, cat: "OOPS", title: "Final Keyword", 
-        context: "Indicates immutability.", 
-        js_compare: "`const` in JS.",
-        example: "Encryption Algorithm name shouldn't change.", 
-        code: "final String ALG = \"AES-256\";", 
-        src: "Link 19",
-        types: [
-            {name: "Variable", desc: "Constant value.", code: "final int X = 10;"},
-            {name: "Method", desc: "Prevent Overriding.", code: "final void run()"},
-            {name: "Class", desc: "Prevent Inheritance.", code: "final class System"}
-        ]
-    },
-    { 
-        id: 21, cat: "OOPS", title: "Super Keyword", 
-        context: "Refers to Parent class.", 
-        js_compare: "`super()` in JS.",
-        example: "Manager calls 'super(name)' to init Employee parts.", 
-        code: "Manager(String n) { super(n); }", 
-        src: "Link 20" 
-    },
-    { 
-        id: 22, cat: "OOPS", title: "The 'this' Keyword", 
-        context: "Refers to current instance. Resolves ambiguity.", 
-        js_compare: "`this` in JS.",
-        example: "Parameter 'email' vs Field 'email'.", 
-        code: "this.email = email;", 
-        src: "Link 12" 
-    },
-    { 
-        id: 23, cat: "OOPS", title: "⭐ PROJECT: Zoo System", isProject: true,
-        context: "Summary: Uses Inheritance for Animal types, Polymorphism for sounds.",
-        js_compare: "TypeScript OOP architecture.",
-        example: "Simulation: List<Animal>. Loop and call makeSound().",
-        code: "abstract class Animal { abstract void sound(); }\nclass Lion extends Animal { void sound(){ print(\"Roar\"); } }\nList<Animal> zoo = List.of(new Lion());\nzoo.forEach(a -> a.sound());" 
-    },
+            // --- 2. OOPS CONCEPTS ---
+            { 
+                id: 13, cat: "OOPS", title: "Classes & Objects", 
+                context: "Class is a blueprint. Object is the instance. Classes encapsulate data and behavior.", 
+                js_compare: "Same as ES6 Classes.",
+                example: "Blueprint: House Plan. Object: The actual House.", 
+                code: "House h = new House();", 
+                src: "10_Classes.pdf" 
+            },
+            { 
+                id: 14, cat: "OOPS", title: "Inheritance", 
+                context: "Child class acquires properties of Parent. Code reusability.", 
+                js_compare: "Same as `class Dog extends Animal`.",
+                example: "Uber: 'UberX' extends 'Vehicle'.", 
+                code: "class UberX extends Vehicle { ... }", 
+                src: "Link 13",
+                types: [
+                    {name: "Single", desc: "A extends B.", code: "class A extends B"},
+                    {name: "Multilevel", desc: "A extends B extends C.", code: "class C extends B"},
+                    {name: "Hierarchical", desc: "B extends A, C extends A.", code: "class B extends A"}
+                ]
+            },
+            { 
+                id: 15, cat: "OOPS", title: "Polymorphism", 
+                context: "One object taking many forms. Parent reference holding Child object.", 
+                js_compare: "Dynamic typing in JS makes this implicit.",
+                example: "Payment Gateway: process() calls PayPal logic if object is PayPal.", 
+                code: "Payment p = new PayPal();\np.process();", 
+                src: "Link 14",
+                types: [
+                    {name: "Compile-Time", desc: "Method Overloading (Static).", code: "add(a), add(a,b)"},
+                    {name: "Runtime", desc: "Method Overriding (Dynamic).", code: "@Override void run()"}
+                ]
+            },
+            { 
+                id: 16, cat: "OOPS", title: "Encapsulation", 
+                context: "Restricting access to data. 'private' variables, 'public' Getters/Setters.", 
+                js_compare: "Closures or `#privateFields` in JS.",
+                example: "Bank Account: 'balance' is private.", 
+                code: "private double bal;\npublic void set(double b) { ... }", 
+                src: "Link 15" 
+            },
+            { 
+                id: 17, cat: "OOPS", title: "Abstraction", 
+                context: "Hiding complexity. Showing only functionality.", 
+                js_compare: "Like passing callback signatures.",
+                example: "Car Brakes: Driver uses Interface (Pedal), not Implementation (Hydraulics).", 
+                code: "abstract void brake();", 
+                src: "Link 16",
+                types: [
+                    {name: "Abstract Class", desc: "0-100% Abstract. Can have state.", code: "abstract class Car"},
+                    {name: "Interface", desc: "100% Abstract. Contract only.", code: "interface Drivable"}
+                ]
+            },
+            { 
+                id: 18, cat: "OOPS", title: "Interfaces", 
+                context: "A contract a class must follow. Supports Multiple Inheritance.", 
+                js_compare: "TypeScript Interfaces.",
+                example: "Phone: Implements Camera, GPS.", 
+                code: "class iPhone implements GPS, Camera { ... }", 
+                src: "Link 17",
+                types: [
+                    {name: "Normal", desc: "Multiple methods.", code: "interface Car { run(); stop(); }"},
+                    {name: "Functional", desc: "Single Abstract Method (SAM). For Lambdas.", code: "@FunctionalInterface"},
+                    {name: "Marker", desc: "Empty. Metadata.", code: "interface Serializable {}"}
+                ]
+            },
+            { 
+                id: 19, cat: "OOPS", title: "Static Keyword", 
+                context: "Belongs to Class, not Object. Shared memory.", 
+                js_compare: "`static` methods in JS.",
+                example: "Company Name: Stored once for 10,000 employees.", 
+                code: "static String company = \"TechCorp\";", 
+                src: "Link 18",
+                types: [
+                    {name: "Variable", desc: "Shared data.", code: "static int count;"},
+                    {name: "Method", desc: "Utility function.", code: "static void print()"},
+                    {name: "Block", desc: "Runs once on class load.", code: "static { ... }"}
+                ]
+            },
+            { 
+                id: 20, cat: "OOPS", title: "Final Keyword", 
+                context: "Indicates immutability.", 
+                js_compare: "`const` in JS.",
+                example: "Encryption Algorithm name shouldn't change.", 
+                code: "final String ALG = \"AES-256\";", 
+                src: "Link 19",
+                types: [
+                    {name: "Variable", desc: "Constant value.", code: "final int X = 10;"},
+                    {name: "Method", desc: "Prevent Overriding.", code: "final void run()"},
+                    {name: "Class", desc: "Prevent Inheritance.", code: "final class System"}
+                ]
+            },
+            { 
+                id: 21, cat: "OOPS", title: "Super Keyword", 
+                context: "Refers to Parent class.", 
+                js_compare: "`super()` in JS.",
+                example: "Manager calls 'super(name)' to init Employee parts.", 
+                code: "Manager(String n) { super(n); }", 
+                src: "Link 20" 
+            },
+            { 
+                id: 22, cat: "OOPS", title: "The 'this' Keyword", 
+                context: "Refers to current instance. Resolves ambiguity.", 
+                js_compare: "`this` in JS.",
+                example: "Parameter 'email' vs Field 'email'.", 
+                code: "this.email = email;", 
+                src: "Link 12" 
+            },
+            { 
+                id: 23, cat: "OOPS", title: "⭐ PROJECT: Zoo System", isProject: true,
+                context: "Summary: Uses Inheritance for Animal types, Polymorphism for sounds.",
+                js_compare: "TypeScript OOP architecture.",
+                example: "Simulation: List<Animal>. Loop and call makeSound().",
+                code: "abstract class Animal { abstract void sound(); }\nclass Lion extends Animal { void sound(){ print(\"Roar\"); } }\nList<Animal> zoo = List.of(new Lion());\nzoo.forEach(a -> a.sound());" 
+            },
 
-    // --- 3. STRINGS & EXCEPTIONS ---
-    { 
-        id: 24, cat: "Exceptions", title: "Try-Catch Handling", 
-        context: "Handling runtime errors to prevent crash.", 
-        js_compare: "`try-catch` in JS.",
-        example: "File Upload: Catch error, show message.", 
-        code: "try { upload(); } catch(Ex e) { alert(); }", 
-        src: "Link 23",
-        types: [
-            {name: "Checked", desc: "Compile-time. Must handle (File IO).", code: "IOException"},
-            {name: "Unchecked", desc: "Runtime. Optional handle (Logic).", code: "NullPointerException"}
-        ]
-    },
-    { 
-        id: 25, cat: "Exceptions", title: "Throw vs Throws", 
-        context: "'Throw' generates error. 'Throws' declares method risk.", 
-        js_compare: "`throw new Error()` in JS.",
-        example: "ATM: 'throw' InsufficientFunds.", 
-        code: "void withdraw() throws Ex { throw new Ex(); }", 
-        src: "Link 25" 
-    },
-    { 
-        id: 26, cat: "Exceptions", title: "Finally Block", 
-        context: "Always runs. Cleanup.", 
-        js_compare: "`finally` in JS.",
-        example: "Close Database connection.", 
-        code: "finally { db.close(); }", 
-        src: "Link 24" 
-    },
-    { 
-        id: 27, cat: "Strings", title: "Immutability", 
-        context: "String objects cannot be modified. Saves memory via String Pool.", 
-        js_compare: "JS Strings are immutable primitives.",
-        example: "User Roles: 'USER' stored once.", 
-        code: "String s = \"Data\";", 
-        src: "Link 21" 
-    },
-    { 
-        id: 28, cat: "Strings", title: "StringBuilder", 
-        context: "Mutable string. Efficient for loops.", 
-        js_compare: "Array join in JS.",
-        example: "Building CSV report.", 
-        code: "sb.append(row);", 
-        src: "Link 22",
-        types: [
-            {name: "String", desc: "Immutable. Slow.", code: "s += \"a\""},
-            {name: "StringBuilder", desc: "Mutable. Fast. Not Thread Safe.", code: "sb.append(\"a\")"},
-            {name: "StringBuffer", desc: "Mutable. Thread Safe (Synchronized).", code: "sb.append(\"a\")"}
-        ]
-    },
-    { 
-        id: 29, cat: "Exceptions", title: "⭐ PROJECT: Error Logger", isProject: true,
-        context: "Summary: Try-Catch failures, format with StringBuilder.",
-        js_compare: "Winston logger in Node.",
-        example: "Server Log: Catch crash, save to file.",
-        code: "try { process(); } catch(Exception e) {\n  StringBuilder log = new StringBuilder();\n  log.append(\"[ERR] \").append(e.msg);\n  save(log.toString());\n}" 
-    },
+            // --- 3. STRINGS & EXCEPTIONS ---
+            { 
+                id: 24, cat: "Exceptions", title: "Try-Catch Handling", 
+                context: "Handling runtime errors to prevent crash.", 
+                js_compare: "`try-catch` in JS.",
+                example: "File Upload: Catch error, show message.", 
+                code: "try { upload(); } catch(Ex e) { alert(); }", 
+                src: "Link 23",
+                types: [
+                    {name: "Checked", desc: "Compile-time. Must handle (File IO).", code: "IOException"},
+                    {name: "Unchecked", desc: "Runtime. Optional handle (Logic).", code: "NullPointerException"}
+                ]
+            },
+            { 
+                id: 25, cat: "Exceptions", title: "Throw vs Throws", 
+                context: "'Throw' generates error. 'Throws' declares method risk.", 
+                js_compare: "`throw new Error()` in JS.",
+                example: "ATM: 'throw' InsufficientFunds.", 
+                code: "void withdraw() throws Ex { throw new Ex(); }", 
+                src: "Link 25" 
+            },
+            { 
+                id: 26, cat: "Exceptions", title: "Finally Block", 
+                context: "Always runs. Cleanup.", 
+                js_compare: "`finally` in JS.",
+                example: "Close Database connection.", 
+                code: "finally { db.close(); }", 
+                src: "Link 24" 
+            },
+            { 
+                id: 27, cat: "Strings", title: "Immutability", 
+                context: "String objects cannot be modified. Saves memory via String Pool.", 
+                js_compare: "JS Strings are immutable primitives.",
+                example: "User Roles: 'USER' stored once.", 
+                code: "String s = \"Data\";", 
+                src: "Link 21" 
+            },
+            { 
+                id: 28, cat: "Strings", title: "StringBuilder", 
+                context: "Mutable string. Efficient for loops.", 
+                js_compare: "Array join in JS.",
+                example: "Building CSV report.", 
+                code: "sb.append(row);", 
+                src: "Link 22",
+                types: [
+                    {name: "String", desc: "Immutable. Slow.", code: "s += \"a\""},
+                    {name: "StringBuilder", desc: "Mutable. Fast. Not Thread Safe.", code: "sb.append(\"a\")"},
+                    {name: "StringBuffer", desc: "Mutable. Thread Safe (Synchronized).", code: "sb.append(\"a\")"}
+                ]
+            },
+            { 
+                id: 29, cat: "Exceptions", title: "⭐ PROJECT: Error Logger", isProject: true,
+                context: "Summary: Try-Catch failures, format with StringBuilder.",
+                js_compare: "Winston logger in Node.",
+                example: "Server Log: Catch crash, save to file.",
+                code: "try { process(); } catch(Exception e) {\n  StringBuilder log = new StringBuilder();\n  log.append(\"[ERR] \").append(e.msg);\n  save(log.toString());\n}" 
+            },
 
-    // --- 4. MEMORY & COLLECTIONS ---
-    { 
-        id: 30, cat: "Memory", title: "Stack vs Heap", 
-        context: "Stack=Execution. Heap=Storage.", 
-        js_compare: "V8 Stack vs Heap.",
-        example: "Recursion (Stack), Objects (Heap).", 
-        code: "int x; // Stack\nUser u = new User(); // Heap", 
-        src: "9_Memory.pdf" 
-    },
-    { 
-        id: 31, cat: "Memory", title: "Garbage Collection", 
-        context: "Auto memory management.", 
-        js_compare: "JS GC.",
-        example: "Closing Browser Tab frees RAM.", 
-        code: "obj = null;", 
-        src: "9_Memory.pdf",
-        types: [
-            {name: "Minor GC", desc: "Cleans Young Generation (Short-lived objects).", code: "Fast"},
-            {name: "Major GC", desc: "Cleans Old Generation (Long-lived objects).", code: "Slow (Stop-the-world)"}
-        ]
-    },
-    { 
-        id: 32, cat: "Collections", title: "List Interface", 
-        context: "Ordered collection. Duplicates allowed.", 
-        js_compare: "JS Arrays `[]`.",
-        example: "Shopping Cart.", 
-        code: "List<String> l = new ArrayList<>();", 
-        src: "Link 46",
-        types: [
-            {name: "ArrayList", desc: "Dynamic Array. Fast Read. Slow Insert.", code: "get(0) is O(1)"},
-            {name: "LinkedList", desc: "Nodes. Fast Insert. Slow Read.", code: "addFirst() is O(1)"}
-        ]
-    },
-    { 
-        id: 33, cat: "Collections", title: "Map Interface", 
-        context: "Key-Value pairs.", 
-        js_compare: "JS Objects `{}`.",
-        example: "Session Cache.", 
-        code: "Map<String, User> map = new HashMap<>();", 
-        src: "Link 52",
-        types: [
-            {name: "HashMap", desc: "Unordered. O(1).", code: "new HashMap()"},
-            {name: "LinkedHashMap", desc: "Insertion Order.", code: "new LinkedHashMap()"},
-            {name: "TreeMap", desc: "Sorted Keys.", code: "new TreeMap()"}
-        ]
-    },
-    { 
-        id: 34, cat: "Collections", title: "Set Interface", 
-        context: "Unique items only.", 
-        js_compare: "JS `Set`.",
-        example: "Email List.", 
-        code: "Set<String> s = new HashSet<>();", 
-        src: "Link 49",
-        types: [
-            {name: "HashSet", desc: "Unordered. Fast.", code: "new HashSet()"},
-            {name: "TreeSet", desc: "Sorted.", code: "new TreeSet()"}
-        ]
-    },
-    { 
-        id: 35, cat: "Collections", title: "Generics", 
-        context: "Type Safety.", 
-        js_compare: "TS Generics.",
-        example: "Box<Shoes>.", 
-        code: "List<String> s = new ArrayList<>();", 
-        src: "10_Classes.pdf",
-        types: [
-            {name: "Unbounded", desc: "Any Type.", code: "<T>"},
-            {name: "Upper Bound", desc: "Subclasses of Number.", code: "<T extends Number>"},
-            {name: "Lower Bound", desc: "Superclasses of Integer.", code: "<T super Integer>"}
-        ]
-    },
-    { 
-        id: 36, cat: "Collections", title: "Comparable vs Comparator", 
-        context: "Sorting logic.", 
-        js_compare: "Array.sort().",
-        example: "Sort by ID vs Name.", 
-        code: "Collections.sort(list);", 
-        src: "General",
-        types: [
-            {name: "Comparable", desc: "Default sort (compareTo). Modifies class.", code: "implements Comparable"},
-            {name: "Comparator", desc: "Custom sort. Separate class.", code: "new NameSorter()"}
-        ]
-    },
-    { 
-        id: 37, cat: "Collections", title: "⭐ PROJECT: Cart System", isProject: true,
-        context: "Summary: HashMap for lookup, ArrayList for history.",
-        js_compare: "Shopping cart logic.",
-        example: "Amazon: Add item -> Check Map.",
-        code: "Map<String, Item> cart = new HashMap<>();\ncart.put(\"ID_1\", new Item(\"Apple\", 2.0));\nfor(Item i : cart.values()) sum += i.price;" 
-    },
+            // --- 4. MEMORY & COLLECTIONS ---
+            { 
+                id: 30, cat: "Memory", title: "Stack vs Heap", 
+                context: "Stack=Execution. Heap=Storage.", 
+                js_compare: "V8 Stack vs Heap.",
+                example: "Recursion (Stack), Objects (Heap).", 
+                code: "int x; // Stack\nUser u = new User(); // Heap", 
+                src: "9_Memory.pdf" 
+            },
+            { 
+                id: 31, cat: "Memory", title: "Garbage Collection", 
+                context: "Auto memory management.", 
+                js_compare: "JS GC.",
+                example: "Closing Browser Tab frees RAM.", 
+                code: "obj = null;", 
+                src: "9_Memory.pdf",
+                types: [
+                    {name: "Minor GC", desc: "Cleans Young Generation (Short-lived objects).", code: "Fast"},
+                    {name: "Major GC", desc: "Cleans Old Generation (Long-lived objects).", code: "Slow (Stop-the-world)"}
+                ]
+            },
+            { 
+                id: 32, cat: "Collections", title: "List Interface", 
+                context: "Ordered collection. Duplicates allowed.", 
+                js_compare: "JS Arrays `[]`.",
+                example: "Shopping Cart.", 
+                code: "List<String> l = new ArrayList<>();", 
+                src: "Link 46",
+                types: [
+                    {name: "ArrayList", desc: "Dynamic Array. Fast Read. Slow Insert.", code: "get(0) is O(1)"},
+                    {name: "LinkedList", desc: "Nodes. Fast Insert. Slow Read.", code: "addFirst() is O(1)"}
+                ]
+            },
+            { 
+                id: 33, cat: "Collections", title: "Map Interface", 
+                context: "Key-Value pairs.", 
+                js_compare: "JS Objects `{}`.",
+                example: "Session Cache.", 
+                code: "Map<String, User> map = new HashMap<>();", 
+                src: "Link 52",
+                types: [
+                    {name: "HashMap", desc: "Unordered. O(1).", code: "new HashMap()"},
+                    {name: "LinkedHashMap", desc: "Insertion Order.", code: "new LinkedHashMap()"},
+                    {name: "TreeMap", desc: "Sorted Keys.", code: "new TreeMap()"}
+                ]
+            },
+            { 
+                id: 34, cat: "Collections", title: "Set Interface", 
+                context: "Unique items only.", 
+                js_compare: "JS `Set`.",
+                example: "Email List.", 
+                code: "Set<String> s = new HashSet<>();", 
+                src: "Link 49",
+                types: [
+                    {name: "HashSet", desc: "Unordered. Fast.", code: "new HashSet()"},
+                    {name: "TreeSet", desc: "Sorted.", code: "new TreeSet()"}
+                ]
+            },
+            { 
+                id: 35, cat: "Collections", title: "Generics", 
+                context: "Type Safety.", 
+                js_compare: "TS Generics.",
+                example: "Box<Shoes>.", 
+                code: "List<String> s = new ArrayList<>();", 
+                src: "10_Classes.pdf",
+                types: [
+                    {name: "Unbounded", desc: "Any Type.", code: "<T>"},
+                    {name: "Upper Bound", desc: "Subclasses of Number.", code: "<T extends Number>"},
+                    {name: "Lower Bound", desc: "Superclasses of Integer.", code: "<T super Integer>"}
+                ]
+            },
+            { 
+                id: 36, cat: "Collections", title: "Comparable vs Comparator", 
+                context: "Sorting logic.", 
+                js_compare: "Array.sort().",
+                example: "Sort by ID vs Name.", 
+                code: "Collections.sort(list);", 
+                src: "General",
+                types: [
+                    {name: "Comparable", desc: "Default sort (compareTo). Modifies class.", code: "implements Comparable"},
+                    {name: "Comparator", desc: "Custom sort. Separate class.", code: "new NameSorter()"}
+                ]
+            },
+            { 
+                id: 37, cat: "Collections", title: "⭐ PROJECT: Cart System", isProject: true,
+                context: "Summary: Uses HashMap for quick item lookup (O1) and ArrayList for order history.",
+                js_compare: "Shopping cart logic.",
+                example: "Amazon: Add item -> Check Map.",
+                code: "Map<String, Item> cart = new HashMap<>();\ncart.put(\"ID_1\", new Item(\"Apple\", 2.0));\nfor(Item i : cart.values()) sum += i.price;" 
+            },
 
-    // --- 5. THREADS & MODERN ---
-    { 
-        id: 38, cat: "Threads", title: "Multithreading Basics", 
-        context: "Parallel Execution.", 
-        js_compare: "JS is single-threaded.",
-        example: "UI + Background Task.", 
-        code: "Thread t = new Thread(task); t.start();", 
-        src: "Link 54",
-        types: [
-            {name: "Thread Class", desc: "Extend Thread.", code: "class T extends Thread"},
-            {name: "Runnable", desc: "Implement Interface (Better).", code: "implements Runnable"}
-        ]
-    },
-    { 
-        id: 39, cat: "Threads", title: "Synchronization", 
-        context: "Thread Safety / Locking.", 
-        js_compare: "N/A in JS.",
-        example: "Booking Seat.", 
-        code: "synchronized void book() { ... }", 
-        src: "Link 58",
-        types: [
-            {name: "Method", desc: "Locks whole method.", code: "synchronized void m()"},
-            {name: "Block", desc: "Locks specific lines.", code: "synchronized(this) {}"}
-        ]
-    },
-    { 
-        id: 40, cat: "Modern", title: "Lambda Expressions", 
-        context: "Functional Code.", 
-        js_compare: "Arrow Functions.",
-        example: "Button Click.", 
-        code: "btn.onClick(e -> print(e));", 
-        src: "Link 69" 
-    },
-    { 
-        id: 41, cat: "Modern", title: "Stream API", 
-        context: "Declarative Data Processing.", 
-        js_compare: "Array.filter().map().",
-        example: "Filter > $50.", 
-        code: "list.stream().filter().toList();", 
-        src: "General",
-        types: [
-            {name: "Intermediate", desc: "Lazy (Filter, Map).", code: ".filter()"},
-            {name: "Terminal", desc: "Eager (Collect, Count).", code: ".collect()"}
-        ]
-    },
-    { 
-        id: 42, cat: "Modern", title: "Optional", 
-        context: "Null Safety.", 
-        js_compare: "Optional Chaining.",
-        example: "DB Result.", 
-        code: "opt.orElse(\"Default\");", 
-        src: "General" 
-    },
-    { 
-        id: 43, cat: "Tools", title: "Lombok", 
-        context: "Boilerplate Generator.", 
-        js_compare: "N/A.",
-        example: "@Data DTOs.", 
-        code: "@Data class User {}", 
-        src: "Link 39" 
-    },
-    { 
-        id: 44, cat: "Modern", title: "Records", 
-        context: "Immutable Data Carrier.", 
-        js_compare: "Readonly Interface.",
-        example: "DTOs.", 
-        code: "record Point(int x, int y){}", 
-        src: "Link 45" 
-    },
-    { 
-        id: 45, cat: "Threads", title: "⭐ PROJECT: Downloader", isProject: true,
-        context: "Summary: Multiple threads for parallel downloading.",
-        js_compare: "Promise.all().",
-        example: "Browser: Downloading 3 files.",
-        code: "new Thread(() -> print(\"File 1\")).start();\nnew Thread(() -> print(\"File 2\")).start();" 
-    },
+            // --- 5. THREADS & MODERN ---
+            { 
+                id: 38, cat: "Threads", title: "Multithreading Basics", 
+                context: "Parallel Execution.", 
+                js_compare: "JS is single-threaded.",
+                example: "UI + Background Task.", 
+                code: "Thread t = new Thread(task); t.start();", 
+                src: "Link 54",
+                types: [
+                    {name: "Thread Class", desc: "Extend Thread.", code: "class T extends Thread"},
+                    {name: "Runnable", desc: "Implement Interface (Better).", code: "implements Runnable"}
+                ]
+            },
+            { 
+                id: 39, cat: "Threads", title: "Synchronization", 
+                context: "Thread Safety / Locking.", 
+                js_compare: "N/A in JS.",
+                example: "Booking Seat.", 
+                code: "synchronized void book() { ... }", 
+                src: "Link 58",
+                types: [
+                    {name: "Method", desc: "Locks whole method.", code: "synchronized void m()"},
+                    {name: "Block", desc: "Locks specific lines.", code: "synchronized(this) {}"}
+                ]
+            },
+            { 
+                id: 40, cat: "Modern", title: "Lambda Expressions", 
+                context: "Functional Code.", 
+                js_compare: "Arrow Functions.",
+                example: "Button Click.", 
+                code: "btn.onClick(e -> print(e));", 
+                src: "Link 69" 
+            },
+            { 
+                id: 41, cat: "Modern", title: "Stream API", 
+                context: "Declarative Data Processing.", 
+                js_compare: "Array.filter().map().",
+                example: "Filter > $50.", 
+                code: "list.stream().filter().toList();", 
+                src: "General",
+                types: [
+                    {name: "Intermediate", desc: "Lazy (Filter, Map).", code: ".filter()"},
+                    {name: "Terminal", desc: "Eager (Collect, Count).", code: ".collect()"}
+                ]
+            },
+            { 
+                id: 42, cat: "Modern", title: "Optional", 
+                context: "Null Safety.", 
+                js_compare: "Optional Chaining.",
+                example: "DB Result.", 
+                code: "opt.orElse(\"Default\");", 
+                src: "General" 
+            },
+            { 
+                id: 43, cat: "Tools", title: "Lombok", 
+                context: "Boilerplate Generator.", 
+                js_compare: "N/A.",
+                example: "@Data DTOs.", 
+                code: "@Data class User {}", 
+                src: "Link 39" 
+            },
+            { 
+                id: 44, cat: "Modern", title: "Records", 
+                context: "Immutable Data Carrier.", 
+                js_compare: "Readonly Interface.",
+                example: "DTOs.", 
+                code: "record Point(int x, int y){}", 
+                src: "Link 45" 
+            },
+            { 
+                id: 45, cat: "Threads", title: "⭐ PROJECT: Downloader", isProject: true,
+                context: "Summary: Multiple threads for parallel downloading.",
+                js_compare: "Promise.all().",
+                example: "Browser: Downloading 3 files.",
+                code: "new Thread(() -> print(\"File 1\")).start();\nnew Thread(() -> print(\"File 2\")).start();" 
+            },
 
-    // --- 6. SPRING BOOT ---
-    { 
-        id: 46, cat: "Spring Boot", title: "Architecture", 
-        context: "Auto-Config, Embedded Server.", 
-        js_compare: "Express + Best Practices.",
-        example: "Web App 5 mins.", 
-        code: "@SpringBootApplication", 
-        src: "User Link" 
-    },
-    { 
-        id: 47, cat: "Spring Boot", title: "Dependency Injection", 
-        context: "Wiring Beans.", 
-        js_compare: "Angular DI.",
-        example: "Inject Service.", 
-        code: "@Autowired", 
-        src: "General",
-        types: [
-            {name: "Constructor", desc: "Mandatory dependencies.", code: "User(Svc s)"},
-            {name: "Setter", desc: "Optional.", code: "setSvc(s)"},
-            {name: "Field", desc: "Avoid (Testing hard).", code: "@Autowired Svc s"}
-        ]
-    },
-    { 
-        id: 48, cat: "Spring Boot", title: "Bean Scopes", 
-        context: "Lifecycle.", 
-        js_compare: "Singleton vs Factory.",
-        example: "Singleton Svc.", 
-        code: "@Scope", 
-        src: "General",
-        types: [
-            {name: "Singleton", desc: "One per app.", code: "Default"},
-            {name: "Prototype", desc: "New per request.", code: "@Scope('prototype')"},
-            {name: "Session", desc: "Per User Session.", code: "@Scope('session')"}
-        ]
-    },
-    { 
-        id: 49, cat: "Spring Boot", title: "REST APIs", 
-        context: "Endpoints.", 
-        js_compare: "Express Routes.",
-        example: "GET /users.", 
-        code: "@RestController", 
-        src: "General",
-        types: [
-            {name: "GET", desc: "Read.", code: "@GetMapping"},
-            {name: "POST", desc: "Create.", code: "@PostMapping"},
-            {name: "PUT", desc: "Update.", code: "@PutMapping"},
-            {name: "DELETE", desc: "Remove.", code: "@DeleteMapping"}
-        ]
-    },
-    { 
-        id: 50, cat: "Security", title: "Security Basics", 
-        context: "AuthN/AuthZ.", 
-        js_compare: "Passport.js.",
-        example: "Login.", 
-        code: "http.auth()", 
-        src: "User Link" 
-    },
-    { 
-        id: 51, cat: "Security", title: "OAuth 2.0", 
-        context: "Social Login.", 
-        js_compare: "Google Auth.",
-        example: "Sign in with Google.", 
-        code: "@EnableOAuth2", 
-        src: "User Link" 
-    },
-    { 
-        id: 52, cat: "Security", title: "RBAC", 
-        context: "Roles.", 
-        js_compare: "Role Middleware.",
-        example: "Admin Only.", 
-        code: "@PreAuthorize", 
-        src: "User Link" 
-    },
-    { 
-        id: 53, cat: "Spring Boot", title: "⭐ PROJECT: Todo API", isProject: true,
-        context: "Summary: Controller, Service, Repo.",
-        js_compare: "MERN Stack Backend.",
-        example: "Todo App: POST /add, GET /list.",
-        code: "@RestController\nclass API {\n  @Autowired Svc s;\n  @GetMapping(\"/todos\") list() { return s.all(); }\n}" 
-    },
+            // --- 6. SPRING BOOT ---
+            { 
+                id: 46, cat: "Spring Boot", title: "Architecture", 
+                context: "Auto-Config, Embedded Server.", 
+                js_compare: "Express + Best Practices.",
+                example: "Web App 5 mins.", 
+                code: "@SpringBootApplication", 
+                src: "User Link" 
+            },
+            { 
+                id: 47, cat: "Spring Boot", title: "Dependency Injection", 
+                context: "Wiring Beans.", 
+                js_compare: "Angular DI.",
+                example: "Inject Service.", 
+                code: "@Autowired", 
+                src: "General",
+                types: [
+                    {name: "Constructor", desc: "Mandatory dependencies.", code: "User(Svc s)"},
+                    {name: "Setter", desc: "Optional.", code: "setSvc(s)"},
+                    {name: "Field", desc: "Avoid (Testing hard).", code: "@Autowired Svc s"}
+                ]
+            },
+            { 
+                id: 48, cat: "Spring Boot", title: "Bean Scopes", 
+                context: "Lifecycle.", 
+                js_compare: "Singleton vs Factory.",
+                example: "Singleton Svc.", 
+                code: "@Scope", 
+                src: "General",
+                types: [
+                    {name: "Singleton", desc: "One per app.", code: "Default"},
+                    {name: "Prototype", desc: "New per request.", code: "@Scope('prototype')"},
+                    {name: "Session", desc: "Per User Session.", code: "@Scope('session')"}
+                ]
+            },
+            { 
+                id: 49, cat: "Spring Boot", title: "REST APIs", 
+                context: "Endpoints.", 
+                js_compare: "Express Routes.",
+                example: "GET /users.", 
+                code: "@RestController\n@GetMapping(\"/users\")", 
+                src: "General",
+                types: [
+                    {name: "GET", desc: "Read.", code: "@GetMapping"},
+                    {name: "POST", desc: "Create.", code: "@PostMapping"},
+                    {name: "PUT", desc: "Update.", code: "@PutMapping"},
+                    {name: "DELETE", desc: "Remove.", code: "@DeleteMapping"}
+                ]
+            },
+            { 
+                id: 50, cat: "Security", title: "Security Basics", 
+                context: "AuthN/AuthZ.", 
+                js_compare: "Passport.js.",
+                example: "Login.", 
+                code: "http.auth()", 
+                src: "User Link" 
+            },
+            { 
+                id: 51, cat: "Security", title: "OAuth 2.0", 
+                context: "Social Login.", 
+                js_compare: "Google Auth.",
+                example: "Sign in with Google.", 
+                code: "@EnableOAuth2", 
+                src: "User Link" 
+            },
+            { 
+                id: 52, cat: "Security", title: "RBAC", 
+                context: "Roles.", 
+                js_compare: "Role Middleware.",
+                example: "Admin Only.", 
+                code: "@PreAuthorize", 
+                src: "User Link" 
+            },
+            { 
+                id: 53, cat: "Spring Boot", title: "⭐ PROJECT: Todo API", isProject: true,
+                context: "Summary: Controller, Service, Repo.",
+                js_compare: "MERN Stack Backend.",
+                example: "Todo App: POST /add, GET /list.",
+                code: "@RestController\nclass API {\n  @Autowired Svc s;\n  @GetMapping(\"/todos\") list() { return s.all(); }\n}" 
+            },
 
-    // --- 7. MICROSERVICES ---
-    { 
-        id: 54, cat: "Microservices", title: "RestClient", 
-        context: "Sync HTTP.", 
-        js_compare: "Axios/Fetch.",
-        example: "Order->Inventory.", 
-        code: "client.get()", 
-        src: "User Link" 
-    },
-    { 
-        id: 55, cat: "Microservices", title: "Feign", 
-        context: "Declarative HTTP.", 
-        js_compare: "N/A.",
-        example: "Interface calls.", 
-        code: "@FeignClient", 
-        src: "User Link" 
-    },
-    { 
-        id: 56, cat: "Microservices", title: "Discovery", 
-        context: "Eureka.", 
-        js_compare: "Service Registry.",
-        example: "Scaling.", 
-        code: "@EnableEureka", 
-        src: "User Link" 
-    },
-    { 
-        id: 57, cat: "Microservices", title: "Gateway", 
-        context: "Entry Point.", 
-        js_compare: "Nginx.",
-        example: "Routing.", 
-        code: "routes: /api", 
-        src: "User Link" 
-    },
-    { 
-        id: 58, cat: "Microservices", title: "Load Balancer", 
-        context: "Distribution.", 
-        js_compare: "Load Balancer.",
-        example: "Round Robin.", 
-        code: "@LoadBalanced", 
-        src: "User Link" 
-    },
-    { 
-        id: 59, cat: "Microservices", title: "Resilience4j", 
-        context: "Fault Tolerance.", 
-        js_compare: "Opossum.",
-        example: "Handling downtimes.", 
-        code: "Resilience4j", 
-        src: "User Link" 
-    },
-    { 
-        id: 60, cat: "Microservices", title: "Config Server", 
-        context: "Central Props.", 
-        js_compare: "Env Vars.",
-        example: "Git Config.", 
-        code: "config-server", 
-        src: "User Link" 
-    },
-    { 
-        id: 61, cat: "Microservices", title: "Circuit Breaker", 
-        context: "Fail Fast.", 
-        js_compare: "Circuit Breaker.",
-        example: "Stop dead calls.", 
-        code: "@CircuitBreaker", 
-        src: "User Link",
-        types: [
-            {name: "Closed", desc: "Normal. Calls pass.", code: "Status: UP"},
-            {name: "Open", desc: "Failure. Calls blocked.", code: "Status: DOWN"},
-            {name: "Half-Open", desc: "Testing recovery.", code: "Status: TESTING"}
-        ]
-    },
-    { 
-        id: 62, cat: "Microservices", title: "⭐ PROJECT: Shop Mesh", isProject: true,
-        context: "Summary: Services communicate via Feign, registered on Eureka.",
-        js_compare: "Microservices Arch.",
-        example: "E-commerce: Order Svc -> Discovery -> Inventory Svc.",
-        code: "@FeignClient(\"inventory\") interface Inv { check(); }\nif(inv.check()) buy();" 
-    },
+            // --- 7. MICROSERVICES ---
+            { 
+                id: 54, cat: "Microservices", title: "RestClient", 
+                context: "Sync HTTP.", 
+                js_compare: "Axios/Fetch.",
+                example: "Order->Inventory.", 
+                code: "client.get()", 
+                src: "User Link" 
+            },
+            { 
+                id: 55, cat: "Microservices", title: "Feign", 
+                context: "Declarative HTTP.", 
+                js_compare: "N/A.",
+                example: "Interface calls.", 
+                code: "@FeignClient", 
+                src: "User Link" 
+            },
+            { 
+                id: 56, cat: "Microservices", title: "Discovery (Eureka)", 
+                context: "Dynamic Service Registry.", 
+                js_compare: "Like DNS for internal services.",
+                example: "Scaling.", 
+                code: "@EnableEurekaServer", 
+                src: "User Link" 
+            },
+            { 
+                id: 57, cat: "Microservices", title: "API Gateway", 
+                context: "Single Entry Point. Routing & Auth.", 
+                js_compare: "Nginx Reverse Proxy.",
+                example: "Routes /orders -> OrderSvc.", 
+                code: "routes: \n - id: order\n uri: lb://ORDER", 
+                src: "User Link" 
+            },
+            { 
+                id: 58, cat: "Microservices", title: "Load Balancing", 
+                context: "Client-side traffic distribution.", 
+                js_compare: "Nginx Load Balancer.",
+                example: "Round Robin requests to instances.", 
+                code: "@LoadBalanced", 
+                src: "User Link" 
+            },
+            { 
+                id: 59, cat: "Microservices", title: "Resilience4j", 
+                context: "Fault Tolerance Framework.", 
+                js_compare: "Libraries like `opossum` in Node.",
+                example: "Handling downtimes gracefully.", 
+                code: "// CircuitBreaker, Retry", 
+                src: "User Link" 
+            },
+            { 
+                id: 60, cat: "Microservices", title: "Central Config", 
+                context: "Git-backed configuration server.", 
+                js_compare: "Environment variables on steroids.",
+                example: "Change properties without redeploy.", 
+                code: "spring.config.import", 
+                src: "User Link" 
+            },
+            { 
+                id: 61, cat: "Microservices", title: "Circuit Breaker", 
+                context: "Fail Fast pattern to stop cascading failures.", 
+                js_compare: "Circuit Breaker pattern in distributed systems.",
+                example: "Email Service Dead? Stop calling it.", 
+                code: "@CircuitBreaker", 
+                src: "User Link",
+                types: [
+                    {name: "Closed", desc: "Normal. Calls pass.", code: "Status: UP"},
+                    {name: "Open", desc: "Failure. Calls blocked.", code: "Status: DOWN"},
+                    {name: "Half-Open", desc: "Testing recovery.", code: "Status: TESTING"}
+                ]
+            },
+            { 
+                id: 62, cat: "Microservices", title: "⭐ PROJECT: Shop Mesh", isProject: true,
+                context: "Summary: Services communicate via Feign, registered on Eureka, protected by Circuit Breaker.",
+                js_compare: "Microservices architecture with Node apps.",
+                example: "E-commerce: Order Svc -> Discovery -> Inventory Svc.",
+                code: "@FeignClient(\"inventory\") interface Inv { check(); }\n// In Order Svc\nif(inv.check()) buy();" 
+            },
 
-    // --- 8. JPA & ADVANCED ---
-    { 
-        id: 63, cat: "JPA", title: "Mappings", 
-        context: "Relations.", 
-        js_compare: "SQL Joins / Mongo Refs.",
-        example: "User-Profile.", 
-        code: "@OneToOne", 
-        src: "Link 72",
-        types: [
-            {name: "OneToOne", desc: "1:1", code: "@OneToOne"},
-            {name: "OneToMany", desc: "1:N", code: "@OneToMany"},
-            {name: "ManyToMany", desc: "N:N", code: "@ManyToMany"}
-        ]
-    },
-    { 
-        id: 64, cat: "JPA", title: "Repositories", 
-        context: "DB Access.", 
-        js_compare: "Mongoose Models.",
-        example: "FindByID.", 
-        code: "extends JpaRepo", 
-        src: "Link 75" 
-    },
-    { 
-        id: 65, cat: "JPA", title: "Transactions", 
-        context: "Atomic Operations.", 
-        js_compare: "SQL Transactions.",
-        example: "Money Transfer.", 
-        code: "@Transactional", 
-        src: "General",
-        types: [
-            {name: "Required", desc: "Join existing or create new.", code: "Default"},
-            {name: "RequiresNew", desc: "Suspend current, create new.", code: "Independent"}
-        ]
-    },
-    { 
-        id: 66, cat: "Advanced", title: "Serialization", 
-        context: "Byte Stream.", 
-        js_compare: "JSON.stringify.",
-        example: "Save State.", 
-        code: "Serializable", 
-        src: "Link 65" 
-    },
-    { 
-        id: 67, cat: "Advanced", title: "Design Patterns", 
-        context: "Solutions.", 
-        js_compare: "Patterns.",
-        example: "Singleton.", 
-        code: "getInstance()", 
-        src: "10_Classes.pdf",
-        types: [
-            {name: "Singleton", desc: "1 Instance.", code: "static Inst"},
-            {name: "Factory", desc: "Creator.", code: "create()"},
-            {name: "Observer", desc: "Events.", code: "notify()"}
-        ]
-    },
-    { 
-        id: 68, cat: "Advanced", title: "Docker", 
-        context: "Container.", 
-        js_compare: "Docker.",
-        example: "Ship App.", 
-        code: "Dockerfile", 
-        src: "General" 
-    },
-    { 
-        id: 69, cat: "Spring Boot", title: "AOP", 
-        context: "Cross-cutting.", 
-        js_compare: "Middleware.",
-        example: "Logging.", 
-        code: "@Before", 
-        src: "General",
-        types: [
-            {name: "Before", desc: "Run before method.", code: "@Before"},
-            {name: "After", desc: "Run after method.", code: "@After"},
-            {name: "Around", desc: "Wrap method execution.", code: "@Around"}
-        ]
-    },
-    { 
-        id: 70, cat: "Spring Boot", title: "Actuator", 
-        context: "Monitoring.", 
-        js_compare: "Health Check.",
-        example: "/health.", 
-        code: "actuator", 
-        src: "General" 
-    },
-    { 
-        id: 71, cat: "Spring Boot", title: "Profiles", 
-        context: "Environments.", 
-        js_compare: "NODE_ENV.",
-        example: "Dev vs Prod.", 
-        code: "profiles.active", 
-        src: "General" 
-    },
-    { 
-        id: 72, cat: "Spring Boot", title: "Testing", 
-        context: "Unit Test.", 
-        js_compare: "Jest.",
-        example: "Mock DB.", 
-        code: "@SpringBootTest", 
-        src: "General" 
-    },
-    { 
-        id: 73, cat: "Spring Boot", title: "Exception Handling", 
-        context: "Global Catch.", 
-        js_compare: "Error Middleware.",
-        example: "404 Page.", 
-        code: "@ControllerAdvice", 
-        src: "General" 
-    },
-    { 
-        id: 74, cat: "Spring Boot", title: "Config Props", 
-        context: "Configuration.", 
-        js_compare: "Dotenv.",
-        example: "DB URL.", 
-        code: "@Value", 
-        src: "General" 
-    },
-    { 
-        id: 75, cat: "JPA", title: "⭐ PROJECT: Blog DB", isProject: true,
-        context: "Summary: Define Entities. Map Relations (1-N). Use Repo.",
-        js_compare: "Mongoose Relations.",
-        example: "Blog: User writes many Posts.",
-        code: "@Entity User { @OneToMany List<Post> p; }\n// Repo saves relations" 
-    }
-];
+            // --- 8. JPA & ADVANCED ---
+            { 
+                id: 63, cat: "JPA", title: "OneToOne Mapping", 
+                context: "1 Entity related to exactly 1 other Entity.", 
+                js_compare: "MongoDB Embedded Document or SQL 1:1.",
+                example: "User <-> UserProfile.", 
+                code: "@OneToOne private Profile profile;", 
+                src: "Link 72",
+                types: [
+                    {name: "OneToOne", desc: "1:1", code: "@OneToOne"},
+                    {name: "OneToMany", desc: "1:N", code: "@OneToMany"},
+                    {name: "ManyToMany", desc: "N:N", code: "@ManyToMany"}
+                ]
+            },
+            { 
+                id: 64, cat: "JPA", title: "OneToMany Mapping", 
+                context: "1 Entity related to Many Entities.", 
+                js_compare: "1 Parent -> Array of Children.",
+                example: "User <-> Orders list.", 
+                code: "@OneToMany List<Order> orders;", 
+                src: "Link 73" 
+            },
+            { 
+                id: 65, cat: "JPA", title: "Repositories", 
+                context: "Abstraction for Database Access (DAO).", 
+                js_compare: "Mongoose Models functions.",
+                example: "findByUsername(name).", 
+                code: "interface UserRepo extends JpaRepository {}", 
+                src: "Link 75" 
+            },
+            { 
+                id: 66, cat: "Advanced", title: "Serialization", 
+                context: "Converting Object to Byte Stream.", 
+                js_compare: "JSON.stringify() but binary.",
+                example: "Saving Game State to disk.", 
+                code: "implements Serializable", 
+                src: "Link 65" 
+            },
+            { 
+                id: 67, cat: "Design Patterns", title: "Singleton", 
+                context: "Class with only one instance.", 
+                js_compare: "Module export in Node is a Singleton.",
+                example: "Database Connection Pool.", 
+                code: "private static Instance;", 
+                src: "10_Classes.pdf",
+                types: [
+                    {name: "Singleton", desc: "1 Instance.", code: "static Inst"},
+                    {name: "Factory", desc: "Creator.", code: "create()"},
+                    {name: "Observer", desc: "Events.", code: "notify()"}
+                ]
+            },
+            { 
+                id: 68, cat: "Design Patterns", title: "Factory", 
+                context: "Creating objects without exposing instantiation logic.", 
+                js_compare: "Factory functions returning objects.",
+                example: "CarFactory.getCar('Sports').", 
+                code: "Shape s = ShapeFactory.get('CIRCLE');", 
+                src: "7_METHODS.pdf" 
+            },
+            { 
+                id: 69, cat: "Spring Boot", title: "Transactions", 
+                context: "Atomic Database Operations.", 
+                js_compare: "SQL Transactions (Begin/Commit/Rollback).",
+                example: "Money Transfer: Debit A + Credit B must both succeed.", 
+                code: "@Transactional", 
+                src: "General",
+                types: [
+                    {name: "Required", desc: "Join existing or create new.", code: "Default"},
+                    {name: "RequiresNew", desc: "Suspend current, create new.", code: "Independent"}
+                ]
+            },
+            { 
+                id: 70, cat: "Spring Boot", title: "AOP", 
+                context: "Aspect Oriented Programming (Cross-cutting concerns).", 
+                js_compare: "Middleware in Express (Logging, Auth).",
+                example: "Logging every method call.", 
+                code: "@Before(\"execution(* *.*(..))\")", 
+                src: "General",
+                types: [
+                    {name: "Before", desc: "Run before method.", code: "@Before"},
+                    {name: "After", desc: "Run after method.", code: "@After"},
+                    {name: "Around", desc: "Wrap method execution.", code: "@Around"}
+                ]
+            },
+            { 
+                id: 71, cat: "Spring Boot", title: "Profiles", 
+                context: "Environment specific configurations.", 
+                js_compare: "NODE_ENV (dev, prod).",
+                example: "Dev uses H2 DB, Prod uses MySQL.", 
+                code: "spring.profiles.active=dev", 
+                src: "General" 
+            },
+            { 
+                id: 72, cat: "Spring Boot", title: "Actuator", 
+                context: "Monitoring and health checks.", 
+                js_compare: "Health check endpoints.",
+                example: "/actuator/health.", 
+                code: "spring-boot-starter-actuator", 
+                src: "General" 
+            },
+            { 
+                id: 73, cat: "Spring Boot", title: "Testing", 
+                context: "Unit & Integration Testing.", 
+                js_compare: "Jest / Mocha.",
+                example: "Mocking DB calls.", 
+                code: "@SpringBootTest", 
+                src: "General" 
+            },
+            { 
+                id: 74, cat: "Advanced", title: "Docker", 
+                context: "Containerization.", 
+                js_compare: "Dockerizing Node apps.",
+                example: "Shipping App Dependencies.", 
+                code: "FROM openjdk:17", 
+                src: "General" 
+            },
+            { 
+                id: 75, cat: "JPA", title: "⭐ PROJECT: Blog DB", isProject: true,
+                context: "Summary: Define Entities. Map Relations (1-N). Use Repo to save/fetch.",
+                js_compare: "Mongoose Schemas with References.",
+                example: "Blog Platform: User has many Posts.",
+                code: "@Entity User { @Id id; @OneToMany List<Post> p; }\n@Entity Post { @ManyToOne User u; }\n// Repo saves relations automatically" 
+            }
+        ];
+
         let currentIndex = 0;
 
         // --- RENDER LOGIC ---
@@ -1014,10 +1089,8 @@
 
             const linkDiv = document.getElementById('linkArea');
             linkDiv.innerHTML = "";
-// Assuming you created a folder named 'pdfs' in your repo
-if(t.src && !t.isProject) {
-    linkDiv.innerHTML += `<a href="./${t.src}" target="_blank" class="link-btn link-note">📄 ${t.src}</a>`;
-}            if(t.link) linkDiv.innerHTML += `<a href="${t.link}" target="_blank" class="link-btn link-note">🔗 Open Link</a>`;
+            if(t.src && !t.isProject) linkDiv.innerHTML += `<a href="#" class="link-btn link-note">📄 ${t.src}</a>`;
+            if(t.link) linkDiv.innerHTML += `<a href="${t.link}" target="_blank" class="link-btn link-note">🔗 Open Link</a>`;
             if(t.git) linkDiv.innerHTML += `<a href="${t.git}" target="_blank" class="link-btn link-git">🦊 Git Code</a>`;
 
             // 4. Types Tab Visibility
@@ -1096,6 +1169,14 @@ if(t.src && !t.isProject) {
                 });
             }
             document.getElementById(`tab-${name}`).classList.add('active');
+        }
+
+        function toggleTheme() {
+            if (document.body.getAttribute('data-theme') === 'light') {
+                document.body.removeAttribute('data-theme');
+            } else {
+                document.body.setAttribute('data-theme', 'light');
+            }
         }
 
         function filterTopics(val) {
