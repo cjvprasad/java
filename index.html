@@ -118,7 +118,11 @@
         .main-content { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; }
         .container { max-width: 1000px; margin: 0 auto; width: 100%; }
         
-        .nav-controls { display: flex; justify-content: space-between; margin-bottom: 15px; }
+        .nav-controls { display: flex; justify-content: space-between; margin-bottom: 15px;  }
+        /* This targets elements that have BOTH classes */
+        .nav-controls.marginTop {
+            margin-top: 10px; /* Correct property name */
+        }
         .btn-nav { padding: 8px 20px; background: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
         .btn-nav:hover { background: var(--accent); transform: translateY(-2px); }
         .btn-nav:disabled { background: #7f8c8d; cursor: not-allowed; transform: none; opacity: 0.5; }
@@ -232,7 +236,7 @@
                 </div>
             </div>
 
-            <div class="nav-controls">
+            <div class="nav-controls marginTop">
                 <button class="btn-nav" id="prevBtnBot" onclick="changeTopic(-1)">← Prev</button>
                 <button class="btn-nav" id="nextBtnBot" onclick="changeTopic(1)">Next →</button>
             </div>
